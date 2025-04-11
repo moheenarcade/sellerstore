@@ -419,15 +419,6 @@
   .left-full {
     left: 100%;
   }
-  .z-1 {
-    z-index: 1;
-  }
-  .z-5 {
-    z-index: 5;
-  }
-  .z-9 {
-    z-index: 9;
-  }
   .z-50 {
     z-index: 50;
   }
@@ -481,9 +472,6 @@
     @media (width >= 96rem) {
       max-width: 96rem;
     }
-  }
-  .m-5 {
-    margin: calc(var(--spacing) * 5);
   }
   .m-29\.5 {
     margin: calc(var(--spacing) * 29.5);
@@ -602,9 +590,6 @@
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
-  }
-  .w-8 {
-    width: calc(var(--spacing) * 8);
   }
   .w-56 {
     width: calc(var(--spacing) * 56);
@@ -1168,9 +1153,6 @@
   .\[xlink\:href\] {
     xlink: href;
   }
-  .\[z\:����WO�\] {
-    z: ����WO�;
-  }
   .backface-hidden {
     backface-visibility: hidden;
   }
@@ -1619,7 +1601,7 @@ input:focus {
   transform: rotate(45deg);
 }
 .product-banner-sec img {
-  height: 220px;
+  height: 220px !important;
   object-fit: cover;
 }
 input[type="range"] {
@@ -1683,12 +1665,20 @@ input[type="range"]::-moz-range-track {
     grid-template-columns: 1fr !important;
     gap: 15px !important;
   }
+  .product-banner-sec img {
+    height: 350px;
+    object-fit: cover;
+  }
 }
 @media screen and (max-width: 767px) and (min-width: 425px) {
   .filter-poducts .product-lists {
     display: grid;
     grid-template-columns: 1fr 1fr !important;
     gap: 5px !important;
+  }
+  .product-banner-sec img {
+    height: 300px;
+    object-fit: cover;
   }
 }
 @media screen and (max-width: 767px) {

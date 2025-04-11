@@ -193,7 +193,7 @@ input:focus {
   transform: rotate(45deg);
 }
 .product-banner-sec img {
-  height: 220px;
+  height: 220px !important;
   object-fit: cover;
 }
 
@@ -267,6 +267,10 @@ input[type="range"]::-moz-range-track {
     grid-template-columns: 1fr !important;
     gap: 15px !important;
 }
+.product-banner-sec img {
+  height: 350px;
+  object-fit: cover;
+}
 }
 
 @media screen and (max-width: 767px) and (min-width: 425px) {
@@ -274,6 +278,10 @@ input[type="range"]::-moz-range-track {
     display: grid;
     grid-template-columns: 1fr 1fr !important;
     gap: 5px !important;
+}
+.product-banner-sec img {
+  height: 300px;
+  object-fit: cover;
 }
 }
 
