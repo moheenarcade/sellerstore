@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "i18next": "^24.2.3",
-    "type": "module",
     "next": "15.2.0",
     "next-i18next": "^15.4.2",
     "next-intl": "^4.0.2",
