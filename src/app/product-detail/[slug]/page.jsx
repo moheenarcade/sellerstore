@@ -9,6 +9,8 @@ import Image from "next/image";
 import OurGranteeShippingFaq from "../../../components/ourGranteeShippingFaq";
 import ProductDetailImageSlider from "../../../components/productDetailImageSlider";
 import Select from "react-select";
+import Loader from "../../../components/loader";
+import NewProductsListing from "../../../components/homePage/newProductsListing";
 const options = [
   { value: "1", label: "1" },
   { value: "2", label: "2" },
@@ -70,7 +72,7 @@ export default function ProductDetailPage() {
   }, [slug, router]);
 
   if (loading) {
-    return <div className="p-10 text-center">Loading product...</div>;
+    return <Loader />;
   }
 
   if (!product) {
@@ -78,70 +80,75 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
-      <div className="flex flex-col md:flex-row justify-between gap-4">
-        <div className="w-full md:w-[50%]">
-          <ProductDetailImageSlider product={product} />
-        </div>
-        <div className="produt-detail-sec w-full md:w-[45%]">
-          <div className="product-top-tag flex justify-center md:justify-end pb-3">
-            <p className="text-[13px] md:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
-              Hot product | few left in stock
-            </p>
+    <>
+      <div className="container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
+        <div className="flex flex-col md:flex-row justify-between gap-4">
+          <div className="w-full md:w-[50%]">
+            <ProductDetailImageSlider product={product} />
           </div>
-          <RandomReviews />
-          <h1 className="text-2xl md:text-3xl font-[600] pt-3">{product.name}</h1>
-          <ul className="pt-2 md:pt-4">
-            <li className="flex items-center mb-2">
-              <p className="text-[14px]">
-                <b>Brand:</b> {product.brand}
+          <div className="produt-detail-sec w-full md:w-[45%]">
+            <div className="product-top-tag flex justify-center md:justify-end pb-3">
+              <p className="text-[13px] md:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
+                Hot product | few left in stock
               </p>
-            </li>
-            <li className="flex items-center mb-2">
-              <p className="text-[14px]">
-                <b>Gender:</b> {product.gender}
-              </p>
-            </li>
-          </ul>
-
-          <div className="">
-            <div className="bundlessave flex items-center justify-center my-4">
-              <div className="w-full h-[2px] bg-black"></div>
-              <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
-                Prices
-              </p>
-              <div className="w-full h-[2px] bg-black"></div>
             </div>
+            <RandomReviews />
+            <h1 className="text-2xl md:text-3xl font-[600] pt-3">
+              {product.name}
+            </h1>
+            <ul className="pt-2 md:pt-4">
+              <li className="flex items-center mb-2">
+                <p className="text-[14px]">
+                  <b>Brand:</b> {product.brand}
+                </p>
+              </li>
+              <li className="flex items-center mb-2">
+                <p className="text-[14px]">
+                  <b>Gender:</b> {product.gender}
+                </p>
+              </li>
+            </ul>
 
-            <div class="singlePrice mb-2 cursor-pointer flex items-center gap-2 py-1 md:py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out border-black bg-gray-100">
-              <div class="checkbox w-fit">
-                <input
-                  readonly=""
-                  class="hidden"
-                  type="radio"
-                  checked=""
-                  name="priceOption"
-                />
-                <div class="w-[15px] h-[15px] rounded-full bg-black"></div>
+            <div className="">
+              <div className="bundlessave flex items-center justify-center my-4">
+                <div className="w-full h-[2px] bg-black"></div>
+                <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
+                  Prices
+                </p>
+                <div className="w-full h-[2px] bg-black"></div>
               </div>
-              <div class="flex flex-col w-full border-l-[1px] md:border-l-0 pl-2 md:pl-0">
-                <div class="flex justify-between">
-                  <p class="font-[600]">Price</p>
-                  <p class="font-[600]">
-                    {product.prices?.[0]?.sale_price} OMR
-                  </p>
+
+              <div class="singlePrice mb-2 cursor-pointer flex items-center gap-2 py-1 md:py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out border-black bg-gray-100">
+                <div class="checkbox w-fit">
+                  <input
+                    readonly=""
+                    class="hidden"
+                    type="radio"
+                    checked=""
+                    name="priceOption"
+                  />
+                  <div class="w-[15px] h-[15px] rounded-full bg-black"></div>
                 </div>
-                <div class="flex justify-end md:justify-between">
-                  <p class="font-[300] text-[12px] md:text-[16px] hidden md:block">+ Free Shipping on orders over 15 OMR</p>
-                  <p class="font-[300] line-through">
-                    {" "}
-                    {product.prices?.[0]?.price}
-                  </p>
+                <div class="flex flex-col w-full border-l-[1px] md:border-l-0 pl-2 md:pl-0">
+                  <div class="flex justify-between">
+                    <p class="font-[600]">Price</p>
+                    <p class="font-[600]">
+                      {product.prices?.[0]?.sale_price} OMR
+                    </p>
+                  </div>
+                  <div class="flex justify-end md:justify-between">
+                    <p class="font-[300] text-[12px] md:text-[16px] hidden md:block">
+                      + Free Shipping on orders over 15 OMR
+                    </p>
+                    <p class="font-[300] line-through">
+                      {" "}
+                      {product.prices?.[0]?.price}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
+            {/* 
           <div className="qty-select md:pt-3 pb-6">
             <label htmlFor="selectqty" class="text-sm md:text-lg font-[600]">
               Select Quantity
@@ -153,9 +160,9 @@ export default function ProductDetailPage() {
               styles={customStyles}
               className="mt-2"
             />
-          </div>
+          </div> */}
 
-          {/* <div className="bundlessave flex items-center justify-center my-4">
+            {/* <div className="bundlessave flex items-center justify-center my-4">
             <div className="w-full h-[2px] bg-black"></div>
             <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
               Bundle & Save!
@@ -233,22 +240,29 @@ export default function ProductDetailPage() {
             </div>
           </div> */}
 
-          <button className="w-full cursor-pointer hover:scale-[1.05] tarnsition-all duration-[0.3s] easi-in-out py-3 text-md md:text-xl px-4 rounded-lg bg-black text-white font-[500] mt-3">
-            Buy with Cash on Delivery
-          </button>
+            <button className="w-full cursor-pointer hover:scale-[1.05] tarnsition-all duration-[0.3s] easi-in-out py-3 text-md md:text-xl px-4 rounded-lg bg-black text-white font-[500] mt-3">
+              Buy with Cash on Delivery
+            </button>
 
-          <div>
-            <OurGranteeShippingFaq />
+            <div>
+              <OurGranteeShippingFaq />
+            </div>
           </div>
         </div>
+        <div className="product-description pt-8 w-full lg:w-[75%] mx-auto">
+          <h2 className="text-center text-2xl md:text-3xl font-[600]">
+            Description
+          </h2>
+          <p className="text-center mt-2">
+            {" "}
+            {product.description?.replace(/<[^>]+>/g, "").trim()}
+          </p>
+        </div>
       </div>
-      <div className="product-description pt-8 w-full lg:w-[65%] mx-auto">
-        <h2 className="text-center text-2xl md:text-3xl font-[600]">Description</h2>
-        <p className="text-center mt-2">
-          {" "}
-          {product.description?.replace(/<[^>]+>/g, "").trim()}
-        </p>
+
+      <div className="pb-12">
+        <NewProductsListing />
       </div>
-    </div>
+    </>
   );
 }

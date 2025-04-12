@@ -77,14 +77,13 @@
 
 // export default ProductDetailImageSlider;
 
-
 "use client";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import Image from "next/image";
-import { useLanguage } from '../../context/LanguageContext';
-import { useTranslation } from '../../hooks/useTranslation';
+import { useLanguage } from "../../context/LanguageContext";
+import { useTranslation } from "../../hooks/useTranslation";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -117,12 +116,12 @@ const ProductDetailImageSlider = ({ product }) => {
         }}
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper2"
-        rtl={language === 'ar'} // Set the rtl prop based on language
+        rtl={language === "ar"} // Set the rtl prop based on language
       >
         {product.images?.map((imageObj, index) => (
           <SwiperSlide key={index}>
             <Image
-              className="w-full block rounded-xl"
+              className="w-full aspect-[5/5] object-cover block rounded-xl"
               src={getImageUrl(imageObj)}
               alt={product.name}
               width={600}
@@ -140,7 +139,7 @@ const ProductDetailImageSlider = ({ product }) => {
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper mt-4"
-        rtl={language === 'ar'} // Set the rtl prop for the thumbs swiper as well
+        rtl={language === "ar"} // Set the rtl prop for the thumbs swiper as well
       >
         {product.images?.map((imageObj, index) => (
           <SwiperSlide key={index}>
@@ -149,7 +148,7 @@ const ProductDetailImageSlider = ({ product }) => {
               alt={`Thumbnail ${index}`}
               width={100}
               height={100}
-              className="w-full border cursor-pointer rounded-xl"
+              className="w-full aspect-[4/4] object-cover border cursor-pointer rounded-xl"
             />
           </SwiperSlide>
         ))}
