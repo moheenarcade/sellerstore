@@ -37,11 +37,10 @@ const ProductMainListsByCat = ({ products }) => {
                 <div className="products-lits">
                     <div className="product-lists pt-6">
                         {products.map((productList, index) => (
-                            <div key={index} className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-1 md:p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
+                            <Link href={`/product-detail/${productList.product_sku}`}>
+                            <div key={index} className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-2 md:p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
                                 <div className="">
                                     <div className="product-banner-sec relative overflow-hidden">
-
-
                                         <Image
                                             className='w-full block'
                                             src={getImageUrl(productList.images?.[0])}
@@ -67,7 +66,7 @@ const ProductMainListsByCat = ({ products }) => {
                                 </div>
                                 <div className="">
                                     <RandomReviews />
-                                    <div className="product-price flex items-center gap-2 pt-4">
+                                    <div className="product-price flex items-center gap-2 pt-2">
                                         <div className="flex items-center gap-1">
                                             {productList.prices?.[0]?.sale_price ? (
                                                 <b className='text-[17px]'>{productList.prices[0].sale_price}</b>
@@ -90,6 +89,7 @@ const ProductMainListsByCat = ({ products }) => {
                                     </div>
                                 </div>
                             </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

@@ -37,54 +37,9 @@ const Products = () => {
         fetchCategories();
     }, []);
 
-    // Handle checkbox changes
-    const handleCheckboxChange = (categoryName) => {
-        setSelectedCategories(prev => {
-            // If category is already selected, remove it
-            if (prev.includes(categoryName)) {
-                return prev.filter(name => name !== categoryName);
-            }
-            // Otherwise add it
-            return [...prev, categoryName];
-        });
-    };
-
-    // Function to fetch products for selected categories
-    const fetchProductsForSelectedCategories = async () => {
-        try {
-            if (selectedCategories.length === 0) {
-                // Handle case where no categories are selected
-                return;
-            }
-
-            // For multiple categories, you might need to modify your API endpoint
-            // to accept multiple category slugs, or make separate calls for each
-            const promises = selectedCategories.map(catName =>
-                getProductsByCategorySlug(catName.toLowerCase().replace(/\s+/g, '-'))
-            );
-
-            const results = await Promise.all(promises);
-            // Process the results as needed
-            console.log(results);
-
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    };
-
-    // Generate the link for multiple categories
-    const getMultiCategoryLink = () => {
-        if (selectedCategories.length === 0) return '#';
-
-        const slugs = selectedCategories.map(cat =>
-            cat.toLowerCase().replace(/\s+/g, '-')
-        );
-
-        return `/products/${slugs.join(',')}`;
-    };
 
     return (
-        <div className='products-main container px-2 md:px-6 xl:px-28 mx-auto py-6'>
+        <div className='products-main container px-4 md:px-6 xl:px-28 mx-auto py-6'>
             <div className="block lg:hidden">
                 <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 pb-4">
                     <button

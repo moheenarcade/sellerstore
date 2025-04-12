@@ -45,8 +45,6 @@ const ProductSideBar = () => {
         });
     };
 
-
-
     // Function to fetch products for selected categories
     useEffect(() => {
         const fetchProducts = async () => {
@@ -160,7 +158,7 @@ const ProductSideBar = () => {
                                                 : 'bg-[#f69853] text-white hover:bg-[#e87f34]'
                                             }`}
                                     >
-                                        See Products
+                                        Filter Products
                                     </button>
                                 </Link>
 

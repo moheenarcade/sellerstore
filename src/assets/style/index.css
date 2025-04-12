@@ -193,7 +193,7 @@ input:focus {
   transform: rotate(45deg);
 }
 .product-banner-sec img {
-  height: 220px !important;
+  height: 200px !important;
   object-fit: cover;
 }
 
@@ -260,6 +260,9 @@ input[type="range"]::-moz-range-track {
   border-radius: 5px;
   z-index: 1;
 }
+
+
+
 
 @media screen and (max-width: 420px) and (min-width: 100px) {
   .filter-poducts .product-lists {
