@@ -10,7 +10,9 @@ import OurGranteeShippingFaq from "../../../components/ourGranteeShippingFaq";
 import ProductDetailImageSlider from "../../../components/productDetailImageSlider";
 import Select from "react-select";
 import Loader from "../../../components/loader";
-import NewProductsListing from "../../../components/homePage/newProductsListing";
+import RelatedProducts from "../../../components/relatedProducts";
+import ProductDescription from '../../../components/productDescription';
+
 const options = [
   { value: "1", label: "1" },
   { value: "2", label: "2" },
@@ -21,12 +23,12 @@ const options = [
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
-    borderColor: state.isFocused ? "#222222" : "#222222", // custom border color (e.g., indigo-600 when focused, gray-300 otherwise)
-    boxShadow: state.isFocused ? "0 0 0 1pxrgba(25, 25, 25, 0.76)" : "none", // custom focus outline
-    borderRadius: "0.5rem", // rounded-xl
-    padding: "2px", // optional
+    borderColor: state.isFocused ? "#222222" : "#222222",
+    boxShadow: state.isFocused ? "0 0 0 1pxrgba(25, 25, 25, 0.76)" : "none",
+    borderRadius: "0.5rem",
+    padding: "2px",
     "&:hover": {
-      borderColor: "#222222", // border color on hover
+      borderColor: "#222222",
     },
   }),
   menu: (provided) => ({
@@ -37,8 +39,8 @@ const customStyles = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? "#E0E7FF" : "white", // e.g., indigo-100 on hover
-    color: "#111827", // text-gray-900
+    backgroundColor: state.isFocused ? "#E0E7FF" : "white",
+    color: "#111827",
     padding: 10,
   }),
 };
@@ -49,6 +51,23 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState("buyOne");
   console.log(product, "product detail page data");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
+  const getImageUrl = (imageObj) => {
+    if (!imageObj || !imageObj.image) return "/placeholder.webp";
+    return imageObj.image.startsWith("http")
+      ? imageObj.image
+      : `${imageBaseUrl}${imageObj.image}`;
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     async function fetchProduct() {
       try {
@@ -148,99 +167,8 @@ export default function ProductDetailPage() {
                 </div>
               </div>
             </div>
-            {/* 
-          <div className="qty-select md:pt-3 pb-6">
-            <label htmlFor="selectqty" class="text-sm md:text-lg font-[600]">
-              Select Quantity
-            </label>
 
-            <Select
-              inputId="selectqty"
-              options={options}
-              styles={customStyles}
-              className="mt-2"
-            />
-          </div> */}
-
-            {/* <div className="bundlessave flex items-center justify-center my-4">
-            <div className="w-full h-[2px] bg-black"></div>
-            <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
-              Bundle & Save!
-            </p>
-            <div className="w-full h-[2px] bg-black"></div>
-          </div>
-
-          <div className="product-detail-price pt-3">
-            <div
-              onClick={() => setSelectedOption("buyOne")}
-              className={`singlePrice mb-2 cursor-pointer flex items-center gap-2 py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out ${
-                selectedOption === "buyOne"
-                  ? "border-black bg-gray-100"
-                  : "border-gray-300 hover:border-black hover:bg-gray-100"
-              }`}
-            >
-              <div className="checkbox w-fit">
-                <input
-                  type="radio"
-                  name="priceOption"
-                  checked={selectedOption === "buyOne"}
-                  readOnly
-                  className="hidden"
-                />
-                <div
-                  className={`w-[15px] h-[15px] rounded-full ${
-                    selectedOption === "buyOne" ? "bg-black" : "bg-gray-300"
-                  }`}
-                ></div>
-              </div>
-              <div className="flex flex-col w-full">
-                <div className="flex justify-between">
-                  <p className="font-[600]">Buy One</p>
-                  <p className="font-[600]">OMR 99</p>
-                </div>
-                <div className="flex justify-between">
-                  <p className="font-[300]">+ Free Shipping</p>
-                  <p className="font-[300] line-through">OMR 130</p>
-                </div>
-              </div>
-            </div>
-
-            <div
-              onClick={() => setSelectedOption("buyTwo")}
-              className={`singlePrice mb-2 cursor-pointer flex items-center gap-2 py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out ${
-                selectedOption === "buyTwo"
-                  ? "border-black bg-gray-100"
-                  : "border-gray-300 hover:border-black hover:bg-gray-100"
-              }`}
-            >
-              <div className="checkbox w-fit">
-                <input
-                  type="radio"
-                  name="priceOption"
-                  checked={selectedOption === "buyTwo"}
-                  readOnly
-                  className="hidden"
-                />
-                <div
-                  className={`w-[15px] h-[15px] rounded-full ${
-                    selectedOption === "buyTwo" ? "bg-black" : "bg-gray-300"
-                  }`}
-                ></div>
-              </div>
-              <div className="flex flex-col w-full">
-                <div className="flex justify-between">
-                  <p className="font-[600]">Buy Two Get 1 Free</p>
-                  <p className="font-[600]">OMR 199</p>
-                </div>
-                <div className="flex justify-between">
-                  <p className="font-[300]">+ Free Shipping</p>
-                  <p className="font-[300] line-through">OMR 230</p>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-            <button className="w-full cursor-pointer hover:scale-[1.05] tarnsition-all duration-[0.3s] easi-in-out py-3 text-md md:text-xl px-4 rounded-lg bg-black text-white font-[500] mt-3">
+            <button onClick={openModal} className="w-full cursor-pointer hover:scale-[1.05] tarnsition-all duration-[0.3s] easi-in-out py-3 text-md md:text-xl px-4 rounded-lg bg-black text-white font-[500] mt-3">
               Buy with Cash on Delivery
             </button>
 
@@ -253,16 +181,113 @@ export default function ProductDetailPage() {
           <h2 className="text-center text-2xl md:text-3xl font-[600]">
             Description
           </h2>
-          <p className="text-center mt-2">
-            {" "}
-            {product.description?.replace(/<[^>]+>/g, "").trim()}
-          </p>
+          <ProductDescription description={product.description} />
         </div>
       </div>
 
       <div className="pb-12">
-        <NewProductsListing />
+        <RelatedProducts />
       </div>
+
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-[9999999999] shadow-lg p-4 bg-gray-900/85 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in">
+          <div className="bg-white rounded-lg max-w-lg w-full p-6">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-xl font-bold">Cash on Delivery</h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-500 hover:text-gray-700 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="mb-4 border-t-[1px] border-t-gray-300 pt-3 flex">
+              <Image
+                className="w-[70px] h-[70px] object-cover block rounded-xl mr-2"
+                src={getImageUrl(product.images?.[0])}
+                alt={product.name}
+                width={100}
+                height={100}
+              />
+              <p className="font-semibold">{product.name}</p>
+
+            </div>
+            <div className="bg-gray-100 p-3 rounded-md mb-4">
+              <div className="flex justify-between">
+                <p className="text-[17px]">Quantity :</p>
+                <p className="font-[600]">1</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="text-[17px]">Price :</p>
+                <p className="font-[600]"> {product.prices?.[0]?.sale_price} OMR</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="">Subtotal:</p>
+                <p className="font-[600]"> {product.prices?.[0]?.sale_price} OMR</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="">Free Shipping:</p>
+                <p className="font-[600]">Free</p>
+              </div>
+              <div className="flex justify-between border-t-[1px] border-t-gray-300 pt-2 mt-2">
+                <p className="font-[600]">Grand Total:</p>
+                <p className="font-[600]">{product.prices?.[0]?.sale_price}</p>
+              </div>
+            </div>
+
+            <form className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Your phone number"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Delivery Address
+                </label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  rows={3}
+                  placeholder="Your complete delivery address"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-center space-x-3 pt-2">
+                <button
+                  type="submit"
+                  className="px-4 py-2 cursor-pointer w-full bg-black text-white rounded-md hover:bg-gray-800"
+                >
+                  Order Now
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }
