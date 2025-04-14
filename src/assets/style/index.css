@@ -21,6 +21,26 @@
   margin-right: 0;
 }
 
+/* RTL Swiper Fix */
+[dir="rtl"] .swiper-button-next {
+  right: auto;
+  left: 0;
+  transform: rotate(180deg);
+}
+
+[dir="rtl"] .swiper-slide-active {
+  margin-right: 0 !important;
+}
+[dir="ltr"] .swiper-slide-active {
+  margin-right: 10px !important;
+}
+
+[dir="rtl"] .swiper-button-prev {
+  left: auto;
+  right: 0;
+  transform: rotate(180deg);
+}
+
 
 :root {
   --background: #ffffff;

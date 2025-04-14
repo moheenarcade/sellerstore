@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import RandomReviews from "../../../components/randomReviews";
-import { getProductBySlug } from "../../../lib/api";
+import { getProductBySlug, getSettings } from "../../../lib/api";
 import { useParams, useRouter } from "next/navigation";
 import BannerImage from "../../../../public/images/heroslide3.webp";
 import Image from "next/image";
@@ -12,45 +12,21 @@ import Select from "react-select";
 import Loader from "../../../components/loader";
 import RelatedProducts from "../../../components/relatedProducts";
 import ProductDescription from '../../../components/productDescription';
+import BuyForm from "../../../components/buyForm"
+import { useTranslation } from "../../../hooks/useTranslation";
+import { useLanguage } from "../.././../context/LanguageContext";
 
-const options = [
-  { value: "1", label: "1" },
-  { value: "2", label: "2" },
-  { value: "3", label: "3" },
-  { value: "4", label: "4" },
-  { value: "5", label: "5" },
-];
-const customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    borderColor: state.isFocused ? "#222222" : "#222222",
-    boxShadow: state.isFocused ? "0 0 0 1pxrgba(25, 25, 25, 0.76)" : "none",
-    borderRadius: "0.5rem",
-    padding: "2px",
-    "&:hover": {
-      borderColor: "#222222",
-    },
-  }),
-  menu: (provided) => ({
-    ...provided,
-    borderRadius: "0.5rem",
-    marginTop: "4px",
-    zIndex: 20,
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isFocused ? "#E0E7FF" : "white",
-    color: "#111827",
-    padding: 10,
-  }),
-};
+
 export default function ProductDetailPage() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const { slug } = useParams();
   const router = useRouter();
   const [product, setProduct] = useState(null);
+  const [getSetting, setGetSetting] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState("buyOne");
-  console.log(product, "product detail page data");
+  console.log(getSetting, "settting page data");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
   const getImageUrl = (imageObj) => {
@@ -67,6 +43,22 @@ export default function ProductDetailPage() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getSettings();
+        const [firstSetting] = data.data || [];
+        setGetSetting(firstSetting || {});
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -95,7 +87,7 @@ export default function ProductDetailPage() {
   }
 
   if (!product) {
-    return <div className="p-10 text-center">Product not found</div>;
+    return <Loader />;
   }
 
   return (
@@ -108,22 +100,22 @@ export default function ProductDetailPage() {
           <div className="produt-detail-sec w-full md:w-[45%]">
             <div className="product-top-tag flex justify-center md:justify-end pb-3">
               <p className="text-[13px] md:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
-                Hot product | few left in stock
+                {t('Hot_product_few_left_in_stock')}
               </p>
             </div>
             <RandomReviews />
             <h1 className="text-2xl md:text-3xl font-[600] pt-3">
-              {product.name}
+              {language === "ar" ? product.name_ar : product.name}
             </h1>
             <ul className="pt-2 md:pt-4">
               <li className="flex items-center mb-2">
                 <p className="text-[14px]">
-                  <b>Brand:</b> {product.brand}
+                  <b>{t('Brand')}:</b> {product.brand}
                 </p>
               </li>
               <li className="flex items-center mb-2">
                 <p className="text-[14px]">
-                  <b>Gender:</b> {product.gender}
+                  <b>{t('Gender')}:</b> {product.gender}
                 </p>
               </li>
             </ul>
@@ -132,34 +124,34 @@ export default function ProductDetailPage() {
               <div className="bundlessave flex items-center justify-center my-4">
                 <div className="w-full h-[2px] bg-black"></div>
                 <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
-                  Prices
+                  {t('Prices')}
                 </p>
                 <div className="w-full h-[2px] bg-black"></div>
               </div>
 
-              <div class="singlePrice mb-2 cursor-pointer flex items-center gap-2 py-1 md:py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out border-black bg-gray-100">
-                <div class="checkbox w-fit">
+              <div className="singlePrice mb-2 cursor-pointer flex items-center gap-2 py-1 md:py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out border-black bg-gray-100">
+                <div className="checkbox w-fit">
                   <input
-                    readonly=""
-                    class="hidden"
+                    readOnly=""
+                    className="hidden"
                     type="radio"
                     checked=""
                     name="priceOption"
                   />
-                  <div class="w-[15px] h-[15px] rounded-full bg-black"></div>
+                  <div className="w-[15px] h-[15px] rounded-full bg-black"></div>
                 </div>
-                <div class="flex flex-col w-full border-l-[1px] md:border-l-0 pl-2 md:pl-0">
-                  <div class="flex justify-between">
-                    <p class="font-[600]">Price</p>
-                    <p class="font-[600]">
+                <div className="flex flex-col w-full border-l-[1px] md:border-l-0 pl-2 md:pl-0">
+                  <div className="flex justify-between">
+                    <p className="font-[600]">{t('Price')}</p>
+                    <p className="font-[600]">
                       {product.prices?.[0]?.sale_price} OMR
                     </p>
                   </div>
-                  <div class="flex justify-end md:justify-between">
-                    <p class="font-[300] text-[12px] md:text-[16px] hidden md:block">
-                      + Free Shipping on orders over 15 OMR
+                  <div className="flex justify-end md:justify-between">
+                    <p className="font-[300] text-[12px] md:text-[16px] hidden md:block">
+                      {t('Free_Shipping_on_orders_over_15_OMR')}
                     </p>
-                    <p class="font-[300] line-through">
+                    <p className="font-[300] line-through">
                       {" "}
                       {product.prices?.[0]?.price}
                     </p>
@@ -169,7 +161,7 @@ export default function ProductDetailPage() {
             </div>
 
             <button onClick={openModal} className="w-full cursor-pointer hover:scale-[1.05] tarnsition-all duration-[0.3s] easi-in-out py-3 text-md md:text-xl px-4 rounded-lg bg-black text-white font-[500] mt-3">
-              Buy with Cash on Delivery
+              {t('Buy_with_Cash_on_Delivery')}
             </button>
 
             <div>
@@ -179,9 +171,9 @@ export default function ProductDetailPage() {
         </div>
         <div className="product-description pt-8 w-full lg:w-[75%] mx-auto">
           <h2 className="text-center text-2xl md:text-3xl font-[600]">
-            Description
+            {t('Description')}
           </h2>
-          <ProductDescription description={product.description} />
+          <ProductDescription description={product.description} description_ar={product.description_ar} />
         </div>
       </div>
 
@@ -194,7 +186,7 @@ export default function ProductDetailPage() {
         <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-[9999999999] shadow-lg p-4 bg-gray-900/85 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in">
           <div className="bg-white rounded-lg max-w-lg w-full p-6">
             <div className="flex justify-between items-center mb-2">
-              <h2 className="text-xl font-bold">Cash on Delivery</h2>
+              <h2 className="text-xl font-bold">{t('Cash_on_Delivery')}</h2>
               <button
                 onClick={closeModal}
                 className="text-gray-500 hover:text-gray-700 cursor-pointer"
@@ -206,85 +198,42 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="mb-4 border-t-[1px] border-t-gray-300 pt-3 flex">
-              <Image
-                className="w-[70px] h-[70px] object-cover block rounded-xl mr-2"
-                src={getImageUrl(product.images?.[0])}
-                alt={product.name}
-                width={100}
-                height={100}
-              />
-              <p className="font-semibold">{product.name}</p>
-
+              <div className="relative">
+                <Image
+                  className="w-[70px] h-[70px] object-cover block rounded-lg"
+                  src={getImageUrl(product.images?.[0])}
+                  alt={product.name}
+                  width={100}
+                  height={100}
+                />
+                <p className="qty-tag absolute -top-2 right-[0px] bg-gray-500 text-white font-[500] rounded-full text-[14px] text-center flex items-center justify-center w-5 h-5">
+                  1
+                </p>
+              </div>
+              <p className={`font-semibold w-[70%] lg:w-[80%] ${language === "ar" ? "mr-4" : "ml-4"}`}>
+                {language === "ar" ? product.name_ar : product.name}
+              </p>
             </div>
             <div className="bg-gray-100 p-3 rounded-md mb-4">
               <div className="flex justify-between">
-                <p className="text-[17px]">Quantity :</p>
-                <p className="font-[600]">1</p>
+                <p className="text-[15px]">{t('Price')}:</p>
+                <p className="font-[600] text-[15px]"> {product.prices?.[0]?.sale_price} OMR</p>
               </div>
               <div className="flex justify-between">
-                <p className="text-[17px]">Price :</p>
-                <p className="font-[600]"> {product.prices?.[0]?.sale_price} OMR</p>
+                <p className="text-[15px]">{t('Subtotal')}:</p>
+                <p className="font-[600] text-[15px]"> {product.prices?.[0]?.sale_price} OMR</p>
               </div>
               <div className="flex justify-between">
-                <p className="">Subtotal:</p>
-                <p className="font-[600]"> {product.prices?.[0]?.sale_price} OMR</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="">Free Shipping:</p>
-                <p className="font-[600]">Free</p>
+                <p className="text-[15px]">{t('Free_Shipping')}:</p>
+                <p className="font-[600] text-[15px]">{t('Free')}</p>
               </div>
               <div className="flex justify-between border-t-[1px] border-t-gray-300 pt-2 mt-2">
-                <p className="font-[600]">Grand Total:</p>
-                <p className="font-[600]">{product.prices?.[0]?.sale_price}</p>
+                <p className="font-[600] text-[15px]">{t('Grand_Total')}:</p>
+                <p className="font-[600] text-[15px]">{product.prices?.[0]?.sale_price}</p>
               </div>
             </div>
 
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  placeholder="Your full name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  placeholder="Your phone number"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Delivery Address
-                </label>
-                <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  rows={3}
-                  placeholder="Your complete delivery address"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-center space-x-3 pt-2">
-                <button
-                  type="submit"
-                  className="px-4 py-2 cursor-pointer w-full bg-black text-white rounded-md hover:bg-gray-800"
-                >
-                  Order Now
-                </button>
-              </div>
-            </form>
+            <BuyForm product={product} closeModal={closeModal}/>
           </div>
         </div>
       )}

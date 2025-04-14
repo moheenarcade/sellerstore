@@ -35,5 +35,51 @@
     "Snapchat" : "سناب شات",
     "Tiktok" : "تيك توك",
     "Menu" : "القائمة",
-    "all_categories" : "كل الفئات"
+    "all_categories" : "كل الفئات",
+    "Brand": "الماركة",
+     "Gender" : "الجنس",
+    "Prices" : "الأسعار",
+    "Price" : "السعر",
+    "Free_Shipping_on_orders_over_15_OMR" : "+ شحن مجاني على الطلبات التي تزيد عن 15 ريال عماني",
+    "Buy_with_Cash_on_Delivery" : "اشترِ عند الاستلام",
+    "Hot_product_few_left_in_stock" : "منتج شائع | بقايا قليلة في المخزون",
+    "Our_Grantee" : "ضماننا",
+    "first_faqs_answer" : "نضمن التوصيل في الوقت المحدد ونوفر تفاصيل التتبع لكل شحنة. إذا لم يصل طردك في الوقت المحدد، قد تكون مؤهلاً لاسترداد كامل.",
+    "Shipping_Info" : "معلومات الشحن",
+    "second_faq_answer" : "عادةً ما يستغرق الشحن من 3 إلى 7 أيام عمل، وذلك حسب موقعك. قد تحدث تأخيرات خلال العطلات أو فترات التخفيضات.",
+    "Description" : "الوصف",
+    "Cash_on_Delivery"  : "الدفع عند الاستلام",
+    "Subtotal" : "المجموع الفرعي",
+    "Free_Shipping" : "الشحن المجاني",
+    "Free" : "مجاني",
+    "Grand_Total" : "المجموع الكلي",
+    "Order_Now" : "اطلب الآن",
+    "Processing" : "جارٍ المعالجة",
+    "Full_Name" : "الاسم",
+    "Yourfull_name" : "الاسم",
+    "Full_name_is_required" : "الاسم الكامل مطلوب",
+    "Email_is_required" : "البريد الإلكتروني مطلوب",
+    "Phone_number_is_required" : "رقم الهاتف مطلوب",
+    "State_is_required" : "الولاية مطلوبة",
+    "City_is_required" : "المدينة مطلوبة",
+    "Address_is_required" : "العنوان مطلوب",
+    "Email" : "بريد إلكتروني",
+    "Your_email" : "بريد إلكتروني",
+    "Phone_Number" : "رقم التليفون",
+    "State" : "إمارة",
+    "city" : "مدينة",
+    "Delivery_Address" : "عنوان",
+    "Your_complete_delivery_address" : "عنوان"
+
+
+
+
+
+
+
+
+
+
+
+
 }

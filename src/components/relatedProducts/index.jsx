@@ -44,18 +44,12 @@ const RelatedProducts = () => {
       <h2 className="text-xl md:text-2xl font-[600] text-[#000000de]">
         {t("related_products")}
       </h2>
-      {/* <Link
-        href="#"
-        className="text-[#f69853] border-[1px] border-[#f69853] py-1 md:py-2 px-4 rounded-md text-md font-[300] hover:scale-[1.05] tarnsition-all duration-[0.6s] ease-in-out"
-      >
-        {t("see_more")}
-      </Link> */}
     </div>
     <div className="product-lists pt-6">
-      {products.map((productList, index) => (
+      {products.map((productList) => (
         <Link href={`/product-detail/${productList.product_sku}`}>
           <div
-            key={index}
+           key={productList.product_sku}
             className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
           >
             <div className="">
@@ -63,7 +57,7 @@ const RelatedProducts = () => {
                 <Image
                   className="w-full block"
                   src={getImageUrl(productList.images?.[0])}
-                  alt={productList.name}
+                  alt="product banner"
                   width={300}
                   height={300}
                 />
@@ -72,7 +66,7 @@ const RelatedProducts = () => {
                   src={getImageUrl(
                     productList.images?.[1] || productList.images?.[0]
                   )}
-                  alt={productList.name}
+                  alt="product banner"  
                   width={300}
                   height={300}
                 />

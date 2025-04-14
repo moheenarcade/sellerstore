@@ -1,27 +1,30 @@
 import React, { useState } from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
+import { useTranslation } from "../../hooks/useTranslation";
+import { useLanguage } from "../.././context/LanguageContext";
 
 
-const faqData = [
-  {
-    question: "Our Grantee",
-    answer:
-      "We ensure timely delivery and provide tracking details for every shipment. If your package doesn't arrive within the promised time, you may be eligible for a full refund.",
-  },
-  {
-    question: "Shipping Info",
-    answer:
-      "Shipping typically takes 3-7 business days, depending on your location. During holidays or sales, delays may occur.",
-  },
-];
 
 const OurGranteeShippingFaq = () => {
   const [openIndex, setOpenIndex] = useState(null);
-
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const toggleFAQ = (index) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
   };
+
+  const faqData = [
+    {
+      question: t('Our_Grantee'),
+      answer: t('first_faqs_answer'),
+    },
+    {
+      question: t('Shipping_Info'),
+      answer:
+        t('second_faq_answer'),
+    },
+  ];
 
   return (
     <div className="shippng-grantee-faq max-w-3xl mx-auto pt-3">

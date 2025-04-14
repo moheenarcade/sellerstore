@@ -1,10 +1,13 @@
 import React from 'react';
 import DOMPurify from 'dompurify';
+import { useTranslation } from "../../hooks/useTranslation";
+import { useLanguage } from "../.././context/LanguageContext";
 
-const ProductDescription = ({ description }) => {
-  // Sanitize the HTML content
-  const sanitizedDescription = DOMPurify.sanitize(description);
-
+const ProductDescription = ({ description , description_ar}) => {
+    const { t } = useTranslation();
+    const { language } = useLanguage();
+    const rawDescription = language === 'ar' ? description_ar : description;
+    const sanitizedDescription = DOMPurify.sanitize(rawDescription);
   return (
     <>
       <div 
