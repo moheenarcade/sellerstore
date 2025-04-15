@@ -40,7 +40,7 @@
     "Gender" : "Gender",
     "Prices" : "Prices",
     "Price" : "Price",
-    "Free_Shipping_on_orders_over_15_OMR" : "+ Free Shipping on orders over 15 OMR",
+    "Free_Shipping_on_orders_over_15_OMR" : "+ Free Shipping on orders over",
     "Buy_with_Cash_on_Delivery" : "Buy with Cash on Delivery",
     "Hot_product_few_left_in_stock" : "Hot product | few left in stock",
     "Our_Grantee" : "Our Grantee",
@@ -69,6 +69,17 @@
     "State" : "State",
     "city" : "City",
     "Delivery_Address" : "Delivery Address",
-    "Your_complete_delivery_address" : "Your complete delivery address"
+    "Your_complete_delivery_address" : "Your complete delivery address",
+    "Select_a_state" : "Select a state",
+    "Select_a_City" : "Select a City",
+    "Enter_valid_mobile_number"  : "Enter valid mobile number",
+    "Available_Quantity" :  "Available Quantity",
+    "Out_of_stock" : "Out of stock",
+    "Color" : "Color",
+    "Size" : "Size",
+    "bundle_save" : "bundle & save"
+
+
+
 
 }

@@ -7,9 +7,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Link from 'next/link';
 import Image from 'next/image';
-import HotsSlide1 from "../../../../public/images/hotslide1.webp";
-import HotsSlide2 from "../../../../public/images/hotslide1bg.webp";
-import { FaStar } from "react-icons/fa";
 import { useLanguage } from '../../../context/LanguageContext';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { getProducts } from "../../../lib/api";
@@ -24,6 +21,7 @@ const HotSaleListing = () => {
     console.log(products, "products list");
     const [loading, setLoading] = useState(true);
     const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
+    const [currencyCode, setCurrencyCode] = useState('');
     const getImageUrl = (imageObj) => {
         if (!imageObj || !imageObj.image) return "/placeholder.webp";
         return imageObj.image.startsWith("http")
@@ -44,6 +42,18 @@ const HotSaleListing = () => {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const settings = localStorage.getItem('storeSettings');
+        if (settings) {
+          try {
+            const parsedSettings = JSON.parse(settings);
+            setCurrencyCode(parsedSettings.currency_code || 'OMR'); // fallback to OMR
+          } catch (error) {
+            console.error("Failed to parse storeSettings:", error);
+          }
+        }
+      }, []);
 
     return (
         <div className='container hero-slider-main px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12' dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -95,14 +105,14 @@ const HotSaleListing = () => {
                                             <Image
                                                 className='w-full block'
                                                 src={getImageUrl(productList.images?.[0])}
-                                                alt={productList.name}
+                                                alt={productList.name || "product banner"}
                                                 width={300}
                                                 height={300}
                                             />
                                             <Image
                                                 className="w-full h-full absolute top-0 left-0 right-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"
                                                 src={getImageUrl(productList.images?.[1] || productList.images?.[0])}
-                                                alt={productList.name}
+                                                alt={productList.name || "product banner"}
                                                 width={300}
                                                 height={300}
                                             />
@@ -124,14 +134,14 @@ const HotSaleListing = () => {
                                                 ) : (
                                                     <b className='text-[12px] text-red-400'>No Price</b>
                                                 )}
-                                                <p className='uppercase font-[300]'>OMR</p>
+                                                <p className='uppercase font-[300]'>{currencyCode}</p>
                                             </div>
                                             <div className="product-offer-badge">
                                                 <span className="offer-effect px-2 py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">+2&nbsp;Free</span>
                                             </div>
                                         </div>
                                         {productList.prices?.[0]?.price ? (
-                                            <b className='text-[17px] line-through font-[300]'>{productList.prices[0].price}</b>
+                                            <b className='text-[17px] line-through font-[300]'>{productList.prices[0].price} {currencyCode}</b>
                                         ) : (
                                             <b className='text-[17px] line-through'></b>
                                         )}

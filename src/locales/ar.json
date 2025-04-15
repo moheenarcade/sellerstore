@@ -40,7 +40,7 @@
      "Gender" : "الجنس",
     "Prices" : "الأسعار",
     "Price" : "السعر",
-    "Free_Shipping_on_orders_over_15_OMR" : "+ شحن مجاني على الطلبات التي تزيد عن 15 ريال عماني",
+    "Free_Shipping_on_orders_over_15_OMR" : "+ شحن مجاني للطلبات التي تزيد عن",
     "Buy_with_Cash_on_Delivery" : "اشترِ عند الاستلام",
     "Hot_product_few_left_in_stock" : "منتج شائع | بقايا قليلة في المخزون",
     "Our_Grantee" : "ضماننا",
@@ -69,8 +69,15 @@
     "State" : "إمارة",
     "city" : "مدينة",
     "Delivery_Address" : "عنوان",
-    "Your_complete_delivery_address" : "عنوان"
-
+    "Your_complete_delivery_address" : "عنوان",
+    "Select_a_state" : "اختر الولاية",
+    "Select_a_City" : "اختر المدينة",
+    "Enter_valid_mobile_number"  : "أدخل رقم جوال صالح",
+    "Available_Quantity" :  "الكمية المتاحة",
+    "Out_of_stock" : "إنتهى من المخزن",
+    "Color" : "لون",
+    "Size" : "مقاس",
+    "bundle_save" : "حزمة وحفظ"
 
 
 

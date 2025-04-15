@@ -10,7 +10,7 @@ import { getProducts, getCategories } from "../../../lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
 import RandomReviews from "../../randomReviews";
 
-const ProductMainLists = () => {
+const ProductMainLists = ({currencyCode}) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
@@ -52,10 +52,9 @@ const ProductMainLists = () => {
         </div>
         <div className="products-lits">
           <div className="product-lists pt-6">
-            {products.map((productList, index) => (
-              <Link href={`/product-detail/${productList.product_sku}`}>
+            {products.map((productList) => (
+              <Link href={`/product-detail/${productList.product_sku}`}  key={productList.product_sku}>
                 <div
-                  key={index}
                   className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-2 md:p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
                 >
                   <div className="">
@@ -63,7 +62,7 @@ const ProductMainLists = () => {
                       <Image
                         className="w-full block"
                         src={getImageUrl(productList.images?.[0])}
-                        alt={productList.name}
+                        alt={productList.name || "product banner image"}
                         width={300}
                         height={300}
                       />
@@ -72,7 +71,7 @@ const ProductMainLists = () => {
                         src={getImageUrl(
                           productList.images?.[1] || productList.images?.[0]
                         )}
-                        alt={productList.name}
+                        alt={productList.name || "product banner image"}
                         width={300}
                         height={300}
                       />
@@ -99,7 +98,7 @@ const ProductMainLists = () => {
                         ) : (
                           <b className="text-[12px] text-red-400">No Price</b>
                         )}
-                        <p className="uppercase font-[300]">OMR</p>
+                        <p className="uppercase font-[300]">{currencyCode}</p>
                       </div>
                       <div className="product-offer-badge">
                         <span className="offer-effect px-2 py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">
@@ -110,7 +109,7 @@ const ProductMainLists = () => {
                     <div className="">
                       {productList.prices?.[0]?.price ? (
                         <b className="text-[17px] line-through font-[300]">
-                          {productList.prices[0].price}
+                          {productList.prices[0].price} {currencyCode}
                         </b>
                       ) : (
                         <b className="text-[17px] line-through"></b>

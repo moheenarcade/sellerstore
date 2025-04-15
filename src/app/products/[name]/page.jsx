@@ -6,7 +6,6 @@ import { getProductsByCategorySlug } from "../../../lib/api";
 import "../../../assets/style/togglemenu.css";
 import { getCategories } from "../../../lib/api";
 import ProductListByCat from "../../../components/productListing/productMainListsByCat";
-import ProductSideBar from "../../../components/productSideBar";
 
 const ProductPage = () => {
   const params = useParams();
@@ -17,6 +16,7 @@ const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [currencyCode, setCurrencyCode] = useState('');
 
   useEffect(() => {
     if (!name) return;
@@ -76,6 +76,18 @@ const ProductPage = () => {
     });
   };
 
+    useEffect(() => {
+      const settings = localStorage.getItem('storeSettings');
+      if (settings) {
+        try {
+          const parsedSettings = JSON.parse(settings);
+          setCurrencyCode(parsedSettings.currency_code || 'OMR');
+        } catch (error) {
+          console.error("Failed to parse storeSettings:", error);
+        }
+      }
+    }, []);
+
   return (
     <div>
       <div className="products-main container px-4 md:px-6 xl:px-28 mx-auto py-6">
@@ -101,7 +113,7 @@ const ProductPage = () => {
                   <div className="flex items-center">
                     <h2 className="text-lg font-[600] py-2">Price:</h2>
                     <p className="font-[400] ps-3 text-[16px]">
-                      0 OMR - {priceRange} OMR
+                      0 {currencyCode} - {priceRange} {currencyCode}
                     </p>
                   </div>
                   <div className="flex gap-3 items-center">
@@ -185,7 +197,7 @@ const ProductPage = () => {
               </div>
             </div>
           </div>
-          <ProductListByCat products={products} />
+          <ProductListByCat currencyCode={currencyCode} products={products} />
         </div>
         {isOpen && (
           <div
@@ -241,7 +253,7 @@ const ProductPage = () => {
                           <div className="flex items-center text-[14px]">
                             <h2 className="text-lg font-[600] py-2">Price:</h2>
                             <p className="font-[400] ps-3 ">
-                              0 OMR - {priceRange} OMR
+                              0 {currencyCode} - {priceRange} {currencyCode}
                             </p>
                           </div>
                           <div className="flex gap-3 items-center">
@@ -315,7 +327,7 @@ const ProductPage = () => {
                             </ul>
                             <Link
                               href={getMultiCategoryLink()}
-                              className="absolut bottom-4 mx-auto right-0 left-0 w-[70%] mt-6"
+                              className="absolut bottom-4 mx-auto right-0 left-0 w-[70%] mt-6 bg-white"
                             >
                               <button
                                 disabled={selectedCategories.length === 0}

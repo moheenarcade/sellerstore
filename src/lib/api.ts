@@ -37,16 +37,6 @@ export const getProductBySlug = async (slug: string) => {
   }
 };  
 
-// export const getSettings = async () => {
-//   try {
-//     const response = await axios.get(`${baseUrl}/store/setting`);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching setting:', error);
-//     throw error;
-//   } 
-// };
-
 export const getSettings = async () => {
   try {
     const response = await axios.get(`${baseUrl}/store/setting`);
@@ -74,5 +64,7 @@ export const getCityState = async () => {
     throw error;
   } 
 };
+
+
 
 

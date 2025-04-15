@@ -6,6 +6,7 @@ import Loader from "../../components/loader";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useLanguage } from "../../context/LanguageContext";
 import { ToastContainer, toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const customStyles = {
     control: (provided, state) => ({
@@ -32,10 +33,9 @@ const customStyles = {
         padding: 10,
     }),
 };
-
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-const BuyForm = ({ product, closeModal }) => {
+const BuyForm = ({ product, closeModal, selectedSize }) => {
+    console.log("Selected Size in form:", selectedSize);
     const { t } = useTranslation();
     const { language } = useLanguage();
     const [selectedState, setSelectedState] = useState(null);
@@ -45,6 +45,7 @@ const BuyForm = ({ product, closeModal }) => {
     const [getState, setGetState] = useState([]);
     const [loading, setLoading] = useState(true);
     const formRef = useRef(null);
+    const router = useRouter();
     const [formValues, setFormValues] = useState({
         fullName: "",
         email: "",
@@ -100,7 +101,7 @@ const BuyForm = ({ product, closeModal }) => {
             const result = await response.json();
             const cities = result.data.map((city) => ({
                 value: city.id,
-                label: city.name.trim(),
+                label: language === 'ar' ? city.name_ar?.trim() : city.name?.trim(),
             }));
             setCityOptions(cities);
             setSelectedCity(null);
@@ -164,10 +165,9 @@ const BuyForm = ({ product, closeModal }) => {
                 product_sku: product?.product_sku || "",
                 product_price: product.prices?.[0]?.sale_price || 0,
                 total_price: (product.prices?.[0]?.sale_price) * (product?.quantity || 1),
-                product_option_id: product.options?.[0]?.option_id || null,
-                product_option_label: product.options?.[0]?.option_label || null,
-                product_option_id: product.options?.[0]?.product_option_id || null,
                 product_option_color: product.color || '',
+                product_option_id: selectedSize?.product_option_id ?? product.options?.[0]?.product_option_id ?? null,
+                product_option_label: selectedSize?.option_label ?? product.options?.[0]?.option_label ?? null,
             };
 
             console.log("Submitting payload:", payload);
@@ -184,6 +184,7 @@ const BuyForm = ({ product, closeModal }) => {
             console.log("API response:", result);
 
             if (result.success) {
+                const orderId = result.order_id; 
                 toast.success('Order placed successfully!');
                 setFormValues({
                     fullName: "",
@@ -194,9 +195,9 @@ const BuyForm = ({ product, closeModal }) => {
                 setSelectedState(null);
                 setSelectedCity(null);
 
-            setTimeout(() => {
-                closeModal();
-            }, 3000);
+                setTimeout(() => {
+                    router.push(`/success?orderId=${orderId}`);
+                }, 3000);
             } else {
                 toast.error(result.message || "Failed to place order");
             }
@@ -212,9 +213,9 @@ const BuyForm = ({ product, closeModal }) => {
         <>
             <ToastContainer />
             <form className="space-y-3" ref={formRef} onSubmit={handleSubmit}>
-                <div className="space-y-3 h-[300px] md:h-[400px] overflow-y-auto px-2">
+                <div className="space-y-3 overflow-y-auto px-2 pt-2">
                     <div ref={formRefs.fullName}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('Full_Name')}</label>
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Full_Name')}</label> */}
                         <input
                             type="text"
                             name="fullName"
@@ -228,7 +229,7 @@ const BuyForm = ({ product, closeModal }) => {
                     </div>
 
                     <div ref={formRefs.email}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('Email')}</label>
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Email')}</label> */}
                         <input
                             type="email"
                             name="email"
@@ -242,33 +243,55 @@ const BuyForm = ({ product, closeModal }) => {
                     </div>
 
                     <div ref={formRefs.phone}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('Phone_Number')}</label>
-                        <div className="flex rounded-md shadow-sm">
-                            <span className={`inline-flex items-center px-3 border-gray-300 bg-gray-50 text-gray-500 text-sm ${language === "ar" ? "rounded-r-md border border-l-0" : "rounded-l-md border border-r-0"}`}>
-                                +{mobileCode}
-                            </span>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formValues.phone}
-                                onChange={handleInputChange}
-                                className={`w-full px-3 py-2 border ${formErrors.phone ? "border-red-500" : "border-gray-300"
-                                    } ${language === "ar" ? "rounded-l-md" : "rounded-r-md"}`}
-                                placeholder={`Enter ${mobileLength}-digit number`}
-                                maxLength={mobileLength}
-                            />
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Phone_Number')}</label> */}
+
+                        <div className="flex rounded-md shadow-sm flex-row-reverse rtl:flex-row">
+                            {language === "ar" ? (
+                                <>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formValues.phone}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-3 py-2 border ${formErrors.phone ? "border-red-500" : "border-gray-300"} ml-[1px] rounded-r-md`}
+                                        placeholder={t('Enter_valid_mobile_number')}
+                                        maxLength={mobileLength}
+                                    />
+                                    <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-md">
+                                        {mobileCode}+
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formValues.phone}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-3 py-2 border ${formErrors.phone ? "border-red-500" : "border-gray-300"} rounded-r-md`}
+                                        placeholder={t('Enter_valid_mobile_number')}
+                                        maxLength={mobileLength}
+                                    />
+                                    <span className="inline-flex items-center px-3 border border-l-1 border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-md">
+                                        +{mobileCode}
+                                    </span>
+                                </>
+                            )}
                         </div>
+
                         {formErrors.phone && <p className="text-red-500 text-sm">{formErrors.phone}</p>}
                     </div>
 
                     <div ref={formRefs.state}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('State')}</label>
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('State')}</label> */}
                         <Select
                             inputId="selectState"
                             options={getState.map((state) => ({
                                 value: state.id,
-                                label: state.name.trim(),
+                                label: language === 'ar' ? state.name_ar?.trim() : state.name?.trim(),
                             }))}
+                            placeholder={t('Select_a_state')}
                             value={selectedState}
                             onChange={(option) => {
                                 setSelectedState(option);
@@ -282,7 +305,7 @@ const BuyForm = ({ product, closeModal }) => {
                     </div>
 
                     <div ref={formRefs.city}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('city')}</label>
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('city')}</label> */}
                         <Select
                             inputId="selectCity"
                             options={cityOptions}
@@ -291,6 +314,7 @@ const BuyForm = ({ product, closeModal }) => {
                                 setSelectedCity(option);
                                 setFormErrors((prev) => ({ ...prev, city: "" }));
                             }}
+                            placeholder={t('Select_a_City')}
                             styles={customStyles}
                             className="mt-2"
                             isDisabled={!selectedState}
@@ -300,7 +324,7 @@ const BuyForm = ({ product, closeModal }) => {
                     </div>
 
                     <div ref={formRefs.address}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('Delivery_Address')}</label>
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Delivery_Address')}</label> */}
                         <textarea
                             name="address"
                             value={formValues.address}

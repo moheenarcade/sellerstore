@@ -10,7 +10,6 @@ import {
 } from "../../lib/api";
 import { useLanguage } from "../../context/LanguageContext";
 import ProductMainLists from "../../components/productListing/productMainLists";
-import ProductSideBar from "../../components/productSideBar";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -18,6 +17,8 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [priceRange, setPriceRange] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [currencyCode, setCurrencyCode] = useState('');
+
   const [selectedCategories, setSelectedCategories] = useState([]);
   const getRangeBackground = (value) => {
     const percentage = (value / 100) * 100;
@@ -84,6 +85,18 @@ const Products = () => {
     return `/products/${slugs.join(",")}`;
   };
 
+  useEffect(() => {
+    const settings = localStorage.getItem('storeSettings');
+    if (settings) {
+      try {
+        const parsedSettings = JSON.parse(settings);
+        setCurrencyCode(parsedSettings.currency_code || 'OMR');
+      } catch (error) {
+        console.error("Failed to parse storeSettings:", error);
+      }
+    }
+  }, []);
+
   return (
     <div className="products-main container px-4 md:px-6 xl:px-28 mx-auto py-6">
       <div className="block lg:hidden">
@@ -94,7 +107,7 @@ const Products = () => {
           >
             Filters
           </button>
-          <button>Price : 10</button>
+          <button>Price : 10 {currencyCode}</button>
         </div>
       </div>
       <div className="flex justify-between gap-[15px]">
@@ -108,7 +121,7 @@ const Products = () => {
                 <div className="flex items-center">
                   <h2 className="text-lg font-[600] py-2">Price:</h2>
                   <p className="font-[400] ps-3 text-[16px]">
-                    0 OMR - {priceRange} OMR
+                    0 {currencyCode} - {priceRange} {currencyCode}
                   </p>
                 </div>
                 <div className="flex gap-3 items-center">
@@ -178,11 +191,10 @@ const Products = () => {
                   >
                     <button
                       disabled={selectedCategories.length === 0}
-                      className={`w-full py-2 rounded-lg transition-all duration-300 ${
-                        selectedCategories.length === 0
+                      className={`w-full py-2 rounded-lg transition-all duration-300 ${selectedCategories.length === 0
                           ? "bg-gray-300 text-white cursor-not-allowed"
                           : "bg-[#f69853] text-white hover:bg-[#e87f34] cursor-pointer"
-                      }`}
+                        }`}
                     >
                       Filter Products
                     </button>
@@ -192,7 +204,7 @@ const Products = () => {
             </div>
           </div>
         </div>
-        <ProductMainLists />
+        <ProductMainLists currencyCode={currencyCode} />
       </div>
       {isOpen && (
         <div
@@ -248,7 +260,7 @@ const Products = () => {
                         <div className="flex items-center text-[14px]">
                           <h2 className="text-lg font-[600] py-2">Price:</h2>
                           <p className="font-[400] ps-3 ">
-                            0 OMR - {priceRange} OMR
+                            0 {currencyCode} - {priceRange} {currencyCode}
                           </p>
                         </div>
                         <div className="flex gap-3 items-center">
@@ -326,11 +338,10 @@ const Products = () => {
                           >
                             <button
                               disabled={selectedCategories.length === 0}
-                              className={`w-full py-2 rounded-lg transition-all duration-300 ${
-                                selectedCategories.length === 0
+                              className={`w-full py-2 rounded-lg transition-all duration-300 ${selectedCategories.length === 0
                                   ? "bg-gray-300 text-white cursor-not-allowed"
                                   : "bg-[#f69853] text-white hover:bg-[#e87f34]"
-                              }`}
+                                }`}
                             >
                               Filter Products
                             </button>

@@ -2,15 +2,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import HotsSlide1 from "../../../public/images/hotslide1.webp";
-import HotsSlide2 from "../../../public/images/hotslide1bg.webp";
-import { FaStar } from "react-icons/fa";
 import { useTranslation } from "../../hooks/useTranslation";
 import { getProducts } from "../../lib/api";
 import { useLanguage } from "../../context/LanguageContext";
 import RandomReviews from "../../components/randomReviews";
 
-const RelatedProducts = () => {
+const RelatedProducts = ({currencyCode}) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [products, setProducts] = useState([]);
@@ -47,9 +44,9 @@ const RelatedProducts = () => {
     </div>
     <div className="product-lists pt-6">
       {products.map((productList) => (
-        <Link href={`/product-detail/${productList.product_sku}`}>
+        <Link href={`/product-detail/${productList.product_sku}`} key={productList.product_sku}>
           <div
-           key={productList.product_sku}
+           
             className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
           >
             <div className="">
@@ -93,7 +90,7 @@ const RelatedProducts = () => {
                   ) : (
                     <b className="text-[12px] text-red-400">No Price</b>
                   )}
-                  <p className="uppercase font-[300]">OMR</p>
+                  <p className="uppercase font-[300]">{currencyCode}</p>
                 </div>
                 <div className="product-offer-badge">
                   <span className="offer-effect px-2 py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">
@@ -104,7 +101,7 @@ const RelatedProducts = () => {
               <div className="">
                 {productList.prices?.[0]?.price ? (
                   <b className="text-[17px] line-through font-[300]">
-                    {productList.prices[0].price}
+                    {productList.prices[0].price} {currencyCode}
                   </b>
                 ) : (
                   <b className="text-[17px] line-through"></b>

@@ -63,6 +63,23 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+
+.single-size {
+  position: relative;
+}
+.description-content img {
+  width: 100% !important;
+}
+/* Tooltip styling */
+.tooltip {
+  visibility: hidden;
+}
+
+.single-size:hover .tooltip {
+  visibility: visible;
+}
+
+
 nextjs-portal {
   display: none;
 }
