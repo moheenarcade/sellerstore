@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LuBadgeCheck } from "react-icons/lu";
+import Loader from '../../components/loader';
 
 const Success = () => {
     const searchParams = useSearchParams();  // This is sufficient, no need to destructure props
@@ -31,7 +32,7 @@ const Success = () => {
         fetchOrder();
     }, [orderId]);
 
-    if (loading) return <p className="text-center py-10">Loading...</p>;
+    if (loading) return  <Loader />;
     if (!orderData) return <p className="text-center py-10">No order data found.</p>;
 
     return (
