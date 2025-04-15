@@ -18,7 +18,7 @@ const Success = () => {
             if (!orderId) return;
 
             try {
-                const res = await fetch(`${baseUrl}/store/order/${orderId}`);
+                const res = await fetch(`https://dxb.reselluae.com/api/rest/store/order/${orderId}`);
                 const data = await res.json();
                 setOrderData(data.data);
             } catch (err) {
@@ -27,6 +27,7 @@ const Success = () => {
                 setLoading(false);
             }
         };
+
         fetchOrder();
     }, [orderId]);
 
