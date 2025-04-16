@@ -9,13 +9,15 @@ import { IoLogoInstagram } from "react-icons/io5";
 import { PiSnapchatLogo } from "react-icons/pi";
 import { AiFillTikTok } from "react-icons/ai";
 import { useTranslation } from '../../hooks/useTranslation';
+import { FaRegCopyright } from "react-icons/fa6";
+
 
 const Footer = () => {
     const { t } = useTranslation();
   return (
 
     <footer className='footer-main bg-[#2d2d2d] pt-8'>
-      <div className="container px-4 md:px-6 xl:px-28 mx-auto">
+      <div className="container px-4 md:px-6 xl:px-28 mx-auto pb-8">
         <div className="footer-nav flex flex-col md:flex-row gap-12 md:gap-6 justify-between text-white">
           <div className="">
             <p className='font-[400] text-lg md:text-[15px] 2xl:text-lg pb-3'>{t('free_souq_oman')}</p>
@@ -59,7 +61,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-[1px] border-t-[#5c5c5c] mt-8">
+      {/* <div className="border-t-[1px] border-t-[#5c5c5c] mt-8">
         <div className="footer-follow-us flex justify-center lg:justify-start items-center gap-4 font-[300] container px-4 md:px-6 xl:px-28 mx-auto py-6">
           <p className='text-white'>{t('follow_us_on')}: </p>
           <ul className='flex items-center gap-4 text-[#fff] text-xl'>
@@ -69,10 +71,10 @@ const Footer = () => {
             <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><PiSnapchatLogo /></li>
           </ul>
         </div>
-      </div>
+      </div> */}
       <div className="footer-copy-right bg-[#393939] pt-4 font-[300] pb-20 lg:pb-4">
         <div className="container px-4 md:px-6 xl:px-28 mx-auto flex flex-col md:flex-row justify-between items-center text-[#fff]">
-          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0'>{t('cpy_right_text')}</p>
+          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright />2025 Dxbstore Powered by Reselluae</p>
           <ul className='text-[12px] flex items-center gap-4'>
             <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
               <Link href="#">

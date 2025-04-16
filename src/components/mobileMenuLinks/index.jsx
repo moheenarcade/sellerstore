@@ -41,7 +41,7 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
     setIsAnimating(false);
   };
 
-  
+
 
   return (
     <div className="pt-8 h-[80vh] overflow-y-scroll">
@@ -76,7 +76,6 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
                   closeMobileMenu();
                 }}
                 className="block mb-2 border-b-[1px] border-b-gray-300 py-1 px-4 hover:bg-gray-100"
-
               >
                 {item.name}
               </Link>

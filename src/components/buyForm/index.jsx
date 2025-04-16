@@ -66,12 +66,13 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
 
     const mobileCode = getSetting?.mobile_code || "";
     const mobileLength = getSetting?.mobile_length || 9;
-
+    console.log(mobileCode, "mobile code ")
     useEffect(() => {
         const fetchSettings = async () => {
             try {
                 const data = await getSettings();
-                setGetSetting(data.data?.[0] || {});
+                console.log("Fetched settings:", data);
+                setGetSetting(data.data || {});
             } catch (err) {
                 console.error("Failed to fetch settings", err);
             } finally {
@@ -184,7 +185,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
             console.log("API response:", result);
 
             if (result.success) {
-                const orderId = result.order_id; 
+                const orderId = result.order_id;
                 toast.success('Order placed successfully!');
                 setFormValues({
                     fullName: "",

@@ -180,9 +180,7 @@ const Products = () => {
                         onClick={() => handleCheckboxChange(category)}
                       >
                         {category}
-
                         <IoClose className="text-xl" />
-
                       </button>
                     ))}
                   </div>

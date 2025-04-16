@@ -17,7 +17,6 @@ import { PiHandsClappingFill } from "react-icons/pi";
 import ProductReviews from "../../../components/productReviews";
 
 
-
 export default function ProductDetailPage() {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -34,13 +33,13 @@ export default function ProductDetailPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
+
   const getImageUrl = (imageObj) => {
     if (!imageObj || !imageObj.image) return "/placeholder.webp";
     return imageObj.image.startsWith("http")
       ? imageObj.image
       : `${imageBaseUrl}${imageObj.image}`;
   };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -76,6 +75,8 @@ export default function ProductDetailPage() {
       } catch (error) {
         console.error("Failed to parse storeSettings:", error);
       }
+    } else {
+      console.warn("storeSettings not found in localStorage");
     }
   }, []);
 
@@ -83,17 +84,18 @@ export default function ProductDetailPage() {
     const fetchData = async () => {
       try {
         const data = await getSettings();
-        const [firstSetting] = data.data || [];
-        setGetSetting(firstSetting || {});
+        const firstSetting = data.data || {};
+        setGetSetting(firstSetting);
       } catch (error) {
         console.error("Failed to fetch categories", error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   useEffect(() => {
     async function fetchProduct() {
@@ -136,16 +138,21 @@ export default function ProductDetailPage() {
           </div>
           <div className="produt-detail-sec w-full md:w-[45%]">
             <div className="product-top-tag flex justify-center md:justify-end pb-3">
-              <p className="text-[13px] md:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
-                {t('Hot_product_few_left_in_stock')}
-              </p>
+              {product.options
+                .filter(opt => opt.option_name === "Size")
+                .reduce((total, opt) => total + opt.available_quantity, 0) < 5 && (
+                  <p className="text-[13px] md:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
+                    {t('Hot_product_few_left_in_stock')}
+                  </p>
+                )}
+
             </div>
             <RandomReviews />
             <h1 className="text-2xl md:text-3xl font-[600] pt-3">
               {language === "ar" ? product.name_ar : product.name}
             </h1>
             <ul className="pt-2 md:pt-4">
-              <li className="flex items-center mb-2">
+              {/* <li className="flex items-center mb-2">
                 <p className="text-[16px]">
                   <b>{t('Brand')}:</b> {product.brand}
                 </p>
@@ -154,67 +161,87 @@ export default function ProductDetailPage() {
                 <p className="text-[16px]">
                   <b>{t('Gender')}:</b> {product.gender}
                 </p>
-              </li>
-              <li className="flex items-center mb-2">
+              </li> */}
+              <li className="flex flex-col mb-3">
                 <p className="text-[16px]">
-                  <b>{t('Color')}:</b> {product.color}
+                  <b>{t('Color')}:</b>
                 </p>
+                <div className="color-sec">
+                  {product.images?.[0] && (
+                    <div className="single-color flex flex-col overflow-hidden cursor-pointer border-black border-[2px] rounded-lg w-fit justify-center">
+                      <Image
+                        className="rounded-b-lg h-[80px] w-[80px] object-cover"
+                        src={getImageUrl(product.images[0])}
+                        alt={product.name}
+                        width={100}
+                        height={100}
+                      />
+                      <p className="text-center">{product.color}</p>
+                    </div>
+                  )}
+
+                </div>
               </li>
             </ul>
-            {product.options.some(opt => opt.option_name === "Size") && (
+
+            {product.options.some(opt => opt.option_name === "Size" && opt.available_quantity > 0) && (
               <>
-                <div className="size-options mb-3">
-                  <p className="text-[16px] pb-2">
-                    <b>{t('Size')}:</b>
-                  </p>
-                  <div className="flex gap-3 flex-wrap">
-                    <div className="flex gap-3 flex-wrap">
-                      {product.options
-                        .filter(opt => opt.option_name === "Size")
-                        .map((size) => {
-                          const isOutOfStock = size.available_quantity === 0;
-                          const isTooltipVisible = activeTooltip === size.option_label_id;
+                {product.options.some(opt => opt.option_name === "Size") && (
+                  <>
+                    <div className="size-options mb-3">
+                      <p className="text-[16px] pb-2">
+                        <b>{t('Size')}:</b>
+                      </p>
+                      <div className="flex gap-3 flex-wrap">
+                        <div className="flex gap-3 flex-wrap">
+                          {product.options
+                            .filter(opt => opt.option_name === "Size")
+                            .map((size) => {
+                              const isOutOfStock = size.available_quantity === 0;
+                              const isTooltipVisible = activeTooltip === size.option_label_id;
 
-                          const handleTouchOrClick = () => {
-                            setActiveTooltip(size.option_label_id);
-                            setTimeout(() => setActiveTooltip(null), 2000);
-                            if (!isOutOfStock) {
-                              setSelectedSize(size.option_label_id);
-                            }
-                          };
+                              const handleTouchOrClick = () => {
+                                setActiveTooltip(size.option_label_id);
+                                setTimeout(() => setActiveTooltip(null), 2000);
+                                if (!isOutOfStock) {
+                                  setSelectedSize(size.option_label_id);
+                                }
+                              };
 
-                          return (
-                            <div
-                              key={size.option_label_id}
-                              onClick={handleTouchOrClick}
-                              onTouchStart={handleTouchOrClick}
-                              className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
+                              return (
+                                <div
+                                  key={size.option_label_id}
+                                  onClick={handleTouchOrClick}
+                                  onTouchStart={handleTouchOrClick}
+                                  className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
             ${selectedSize === size.option_label_id
-                                  ? "bg-black text-white border-black border-[2px]"
-                                  : "bg-white border-dotted border-[2px]"}
+                                      ? "bg-black text-white border-black border-[2px]"
+                                      : "bg-white border-dotted border-[2px]"}
             ${isOutOfStock ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           `}
-                              aria-disabled={isOutOfStock}
-                            >
-                              {size.option_label}
+                                  aria-disabled={isOutOfStock}
+                                >
+                                  {size.option_label}
 
-                              <div
-                                className={`absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm pointer-events-none
+                                  <div
+                                    className={`absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm pointer-events-none
               ${isOutOfStock ? "bg-red-600" : "bg-black"}
               ${isTooltipVisible ? "opacity-100" : "opacity-0"} 
               group-hover:opacity-100 transition-opacity duration-300
             `}
-                              >
-                                {isOutOfStock
-                                  ? t('Out_of_stock')
-                                  : `${t('Available_Quantity')}: ${size.available_quantity}`}
-                              </div>
-                            </div>
-                          );
-                        })}
+                                  >
+                                    {isOutOfStock
+                                      ? t('Out_of_stock')
+                                      : `${t('Available_Quantity')}: ${size.available_quantity}`}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </>
             )}
 
@@ -241,7 +268,7 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <div className="">
+            {/* <div className="">
               <div className="bundlessave flex items-center justify-center my-4">
                 <div className="w-full h-[2px] bg-black"></div>
                 <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
@@ -278,10 +305,10 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div
-              className="relative group w-full"
+              className="relative group w-full mt-6"
               onTouchStart={() => {
                 if (isOutOfStock) {
                   setShowTooltip(true);
@@ -317,7 +344,7 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="product-reviews">
-              <ProductReviews product={product.reviews}/>
+              <ProductReviews product={product.reviews} />
             </div>
           </div>
         </div>
