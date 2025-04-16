@@ -186,62 +186,104 @@ export default function ProductDetailPage() {
 
             {product.options.some(opt => opt.option_name === "Size" && opt.available_quantity > 0) && (
               <>
-                {product.options.some(opt => opt.option_name === "Size") && (
-                  <>
-                    <div className="size-options mb-3">
-                      <p className="text-[16px] pb-2">
-                        <b>{t('Size')}:</b>
-                      </p>
-                      <div className="flex gap-3 flex-wrap">
+                  {/* {product.options.some(opt => opt.option_name === "Size") && (
+                    <>
+                      <div className="size-options mb-3">
+                        <p className="text-[16px] pb-2">
+                          <b>{t('Size')}:</b>
+                        </p>
                         <div className="flex gap-3 flex-wrap">
-                          {product.options
-                            .filter(opt => opt.option_name === "Size")
-                            .map((size) => {
-                              const isOutOfStock = size.available_quantity === 0;
-                              const isTooltipVisible = activeTooltip === size.option_label_id;
+                          <div className="flex gap-3 flex-wrap">
+                            {product.options
+                              .filter(opt => opt.option_name === "Size")
+                              .map((size) => {
+                                const isOutOfStock = size.available_quantity === 0;
+                                const isTooltipVisible = activeTooltip === size.option_label_id;
 
-                              const handleTouchOrClick = () => {
-                                setActiveTooltip(size.option_label_id);
-                                setTimeout(() => setActiveTooltip(null), 2000);
-                                if (!isOutOfStock) {
-                                  setSelectedSize(size.option_label_id);
-                                }
-                              };
+                                const handleTouchOrClick = () => {
+                                  setActiveTooltip(size.option_label_id);
+                                  setTimeout(() => setActiveTooltip(null), 2000);
+                                  if (!isOutOfStock) {
+                                    setSelectedSize(size.option_label_id);
+                                  }
+                                };
 
-                              return (
-                                <div
-                                  key={size.option_label_id}
-                                  onClick={handleTouchOrClick}
-                                  onTouchStart={handleTouchOrClick}
-                                  className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
-            ${selectedSize === size.option_label_id
-                                      ? "bg-black text-white border-black border-[2px]"
-                                      : "bg-white border-dotted border-[2px]"}
-            ${isOutOfStock ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-          `}
-                                  aria-disabled={isOutOfStock}
-                                >
-                                  {size.option_label}
-
+                                return (
                                   <div
-                                    className={`absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm pointer-events-none
-              ${isOutOfStock ? "bg-red-600" : "bg-black"}
-              ${isTooltipVisible ? "opacity-100" : "opacity-0"} 
-              group-hover:opacity-100 transition-opacity duration-300
+                                    key={size.option_label_id}
+                                    onClick={handleTouchOrClick}
+                                    onTouchStart={handleTouchOrClick}
+                                    className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
+              ${selectedSize === size.option_label_id
+                                        ? "bg-black text-white border-black border-[2px]"
+                                        : "bg-white border-dotted border-[2px]"}
+              ${isOutOfStock ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
             `}
+                                    aria-disabled={isOutOfStock}
                                   >
-                                    {isOutOfStock
-                                      ? t('Out_of_stock')
-                                      : `${t('Available_Quantity')}: ${size.available_quantity}`}
+                                    {size.option_label}
+
+                                    <div
+                                      className={`absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm pointer-events-none
+                ${isOutOfStock ? "bg-red-600" : "bg-black"}
+                ${isTooltipVisible ? "opacity-100" : "opacity-0"} 
+                group-hover:opacity-100 transition-opacity duration-300
+              `}
+                                    >
+                                      {isOutOfStock
+                                        ? t('Out_of_stock')
+                                        : `${t('Available_Quantity')}: ${size.available_quantity}`}
+                                    </div>
                                   </div>
-                                </div>
-                              );
-                            })}
+                                );
+                              })}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )} */}
+
+{product.options.some(opt => opt.option_name === "Size") && (
+  <>
+    <div className="size-options mb-3">
+      <p className="text-[16px] pb-2">
+        <b>{t('Size')}:</b>
+      </p>
+      <div className="flex gap-3 flex-wrap">
+        {product.options
+          .filter(opt => opt.option_name === "Size" && opt.available_quantity > 0) // Only available sizes
+          .map((size) => {
+            const isSelected = selectedSize === size.option_label_id;
+
+            const handleTouchOrClick = () => {
+              setSelectedSize(size.option_label_id);
+            };
+
+            return (
+              <div
+                key={size.option_label_id}
+                onClick={handleTouchOrClick}
+                onTouchStart={handleTouchOrClick}
+                className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
+                  ${isSelected ? "bg-black text-white border-black border-[2px]" : "bg-white border-dotted border-[2px]"}
+                  cursor-pointer
+                `}
+              >
+                {size.option_label}
+
+                <div
+                  className="absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                >
+                  {`${t('Available_Quantity')}: ${size.available_quantity}`}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </div>
+  </>
+)}
+
               </>
             )}
 
