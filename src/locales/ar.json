@@ -77,7 +77,11 @@
     "Out_of_stock" : "إنتهى من المخزن",
     "Color" : "لون",
     "Size" : "مقاس",
-    "bundle_save" : "حزمة وحفظ"
+    "bundle_save" : "حزمة وحفظ",
+    "Save" : "يحفظ",
+    "No_related_product_available" : "لا يوجد منتج ذو صلة متاح" 
+
+
 
 
 

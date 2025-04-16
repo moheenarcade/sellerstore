@@ -14,6 +14,7 @@ import { useTranslation } from "../../../hooks/useTranslation";
 import { useLanguage } from "../.././../context/LanguageContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { PiHandsClappingFill } from "react-icons/pi";
+import ProductReviews from "../../../components/productReviews";
 
 
 
@@ -126,7 +127,6 @@ export default function ProductDetailPage() {
   const totalAvailableQty = product.options.reduce((sum, opt) => sum + opt.available_quantity, 0);
   const isOutOfStock = totalAvailableQty === 0;
 
-
   return (
     <>
       <div className="container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
@@ -218,7 +218,7 @@ export default function ProductDetailPage() {
               </>
             )}
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
               <p className="font-[600] text-2xl">
                 {product.prices?.[0]?.sale_price} {currencyCode}
               </p>
@@ -229,7 +229,7 @@ export default function ProductDetailPage() {
                 <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
                   <p className="flex items-center gap-2">
                     <PiHandsClappingFill className="text-xl mt-[2px]" />
-                    Save
+                    {t('Save')}
                     <span className="">
                       {Math.round(
                         ((product.prices[0].price - product.prices[0].sale_price) / product.prices[0].price) * 100
@@ -315,6 +315,10 @@ export default function ProductDetailPage() {
             <div>
               <OurGranteeShippingFaq />
             </div>
+
+            <div className="product-reviews">
+              <ProductReviews product={product.reviews}/>
+            </div>
           </div>
         </div>
         <div className="product-description pt-8 w-full lg:w-[75%] mx-auto">
@@ -326,7 +330,7 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="pb-12">
-        <RelatedProducts currencyCode={currencyCode} />
+        <RelatedProducts product={product.related_products} currencyCode={currencyCode} />
       </div>
 
       {isModalOpen && (

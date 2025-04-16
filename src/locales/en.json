@@ -77,7 +77,9 @@
     "Out_of_stock" : "Out of stock",
     "Color" : "Color",
     "Size" : "Size",
-    "bundle_save" : "bundle & save"
+    "bundle_save" : "bundle & save",
+    "Save" : "Save",
+    "No_related_product_available" : "No related product available" 
 
 
 

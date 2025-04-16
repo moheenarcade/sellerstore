@@ -6,11 +6,11 @@ import { LuBadgeCheck } from "react-icons/lu";
 import Loader from '../../components/loader';
 
 const Success = () => {
-    const searchParams = useSearchParams();  // This is sufficient, no need to destructure props
+    const searchParams = useSearchParams(); 
     const orderId = searchParams.get('orderId');
     const [orderData, setOrderData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const baseUrl = process.env.NEXT_PUBLIC_API_BA
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     
     console.log(orderData, "order data");
 
@@ -19,7 +19,7 @@ const Success = () => {
             if (!orderId) return;
 
             try {
-                const res = await fetch(`https://dxb.reselluae.com/api/rest/store/order/${orderId}`);
+                const res = await fetch(`${baseUrl}/store/order/${orderId}`);
                 const data = await res.json();
                 setOrderData(data.data);
             } catch (err) {

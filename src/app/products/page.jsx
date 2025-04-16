@@ -16,6 +16,7 @@ const Products = () => {
   const { language } = useLanguage();
   const [categories, setCategories] = useState([]);
   const [priceRange, setPriceRange] = useState(1);
+    const [products, setProducts] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [currencyCode, setCurrencyCode] = useState('');
 
@@ -39,6 +40,21 @@ const Products = () => {
     };
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await getProducts();
+          setProducts(data.data || []);
+        } catch (error) {
+          console.error("Failed to fetch categories", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }, []);
+  
 
   // Handle checkbox changes
   const handleCheckboxChange = (categoryName) => {
@@ -107,7 +123,7 @@ const Products = () => {
           >
             Filters
           </button>
-          <button>Price : 10 {currencyCode}</button>
+          <p className="pl-3 font-[300]">Products: {products.length}</p>
         </div>
       </div>
       <div className="flex justify-between gap-[15px]">

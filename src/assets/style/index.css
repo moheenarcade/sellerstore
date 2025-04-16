@@ -299,6 +299,22 @@ input[type="range"]::-moz-range-track {
 }
 
 
+/* ProductReviews.module.css */
+.product-reviews-slider .swiper-button-next,
+.product-reviews-slider .swiper-button-prev {
+  color: black;
+}
+
+.product-reviews-slider .swiper-pagination-bullet {
+  background-color: #ccc;
+  opacity: 1;
+}
+
+.product-reviews-slider .swiper-pagination-bullet-active {
+  background-color: black;
+}
+
+
 
 
 @media screen and (max-width: 420px) and (min-width: 100px) {

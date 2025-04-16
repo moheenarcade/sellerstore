@@ -99,7 +99,7 @@ const ProductPage = () => {
             >
               Filters
             </button>
-            <button>Price : 10</button>
+            <p className="pl-3 font-[300]"> Products: {products.length}</p>
           </div>
         </div>
         <div className="flex justify-between gap-[15px]">
