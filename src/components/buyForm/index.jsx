@@ -8,6 +8,19 @@ import { useLanguage } from "../../context/LanguageContext";
 import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 
+
+
+const getCustomStyles = (formErrors, field) => ({
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: formErrors[field] ? '#f87171' : state.isFocused ? '#f69853' : '#d1d5db',
+      boxShadow: state.isFocused ? '0 0 0 2px rgba(250, 204, 21, 0.8)' : 'none',
+      '&:hover': {
+        borderColor: state.isFocused ? '#f69853' : '#d1d5db',
+      },
+    }),
+  });
+
 const customStyles = {
     control: (provided, state) => ({
         ...provided,
@@ -222,7 +235,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                             name="fullName"
                             value={formValues.fullName}
                             onChange={handleInputChange}
-                            className={`w-full px-3 py-2 border ${formErrors.fullName ? "border-red-500" : "border-gray-300"
+                            className={`w-full px-3 py-2 border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 ${formErrors.fullName ? "border-red-500" : "border-gray-300"
                                 } rounded-md`}
                             placeholder={t('Yourfull_name')}
                         />
@@ -236,7 +249,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                             name="email"
                             value={formValues.email}
                             onChange={handleInputChange}
-                            className={`w-full px-3 py-2 border ${formErrors.email ? "border-red-500" : "border-gray-300"
+                            className={`w-full px-3 py-2 border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 ${formErrors.email ? "border-red-500" : "border-gray-300"
                                 } rounded-md`}
                             placeholder={t('Your_email')}
                         />
@@ -254,7 +267,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                                         name="phone"
                                         value={formValues.phone}
                                         onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 border ${formErrors.phone ? "border-red-500" : "border-gray-300"} ml-[1px] rounded-r-md`}
+                                        className={`w-full px-3 py-2 border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 ${formErrors.phone ? "border-red-500" : "border-gray-300"} ml-[1px] rounded-r-md`}
                                         placeholder={t('Enter_valid_mobile_number')}
                                         maxLength={mobileLength}
                                     />
@@ -270,7 +283,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                                         name="phone"
                                         value={formValues.phone}
                                         onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 border ${formErrors.phone ? "border-red-500" : "border-gray-300"} rounded-r-md`}
+                                        className={`w-full px-3 py-2 border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 ${formErrors.phone ? "border-red-500" : "border-gray-300"} rounded-r-md`}
                                         placeholder={t('Enter_valid_mobile_number')}
                                         maxLength={mobileLength}
                                     />
@@ -298,7 +311,8 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                                 setSelectedState(option);
                                 setFormErrors((prev) => ({ ...prev, state: "" }));
                             }}
-                            styles={customStyles}
+                            // styles={customStyles}
+                            styles={getCustomStyles(formErrors, 'state')}
                             className="mt-2"
                             error={!!formErrors.state}
                         />
@@ -316,7 +330,8 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                                 setFormErrors((prev) => ({ ...prev, city: "" }));
                             }}
                             placeholder={t('Select_a_City')}
-                            styles={customStyles}
+                            // styles={customStyles}
+                            styles={getCustomStyles(formErrors, 'state')}
                             className="mt-2"
                             isDisabled={!selectedState}
                             error={!!formErrors.city}
@@ -330,7 +345,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                             name="address"
                             value={formValues.address}
                             onChange={handleInputChange}
-                            className={`w-full px-3 py-2 border ${formErrors.address ? "border-red-500" : "border-gray-300"
+                            className={`w-full px-3 py-2 border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 ${formErrors.address ? "border-red-500" : "border-gray-300"
                                 } rounded-md`}
                             rows={3}
                             placeholder={t('Your_complete_delivery_address')}
