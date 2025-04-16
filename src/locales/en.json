@@ -79,7 +79,15 @@
     "Size" : "Size",
     "bundle_save" : "bundle & save",
     "Save" : "Save",
-    "No_related_product_available" : "No related product available" 
+    "No_related_product_available" : "No related product available",
+    "Products" : "Products",
+    "Filters" : "Filters",
+    "Filter_Results" : "Filter Results",
+    "Go" : "Go",
+    "Clear"  : "Clear",
+    "For_you" : "For you",
+    "Category" : "Category",
+    "Close_panel" : "Close panel"
 
 
 

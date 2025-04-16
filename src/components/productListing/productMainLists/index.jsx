@@ -2,19 +2,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import HotsSlide1 from "../../../../public/images/hotslide1.webp";
-import HotsSlide2 from "../../../../public/images/hotslide1bg.webp";
-import { FaStar } from "react-icons/fa";
 import { useTranslation } from "../../../hooks/useTranslation";
-import { getProducts, getCategories } from "../../../lib/api";
 import { useLanguage } from "../../../context/LanguageContext";
 import RandomReviews from "../../randomReviews";
 
-const ProductMainLists = ({currencyCode}) => {
+const ProductMainLists = ({currencyCode , products}) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
   const getImageUrl = (imageObj) => {
     if (!imageObj || !imageObj.image) return "/placeholder.webp";
@@ -23,30 +18,16 @@ const ProductMainLists = ({currencyCode}) => {
       : `${imageBaseUrl}${imageObj.image}`;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getProducts();
-        setProducts(data.data || []);
-      } catch (error) {
-        console.error("Failed to fetch categories", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     <>
       <div className="filter-poducts w-full lg:w-[75%] relative">
         <div className="hidden lg:block">
           <div className="flex justify-between">
             <div className="flex items-center">
-              <p className="text-xl font-[600] pr-4 border-r-[1px] border-r-gray-300">
-                Products
+              <p className={`text-xl font-[600]  ${language === "ar" ? " pl-4 border-l-[1px] border-l-gray-300" : "pr-4 border-r-[1px] border-r-gray-300"} `}>
+                {t('Products')}
               </p>
-              <p className="pl-3 font-[300]">{products.length}</p>
+              <p className={` font-[300] ${language === "ar" ? "pr-3" : "pl-3"} `}>{products.length}</p>
             </div>
           </div>
         </div>

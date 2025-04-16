@@ -10,16 +10,21 @@ import {
 } from "../../lib/api";
 import { useLanguage } from "../../context/LanguageContext";
 import ProductMainLists from "../../components/productListing/productMainLists";
+import { useSelectedCategory } from "../../context/SelectedCategoryContext";
+import Loader from "../../components/loader";
+import { IoClose } from "react-icons/io5";
+
 
 const Products = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [categories, setCategories] = useState([]);
   const [priceRange, setPriceRange] = useState(1);
-    const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [currencyCode, setCurrencyCode] = useState('');
-
+  const { selectedCategory, setSelectedCategory } = useSelectedCategory();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const getRangeBackground = (value) => {
     const percentage = (value / 100) * 100;
@@ -36,69 +41,69 @@ const Products = () => {
         setCategories(data.data || []);
       } catch (error) {
         console.error("Failed to fetch categories", error);
+      } finally {
+        setLoading(false);
       }
+      
     };
     fetchCategories();
   }, []);
 
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const data = await getProducts();
-          setProducts(data.data || []);
-        } catch (error) {
-          console.error("Failed to fetch categories", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
-    }, []);
-  
+    const fetchData = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
 
   // Handle checkbox changes
   const handleCheckboxChange = (categoryName) => {
-    setSelectedCategories((prev) => {
-      if (prev.includes(categoryName)) {
-        return prev.filter((name) => name !== categoryName);
-      } else {
-        return [...prev, categoryName];
-      }
-    });
+    setSelectedCategories((prev) =>
+      prev.includes(categoryName)
+        ? prev.filter((cat) => cat !== categoryName)
+        : [...prev, categoryName]
+    );
   };
 
-  // Function to fetch products for selected categories
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (selectedCategories.length === 0) {
-        console.log("No categories selected");
-        return;
-      }
-
+    const fetchData = async () => {
       try {
-        const promises = selectedCategories.map((cat) =>
-          getProductsByCategorySlug(cat.toLowerCase().replace(/\s+/g, "-"))
-        );
-        const results = await Promise.all(promises);
-        console.log("Fetched products for selected categories:", results);
-
-        // You can now update your UI with these products, maybe store in useState?
+        const slugs = selectedCategories
+          .map((cat) => cat.toLowerCase().replace(/\s+/g, "-"))
+          .join(",");
+        const data = await getProducts(slugs); // 👈 Pass the slugs
+        setProducts(data.data || []);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Failed to fetch products", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, [selectedCategories]);
-  // Generate the link for multiple categories
-  const getMultiCategoryLink = () => {
-    if (selectedCategories.length === 0) return "#";
 
-    const slugs = selectedCategories.map((cat) =>
-      cat.toLowerCase().replace(/\s+/g, "-")
-    );
+  useEffect(() => {
+    if (selectedCategory) {
+      setSelectedCategories([selectedCategory]);
+      fetchProducts([selectedCategory]);
+      setSelectedCategory(null);
+    }
+  }, [selectedCategory]);
 
-    return `/products/${slugs.join(",")}`;
+  const fetchProducts = async (categories) => {
+    const slugs = categories.map(cat => cat.toLowerCase().replace(/\s+/g, "-"));
+    const data = await getProductsByCategorySlug(slugs.join(","));
+    setProducts(data?.data || []);
   };
 
   useEffect(() => {
@@ -121,21 +126,21 @@ const Products = () => {
             onClick={() => setIsOpen(true)}
             className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
           >
-            Filters
+            {t('Filters')}
           </button>
-          <p className="pl-3 font-[300]">Products: {products.length}</p>
+          <p className="pl-3 font-[300]">{t('Products')}: {products.length}</p>
         </div>
       </div>
       <div className="flex justify-between gap-[15px]">
         <div className="filters-main hidden lg:block w-[25%] relative">
           <div className="filter-container border-[1px] border-gray-300 rounded-lg">
             <div className="border-b-[1px] border-b-gray-300">
-              <h1 className="text-lg font-[600] px-4 py-2">Filters</h1>
+              <h1 className="text-lg font-[600] px-4 py-2">{t('Filters')}</h1>
             </div>
             <div className="px-4 h-[94%] overflow-y-auto pb-12">
               <div className="filter-price border-b-[1px] border-b-gray-300 pb-6">
                 <div className="flex items-center">
-                  <h2 className="text-lg font-[600] py-2">Price:</h2>
+                  <h2 className="text-lg font-[600] py-2">{t('Price')}:</h2>
                   <p className="font-[400] ps-3 text-[16px]">
                     0 {currencyCode} - {priceRange} {currencyCode}
                   </p>
@@ -150,14 +155,43 @@ const Products = () => {
                     onChange={(e) => setPriceRange(Number(e.target.value))}
                     className="custom-range w-full outline-none"
                   />
-
                   <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    Go
+                    {t('Go')}
                   </button>
                 </div>
               </div>
+
+              {selectedCategories.length > 0 && (
+                <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-[600] py-2">{t('Filter_Results')}</h2>
+                    <button
+                      className="text-red-600 cursor-pointer py-1 px-4 transition-all duration-[0.3s] ease-in-out"
+                      onClick={() => setSelectedCategories([])}
+                    >
+                      {t('Clear')}
+                    </button>
+                  </div>
+                  <div className="flex gap-2 flex-wrap text-[14px]">
+                    {selectedCategories.map((category) => (
+                      <button
+                        key={category}
+                        className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
+                        onClick={() => handleCheckboxChange(category)}
+                      >
+                        {category}
+
+                        <IoClose className="text-xl" />
+
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+
               <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
-                <h2 className="text-lg font-[600] py-2">For you</h2>
+                <h2 className="text-lg font-[600] py-2">{t('For_you')}</h2>
                 <div className="flex gap-2 flex-wrap text-[14px]">
                   <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
                     All
@@ -182,8 +216,10 @@ const Products = () => {
                   </button>
                 </div>
               </div>
+
+
               <div className="filter-cat ">
-                <p className="text-lg font-[600] py-2">Category</p>
+                <p className="text-lg font-[600] py-2">{t('Category')}</p>
                 <div className="flex flex-col justify-between">
                   <ul className="pl-2 text-[14px]">
                     {categories.map((cat) => (
@@ -201,26 +237,16 @@ const Products = () => {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href={getMultiCategoryLink()}
-                    className="pt-6 w-[70%] mx-auto right-0 left-0 absolute bottom-4"
-                  >
-                    <button
-                      disabled={selectedCategories.length === 0}
-                      className={`w-full py-2 rounded-lg transition-all duration-300 ${selectedCategories.length === 0
-                          ? "bg-gray-300 text-white cursor-not-allowed"
-                          : "bg-[#f69853] text-white hover:bg-[#e87f34] cursor-pointer"
-                        }`}
-                    >
-                      Filter Products
-                    </button>
-                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <ProductMainLists currencyCode={currencyCode} />
+        {loading ? <Loader />
+          :
+          <ProductMainLists products={products} currencyCode={currencyCode} />
+        }
+
       </div>
       {isOpen && (
         <div
@@ -246,7 +272,7 @@ const Products = () => {
                           className="text-base font-semibold text-gray-900"
                           id="slide-over-title"
                         >
-                          Filters
+                          {t('Filters')}
                         </h2>
                       </div>
                       <button
@@ -254,7 +280,7 @@ const Products = () => {
                         className="relative rounded-md text-black hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden"
                       >
                         <span className="absolute -inset-2.5"></span>
-                        <span className="sr-only">Close panel</span>
+                        <span className="sr-only">{t('Close_panel')}</span>
                         <svg
                           className="size-6"
                           fill="none"
@@ -274,7 +300,7 @@ const Products = () => {
                     <div className="px-3 h-screen overflow-y-auto pt-12">
                       <div className="filter-price border-b-[1px] border-b-gray-300 pb-6">
                         <div className="flex items-center text-[14px]">
-                          <h2 className="text-lg font-[600] py-2">Price:</h2>
+                          <h2 className="text-lg font-[600] py-2">{t('Price')}:</h2>
                           <p className="font-[400] ps-3 ">
                             0 {currencyCode} - {priceRange} {currencyCode}
                           </p>
@@ -293,12 +319,39 @@ const Products = () => {
                           />
 
                           <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Go
+                            {t('Go')}
                           </button>
                         </div>
                       </div>
+                      {selectedCategories.length > 0 && (
+                        <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
+                          <div className="flex justify-between items-center">
+                            <h2 className="text-lg font-[600] py-2">{t('Filter_Results')}</h2>
+
+                            <button
+                              className="text-red-600 cursor-pointer py-1 px-4 transition-all duration-[0.3s] ease-in-out"
+                              onClick={() => setSelectedCategories([])}
+                            >
+                              {t('Clear')}
+                            </button>
+                          </div>
+                          <div className="flex gap-2 flex-wrap text-[14px]">
+                            {selectedCategories.map((category) => (
+                              <button
+                                key={category}
+                                className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
+                                onClick={() => handleCheckboxChange(category)}
+                              >
+                                {category}
+
+                                <IoClose className="text-xl" />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
-                        <h2 className="text-lg font-[600] py-2">For you</h2>
+                        <h2 className="text-lg font-[600] py-2">{t('For_you')}</h2>
                         <div className="flex gap-2 flex-wrap text-[14px]">
                           <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
                             All
@@ -324,7 +377,7 @@ const Products = () => {
                         </div>
                       </div>
                       <div className="filter-cat pb-6">
-                        <p className="text-lg font-[600] py-2">Category</p>
+                        <p className="text-lg font-[600] py-2">{t('Category')}</p>
                         <div className="flex flex-col justify-between">
                           <ul className="pl-2 text-[14px]">
                             {categories.map((cat) => (
@@ -348,20 +401,6 @@ const Products = () => {
                               </li>
                             ))}
                           </ul>
-                          <Link
-                            href={getMultiCategoryLink()}
-                            className="absolut bottom-4 mx-auto right-0 left-0 w-[70%] mt-6"
-                          >
-                            <button
-                              disabled={selectedCategories.length === 0}
-                              className={`w-full py-2 rounded-lg transition-all duration-300 ${selectedCategories.length === 0
-                                  ? "bg-gray-300 text-white cursor-not-allowed"
-                                  : "bg-[#f69853] text-white hover:bg-[#e87f34]"
-                                }`}
-                            >
-                              Filter Products
-                            </button>
-                          </Link>
                         </div>
                       </div>
                     </div>

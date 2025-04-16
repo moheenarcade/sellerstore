@@ -229,6 +229,16 @@ input:focus {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+
+html[dir="rtl"] .form-group input:checked + label:after {
+  left: unset !important;
+}
+
+html[dir="rtl"]  .form-group label:before {
+  margin-right: -6px !important;
+  margin-left: 6px !important;
+}
+
 .product-banner-sec img {
   height: 200px !important;
   object-fit: cover;

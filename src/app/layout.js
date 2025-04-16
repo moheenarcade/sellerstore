@@ -9,6 +9,7 @@ import { LanguageProvider } from "../context/LanguageContext";
 import MobileBottomMenu from "../components/mobileBottomMenu";
 import Loader from "../components/loader";
 import { getCategories } from "../lib/api";
+import { SelectedCategoryProvider } from "../context/SelectedCategoryContext";
 
 export default function RootLayout({ children }) {
   const [categories, setCategories] = useState([]);
@@ -32,17 +33,19 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <LanguageProvider>
-          <Head>
-            <link
-              href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
-              rel="stylesheet"
-            />
-          </Head>
-          <Header />
-          <FloatedLinks />
-          <MobileBottomMenu />
-          {loading ? <Loader /> : <>{children}</>}
-          <Footer />
+          <SelectedCategoryProvider>
+            <Head>
+              <link
+                href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+                rel="stylesheet"
+              />
+            </Head>
+            <Header />
+            <FloatedLinks />
+            <MobileBottomMenu />
+            {loading ? <Loader /> : <>{children}</>}
+            <Footer />
+          </SelectedCategoryProvider>
         </LanguageProvider>
       </body>
     </html>

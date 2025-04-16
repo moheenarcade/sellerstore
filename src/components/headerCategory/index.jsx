@@ -7,7 +7,8 @@ import Link from "next/link";
 import { useLanguage } from "../../context/LanguageContext";
 import { getCategories } from "../../lib/api";
 import { MdOutlineBallot } from "react-icons/md";
-
+import { useRouter } from "next/navigation";
+import { useSelectedCategory } from "../../context/SelectedCategoryContext";
 
 const HeaderCategory = () => {
     const { t } = useTranslation();
@@ -15,6 +16,8 @@ const HeaderCategory = () => {
     const formatCategoryName = (name) => {
         return name.toLowerCase().replace(/\s+/g, '-');
     };
+    const { setSelectedCategory } = useSelectedCategory();
+    const router = useRouter();
     const catitems = [
         t("all_product"),
         ,
@@ -83,7 +86,12 @@ const HeaderCategory = () => {
                             {categories.map((cat) => (
                                 <div key={cat.id} className="relative group/main-cat">
                                     <div className="flex items-center justify-between border-b px-3 border-gray-100 py-2 font-[400] text-gray-500 hover:text-black md:mx-2">
-                                        <Link href={`/products/${cat.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                                        <Link href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setSelectedCategory(cat.name);
+                                                router.push("/products");
+                                            }}>
                                             {cat.name}
                                         </Link>
                                         {cat.sub_categories && cat.sub_categories.length > 0 && (
@@ -107,8 +115,12 @@ const HeaderCategory = () => {
                                     {cat.sub_categories && cat.sub_categories.length > 0 && (
                                         <div className={`invisible absolute left-full top-0 z-50 w-56 bg-white shadow-2xl rounded-lg py-1 text-gray-800 group-hover/main-cat:visible pl-1 ${language === 'ar' ? 'right-[96%]' : 'right-0'}`}>
                                             {cat.sub_categories.map((subCat) => (
-                                                <Link
-                                                href={`/products/${subCat.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                <Link href="#"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setSelectedCategory(cat.name);
+                                                        router.push("/products");
+                                                    }}
                                                     key={subCat.id}
                                                     className="block border-b px-3 border-gray-100 py-2 font-[400] text-gray-500 hover:text-black"
                                                 >
@@ -122,7 +134,12 @@ const HeaderCategory = () => {
                         </div>
                     </div>
                 </li>
-                <Link href="/products">
+                <Link href="/products"
+                onClick={() => {
+                    setSelectedCategory(); 
+                    router.push("/products"); 
+                  }}
+                >
                     <li
                         className={
                             `${language === "ar"

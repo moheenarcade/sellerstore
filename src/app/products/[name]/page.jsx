@@ -54,16 +54,6 @@ const ProductPage = () => {
     fetchCategories();
   }, []);
 
-  // Generate the link for multiple categories
-  const getMultiCategoryLink = () => {
-    if (selectedCategories.length === 0) return "#";
-
-    const slugs = selectedCategories.map((cat) =>
-      cat.toLowerCase().replace(/\s+/g, "-")
-    );
-
-    return `/products/${slugs.join(",")}`;
-  };
 
   // Handle checkbox changes
   const handleCheckboxChange = (categoryName) => {
@@ -87,6 +77,43 @@ const ProductPage = () => {
         }
       }
     }, []);
+
+
+    useEffect(() => {
+      const fetchFilteredProducts = async () => {
+        // If no filters, load original slug's products
+        if (selectedCategories.length === 0) {
+          try {
+            setLoading(true);
+            const defaultData = await getProductsByCategorySlug(name);
+            setProducts(defaultData?.data || []);
+          } catch (error) {
+            console.error("Error fetching default products:", error);
+          } finally {
+            setLoading(false);
+          }
+          return;
+        }
+    
+        const slugs = selectedCategories.map((cat) =>
+          cat.toLowerCase().replace(/\s+/g, "-")
+        );
+    
+        try {
+          setLoading(true);
+          const filteredData = await getProductsByCategorySlug(slugs.join(","));
+          setProducts(filteredData?.data || []);
+        } catch (error) {
+          console.error("Error fetching filtered products:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      fetchFilteredProducts();
+    }, [selectedCategories, name]);
+    
+    
 
   return (
     <div>
@@ -177,7 +204,7 @@ const ProductPage = () => {
                         </li>
                       ))}
                     </ul>
-                    <Link
+                    {/* <Link
                       href={getMultiCategoryLink()}
                       className="pt-6 w-[70%] mx-auto right-0 left-0 absolute bottom-4"
                     >
@@ -191,7 +218,7 @@ const ProductPage = () => {
                       >
                         Filter Products
                       </button>
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </div>

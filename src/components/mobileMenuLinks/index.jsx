@@ -6,12 +6,16 @@ import { FaBorderAll, FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useLanguage } from "../../context/LanguageContext";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useSelectedCategory } from "../../context/SelectedCategoryContext";
 
 const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const [isAnimating, setIsAnimating] = useState(false);
+  const { setSelectedCategory } = useSelectedCategory();
   const pathname = usePathname();
   const allItems = categories.flatMap((category) => [
     { id: category.id, name: category.name },
@@ -37,6 +41,8 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
     setIsAnimating(false);
   };
 
+  
+
   return (
     <div className="pt-8 h-[80vh] overflow-y-scroll">
       <li>
@@ -45,7 +51,7 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
           className="w-full text-[#222222] text-[16px] flex bg-white py-2 px-4 shadow-lg gap-2 items-center hover:text-[#f69853] font-[600] mt-2"
         >
           <FaBorderAll className="text-[#222222] text-[16px]" />
-          {t("All Categories")}
+          {t("all_categories")}
           {isOpen ? (
             <FaChevronUp className="ml-auto" />
           ) : (
@@ -53,19 +59,24 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
           )}
         </button>
       </li>
-      <div 
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[1000px]" : "max-h-0"
-        }`}
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1000px]" : "max-h-0"
+          }`}
         onTransitionEnd={handleAnimationEnd}
       >
         <ul className="space-y-2 bg-white pl-4">
           {allItems.map((item) => (
             <li key={item.id}>
               <Link
-                href={`/products/${item.name.toLowerCase().replace(/\s+/g, "-")}`}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedCategory(item.name);
+                  router.push("/products");
+                  closeMobileMenu();
+                }}
                 className="block mb-2 border-b-[1px] border-b-gray-300 py-1 px-4 hover:bg-gray-100"
-                onClick={handleLinkClick}
+
               >
                 {item.name}
               </Link>
