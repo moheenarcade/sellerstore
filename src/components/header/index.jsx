@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect ,useRef  } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Logo from "../../../public/images/main-logo.webp";
 import Link from "next/link";
@@ -17,8 +17,19 @@ const Header = () => {
   const { language } = useLanguage();
   const [isSticky, setIsSticky] = useState(false);
   const [categories, setCategories] = useState([]);
-  // console.log(categories, "category");
   const [loading, setLoading] = useState(true);
+  const [storeSettings, setStoreSettings] = useState(null);
+  const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL_FOT_LOGO;
+
+  console.log(storeSettings?.store_logo, "logo data he re")
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const settings = localStorage.getItem('storeSettings');
+      if (settings) {
+        setStoreSettings(JSON.parse(settings));
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,15 +70,23 @@ const Header = () => {
     }
   };
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return Logo;
+    if (imagePath.startsWith("http")) {
+      return imagePath;
+    }
+    const encodedPath = encodeURI(imagePath);
+    return `${imageBaseUrl}${encodedPath}`;
+  };
+
   return (
     <header>
       <HeaderSlide />
       <div
-        className={`header-main border-b-[1px] border-b-gray-300 z-[99999] ${
-          isSticky
+        className={`header-main border-b-[1px] border-b-gray-300 z-[99999] ${isSticky
             ? "fixed top-0 left-0 right-0 z-[9999999] bg-white"
             : "relative"
-        }`}
+          }`}
       >
         <div className="hidden lg:block">
           <div
@@ -79,7 +98,7 @@ const Header = () => {
                   <div className="flex items-center">
                     <Image
                       className="w-[50px]"
-                      src={Logo}
+                      src={getImageUrl(storeSettings?.store_logo)}
                       alt="logo"
                       width={100}
                       height={100}
@@ -111,11 +130,10 @@ const Header = () => {
         </div>
         <div className="block lg:hidden mobile-header ">
           <div
-            className={`flex items-center justify-between gap-12 w-full px-2 py-2 ${
-              isSticky
+            className={`flex items-center justify-between gap-12 w-full px-2 py-2 ${isSticky
                 ? "fixed top-0 left-0 right-0 z-[9999999] bg-white shadow-md"
                 : ""
-            }`}
+              }`}
           >
             <Link href="/">
               <div className="flex items-center">
@@ -138,9 +156,8 @@ const Header = () => {
             <div className="hamburger-menu w-[10%] md:w-[4%] flex justify-end">
               <input id="menu__toggle" type="checkbox" ref={menuToggleRef} />
               <label
-                className={`menu__btn z-[999999] ${
-                  isSticky ? "top-[10px]" : "top-[36px]"
-                } ${language === "ar" ? "right-[89%]" : "right-[15px]"}`}
+                className={`menu__btn z-[999999] ${isSticky ? "top-[10px]" : "top-[36px]"
+                  } ${language === "ar" ? "right-[89%]" : "right-[15px]"}`}
                 htmlFor="menu__toggle"
               >
                 <span></span>
@@ -148,9 +165,8 @@ const Header = () => {
 
               <ul className="menu__box ">
                 <p
-                  className={`1text-[18px] pl-5 font-[600] text-[#333] ${
-                    language === "ar" ? "pr-[24px]" : "pr-[5px]"
-                  }`}
+                  className={`1text-[18px] pl-5 font-[600] text-[#333] ${language === "ar" ? "pr-[24px]" : "pr-[5px]"
+                    }`}
                 >
                   {t("Menu")}
                 </p>

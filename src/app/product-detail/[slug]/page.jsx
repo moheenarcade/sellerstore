@@ -40,6 +40,7 @@ export default function ProductDetailPage() {
       ? imageObj.image
       : `${imageBaseUrl}${imageObj.image}`;
   };
+  
   const openModal = () => {
     setIsModalOpen(true);
   };
