@@ -26,7 +26,7 @@ const HeaderCategory = () => {
         t("Electronics"),
     ];
     const [categories, setCategories] = useState([]);
-    console.log(categories, "category");
+    // console.log(categories, "category");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

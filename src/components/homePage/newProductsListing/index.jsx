@@ -14,7 +14,7 @@ const NewProductsListing = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [products, setProducts] = useState([]);
-  console.log(products, "products list new products section");
+  // console.log(products, "products list new products section");
   const [loading, setLoading] = useState(true);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
   const [currencyCode, setCurrencyCode] = useState('');

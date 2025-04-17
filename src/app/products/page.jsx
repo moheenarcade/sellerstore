@@ -145,7 +145,7 @@ const Products = () => {
               <h1 className="text-lg font-[600] px-4 py-2">{t('Filters')}</h1>
             </div>
             <div className="px-4 h-[94%] overflow-y-auto pb-12">
-              <div className="filter-price border-b-[1px] border-b-gray-300 pb-6">
+              {/* <div className="filter-price border-b-[1px] border-b-gray-300 pb-6">
                 <div className="flex items-center">
                   <h2 className="text-lg font-[600] py-2">{t('Price')}:</h2>
                   <p className="font-[400] ps-3 text-[16px]">
@@ -166,34 +166,7 @@ const Products = () => {
                     {t('Go')}
                   </button>
                 </div>
-              </div>
-
-              {selectedCategories.length > 0 && (
-                <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-[600] py-2">{t('Filter_Results')}</h2>
-                    <button
-                      className="text-red-600 cursor-pointer py-1 px-4 transition-all duration-[0.3s] ease-in-out"
-                      onClick={() => setSelectedCategories([])}
-                    >
-                      {t('Clear')}
-                    </button>
-                  </div>
-                  <div className="flex gap-2 flex-wrap text-[14px]">
-                    {selectedCategories.map((category) => (
-                      <button
-                        key={category}
-                        className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
-                        onClick={() => handleCheckboxChange(category)}
-                      >
-                        {category}
-                        <IoClose className="text-xl" />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+              </div> */}
 
               <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
                 <h2 className="text-lg font-[600] py-2">{t('For_you')}</h2>
@@ -222,6 +195,32 @@ const Products = () => {
                 </div>
               </div>
 
+
+              {selectedCategories.length > 0 && (
+                <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-[600] py-2">{t('Filter_Results')}</h2>
+                    <button
+                      className="text-red-600 cursor-pointer py-1 px-4 transition-all duration-[0.3s] ease-in-out"
+                      onClick={() => setSelectedCategories([])}
+                    >
+                      {t('Clear')}
+                    </button>
+                  </div>
+                  <div className="flex gap-2 flex-wrap text-[14px]">
+                    {selectedCategories.map((category) => (
+                      <button
+                        key={category}
+                        className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
+                        onClick={() => handleCheckboxChange(category)}
+                      >
+                        {category}
+                        <IoClose className="text-xl" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="filter-cat ">
                 <p className="text-lg font-[600] py-2">{t('Category')}</p>
@@ -302,31 +301,35 @@ const Products = () => {
                       </button>
                     </div>
                     <div className="px-3 h-screen overflow-y-auto pt-12">
-                      <div className="filter-price border-b-[1px] border-b-gray-300 pb-6">
-                        <div className="flex items-center text-[14px]">
-                          <h2 className="text-lg font-[600] py-2">{t('Price')}:</h2>
-                          <p className="font-[400] ps-3 ">
-                            0 {currencyCode} - {priceRange} {currencyCode}
-                          </p>
-                        </div>
-                        <div className="flex gap-3 items-center">
-                          <input
-                            style={getRangeBackground(priceRange)}
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={priceRange}
-                            onChange={(e) =>
-                              setPriceRange(Number(e.target.value))
-                            }
-                            className="custom-range w-full outline-none"
-                          />
-
+                     
+                    
+                      <div className="filter-for-you border-y-[1px] border-y-gray-300 pb-6">
+                        <h2 className="text-lg font-[600] py-2">{t('For_you')}</h2>
+                        <div className="flex gap-2 flex-wrap text-[14px]">
                           <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            {t('Go')}
+                            All
+                          </button>
+                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
+                            Amazing Products
+                          </button>
+                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
+                            Today's Deal
+                          </button>
+                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
+                            Hot Sale
+                          </button>
+                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
+                            Related Products
+                          </button>
+                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
+                            Special Offer
+                          </button>{" "}
+                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
+                            New Products
                           </button>
                         </div>
                       </div>
+
                       {selectedCategories.length > 0 && (
                         <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
                           <div className="flex justify-between items-center">
@@ -354,32 +357,6 @@ const Products = () => {
                           </div>
                         </div>
                       )}
-                      <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
-                        <h2 className="text-lg font-[600] py-2">{t('For_you')}</h2>
-                        <div className="flex gap-2 flex-wrap text-[14px]">
-                          <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            All
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Amazing Products
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Today's Deal
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Hot Sale
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Related Products
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Special Offer
-                          </button>{" "}
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            New Products
-                          </button>
-                        </div>
-                      </div>
                       <div className="filter-cat pb-6">
                         <p className="text-lg font-[600] py-2">{t('Category')}</p>
                         <div className="flex flex-col justify-between">

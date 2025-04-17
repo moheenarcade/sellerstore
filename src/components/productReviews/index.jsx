@@ -13,7 +13,7 @@ const ProductReviews = ({ product }) => {
         return null;
       }
     
-    console.log(product, "product reviews data");
+    // console.log(product, "product reviews data");
 
     return (
         <div className='product-reviews-main mt-6 border border-gray-300 rounded-lg px-3'>

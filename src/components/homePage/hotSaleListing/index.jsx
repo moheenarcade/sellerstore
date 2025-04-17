@@ -18,7 +18,7 @@ const HotSaleListing = () => {
     const swiperRef = useRef(null);
     const { language } = useLanguage();
     const [products, setProducts] = useState([]);
-    console.log(products, "products list");
+    // console.log(products, "products list");
     const [loading, setLoading] = useState(true);
     const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
     const [currencyCode, setCurrencyCode] = useState('');

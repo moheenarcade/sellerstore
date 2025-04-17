@@ -29,7 +29,7 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [currencyCode, setCurrencyCode] = useState('');
-  console.log(selectedSize, "selectedSize page data");
+  // console.log(selectedSize, "selectedSize page data");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;

@@ -17,7 +17,7 @@ const Header = () => {
   const { language } = useLanguage();
   const [isSticky, setIsSticky] = useState(false);
   const [categories, setCategories] = useState([]);
-  console.log(categories, "category");
+  // console.log(categories, "category");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

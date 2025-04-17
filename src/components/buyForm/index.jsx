@@ -65,7 +65,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
         phone: "",
         address: "",
     });
-    console.log(product, "product data in form ")
+    // console.log(product, "product data in form ")
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const formRefs = {
