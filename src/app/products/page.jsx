@@ -13,6 +13,7 @@ import ProductMainLists from "../../components/productListing/productMainLists";
 import { useSelectedCategory } from "../../context/SelectedCategoryContext";
 import Loader from "../../components/loader";
 import { IoClose } from "react-icons/io5";
+import { trackBothEvents } from "../../lib/pixelEvents";
 
 
 const Products = () => {
@@ -21,7 +22,7 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [priceRange, setPriceRange] = useState(1);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [currencyCode, setCurrencyCode] = useState('');
   const { selectedCategory, setSelectedCategory } = useSelectedCategory();
@@ -32,6 +33,12 @@ const Products = () => {
       "--range-progress": `${percentage}%`,
     };
   };
+
+  useEffect(() => {
+    trackBothEvents("ViewContent", {
+      content_name: "Products",
+    });
+  }, []);
 
   // get categories
   useEffect(() => {
@@ -44,7 +51,7 @@ const Products = () => {
       } finally {
         setLoading(false);
       }
-      
+
     };
     fetchCategories();
   }, []);
@@ -80,7 +87,7 @@ const Products = () => {
         const slugs = selectedCategories
           .map((cat) => cat.toLowerCase().replace(/\s+/g, "-"))
           .join(",");
-        const data = await getProducts(slugs); // 👈 Pass the slugs
+        const data = await getProducts(slugs);
         setProducts(data.data || []);
       } catch (error) {
         console.error("Failed to fetch products", error);
@@ -244,7 +251,6 @@ const Products = () => {
           :
           <ProductMainLists products={products} currencyCode={currencyCode} />
         }
-
       </div>
       {isOpen && (
         <div

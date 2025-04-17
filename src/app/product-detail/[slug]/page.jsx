@@ -15,7 +15,7 @@ import { useLanguage } from "../.././../context/LanguageContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { PiHandsClappingFill } from "react-icons/pi";
 import ProductReviews from "../../../components/productReviews";
-
+import { trackBothEvents } from "../../../lib/pixelEvents"; 
 
 export default function ProductDetailPage() {
   const { t } = useTranslation();
@@ -47,6 +47,44 @@ export default function ProductDetailPage() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const handleBuyButtonClick = () => {
+    if (!isOutOfStock && product) {
+      trackBothEvents("InitiateCheckout", {
+        content_name: product.name,
+        content_ids: [product.product_id],
+        content_type: "product",
+        currency: currencyCode,
+        value: product.prices?.[0]?.sale_price,
+        quantity: 1,
+      });
+      openModal();
+    }
+  };
+
+  useEffect(() => {
+    if (product) {
+      trackBothEvents("ViewContent", {
+        content_name: product.name,
+        content_ids: [product.product_id],
+        content_type: "product",
+        currency: currencyCode,
+        value: product.prices?.[0]?.sale_price,
+      });
+    }
+  }, [product, currencyCode]);
+
+  // useEffect(() => {
+  //   if (selectedSize && product) {
+  //     trackBothEvents("AddToCart", {
+  //       content_name: product.name,
+  //       content_ids: [product.product_id],
+  //       content_type: "product",
+  //       currency: currencyCode,
+  //       value: product.prices?.[0]?.sale_price,
+  //       quantity: 1,
+  //     });
+  //   }
+  // }, [selectedSize, product, currencyCode]);
 
 
   useEffect(() => {
@@ -92,10 +130,10 @@ export default function ProductDetailPage() {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
 
   useEffect(() => {
     async function fetchProduct() {
@@ -186,7 +224,7 @@ export default function ProductDetailPage() {
 
             {product.options.some(opt => opt.option_name === "Size" && opt.available_quantity > 0) && (
               <>
-                  {/* {product.options.some(opt => opt.option_name === "Size") && (
+                {/* {product.options.some(opt => opt.option_name === "Size") && (
                     <>
                       <div className="size-options mb-3">
                         <p className="text-[16px] pb-2">
@@ -243,46 +281,46 @@ export default function ProductDetailPage() {
                     </>
                   )} */}
 
-{product.options.some(opt => opt.option_name === "Size") && (
-  <>
-    <div className="size-options mb-3">
-      <p className="text-[16px] pb-2">
-        <b>{t('Size')}:</b>
-      </p>
-      <div className="flex gap-3 flex-wrap">
-        {product.options
-          .filter(opt => opt.option_name === "Size" && opt.available_quantity > 0) // Only available sizes
-          .map((size) => {
-            const isSelected = selectedSize === size.option_label_id;
+                {product.options.some(opt => opt.option_name === "Size") && (
+                  <>
+                    <div className="size-options mb-3">
+                      <p className="text-[16px] pb-2">
+                        <b>{t('Size')}:</b>
+                      </p>
+                      <div className="flex gap-3 flex-wrap">
+                        {product.options
+                          .filter(opt => opt.option_name === "Size" && opt.available_quantity > 0) // Only available sizes
+                          .map((size) => {
+                            const isSelected = selectedSize === size.option_label_id;
 
-            const handleTouchOrClick = () => {
-              setSelectedSize(size.option_label_id);
-            };
+                            const handleTouchOrClick = () => {
+                              setSelectedSize(size.option_label_id);
+                            };
 
-            return (
-              <div
-                key={size.option_label_id}
-                onClick={handleTouchOrClick}
-                onTouchStart={handleTouchOrClick}
-                className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
+                            return (
+                              <div
+                                key={size.option_label_id}
+                                onClick={handleTouchOrClick}
+                                onTouchStart={handleTouchOrClick}
+                                className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
                   ${isSelected ? "bg-black text-white border-black border-[2px]" : "bg-white border-dotted border-[2px]"}
                   cursor-pointer
                 `}
-              >
-                {size.option_label}
+                              >
+                                {size.option_label}
 
-                <div
-                  className="absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                >
-                  {`${t('Available_Quantity')}: ${size.available_quantity}`}
-                </div>
-              </div>
-            );
-          })}
-      </div>
-    </div>
-  </>
-)}
+                                <div
+                                  className="absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                                >
+                                  {`${t('Available_Quantity')}: ${size.available_quantity}`}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  </>
+                )}
 
               </>
             )}
@@ -359,9 +397,10 @@ export default function ProductDetailPage() {
               }}
             >
               <button
-                onClick={() => {
-                  if (!isOutOfStock) openModal();
-                }}
+                // onClick={() => {
+                //   if (!isOutOfStock) openModal();
+                // }}
+                onClick={handleBuyButtonClick}
                 className={`w-full cursor-pointer hover:scale-[1.05] transition-all duration-[0.3s] ease-in-out py-3 text-md md:text-xl px-4 rounded-lg bg-black text-white font-[500] mt-3`}
                 disabled={isOutOfStock}
               >

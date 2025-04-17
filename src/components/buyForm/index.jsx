@@ -7,19 +7,18 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { useLanguage } from "../../context/LanguageContext";
 import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-
-
+import { trackBothEvents } from "../../lib/pixelEvents";
 
 const getCustomStyles = (formErrors, field) => ({
     control: (provided, state) => ({
-      ...provided,
-      borderColor: formErrors[field] ? '#f87171' : state.isFocused ? '#f69853' : '#d1d5db',
-      boxShadow: state.isFocused ? '0 0 0 2px rgba(250, 204, 21, 0.8)' : 'none',
-      '&:hover': {
-        borderColor: state.isFocused ? '#f69853' : '#d1d5db',
-      },
+        ...provided,
+        borderColor: formErrors[field] ? '#f87171' : state.isFocused ? '#f69853' : '#d1d5db',
+        boxShadow: state.isFocused ? '0 0 0 2px rgba(250, 204, 21, 0.8)' : 'none',
+        '&:hover': {
+            borderColor: state.isFocused ? '#f69853' : '#d1d5db',
+        },
     }),
-  });
+});
 
 const customStyles = {
     control: (provided, state) => ({
@@ -49,6 +48,7 @@ const customStyles = {
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const BuyForm = ({ product, closeModal, selectedSize }) => {
     console.log("Selected Size in form:", selectedSize);
+    const [currencyCode, setCurrencyCode] = useState('');
     const { t } = useTranslation();
     const { language } = useLanguage();
     const [selectedState, setSelectedState] = useState(null);
@@ -138,6 +138,20 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
         setFormErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
+    useEffect(() => {
+        const settings = localStorage.getItem('storeSettings');
+        if (settings) {
+            try {
+                const parsedSettings = JSON.parse(settings);
+                setCurrencyCode(parsedSettings.currency_code || 'OMR');
+            } catch (error) {
+                console.error("Failed to parse storeSettings:", error);
+            }
+        } else {
+            console.warn("storeSettings not found in localStorage");
+        }
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -199,6 +213,31 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
 
             if (result.success) {
                 const orderId = result.order_id;
+              
+                // Track Purchase Event (with TikTok-required fields)
+                trackBothEvents("Purchase", {
+                    content_ids: [product.product_id], 
+                    content_id: product.product_id,
+                    content_name: product.name,
+                    content_type: "product",
+                    currency: currencyCode,
+                    value: product.prices?.[0]?.sale_price,
+                    quantity: product?.quantity || 1,
+                    order_id: orderId,
+                    email: formValues.email,
+                    phone: `${mobileCode}${formValues.phone}`,
+                });
+
+                // TikTok-specific: CompletePayment
+                // trackBothEvents("CompletePayment", {
+                //     value: product.prices?.[0]?.sale_price,
+                //     currency: currencyCode,
+                //     order_id: orderId,
+                //     email: formValues.email,
+                //     phone: `${mobileCode}${formValues.phone}`,
+                //     description: "Order completed",
+                // });
+
                 toast.success('Order placed successfully!');
                 setFormValues({
                     fullName: "",

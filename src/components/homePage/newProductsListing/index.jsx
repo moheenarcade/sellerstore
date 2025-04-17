@@ -17,7 +17,7 @@ const NewProductsListing = () => {
   console.log(products, "products list new products section");
   const [loading, setLoading] = useState(true);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
-      const [currencyCode, setCurrencyCode] = useState('');
+  const [currencyCode, setCurrencyCode] = useState('');
   const getImageUrl = (imageObj) => {
     if (!imageObj || !imageObj.image) return "/placeholder.webp";
     return imageObj.image.startsWith("http")
@@ -39,17 +39,17 @@ const NewProductsListing = () => {
     fetchData();
   }, []);
 
-    useEffect(() => {
-          const settings = localStorage.getItem('storeSettings');
-          if (settings) {
-            try {
-              const parsedSettings = JSON.parse(settings);
-              setCurrencyCode(parsedSettings.currency_code || 'OMR');
-            } catch (error) {
-              console.error("Failed to parse storeSettings:", error);
-            }
-          }
-        }, []);
+  useEffect(() => {
+    const settings = localStorage.getItem('storeSettings');
+    if (settings) {
+      try {
+        const parsedSettings = JSON.parse(settings);
+        setCurrencyCode(parsedSettings.currency_code || 'OMR');
+      } catch (error) {
+        console.error("Failed to parse storeSettings:", error);
+      }
+    }
+  }, []);
 
   return (
     <div className="new-product-main container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12">
@@ -66,7 +66,7 @@ const NewProductsListing = () => {
       </div>
       <div className="product-lists pt-6">
         {products.map((productList, index) => (
-          <Link href={`/product-detail/${productList.product_sku}`}  key={productList.product_sku}>
+          <Link href={`/product-detail/${productList.product_sku}`} key={productList.product_sku}>
             <div
               className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
             >
@@ -90,7 +90,9 @@ const NewProductsListing = () => {
                   />
 
                   <div className="prpduct-off-price absolute uppercase font-[300] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
-                    30% OFF
+                    {Math.round(
+                      ((productList.prices[0].price - productList.prices[0].sale_price) / productList.prices[0].price) * 100
+                    )}% OFF
                   </div>
                 </div>
                 <p className="text-[15px] font-[300] pt-1 line-clamp-2 h-[50px]">

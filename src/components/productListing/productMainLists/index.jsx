@@ -6,7 +6,8 @@ import { useTranslation } from "../../../hooks/useTranslation";
 import { useLanguage } from "../../../context/LanguageContext";
 import RandomReviews from "../../randomReviews";
 
-const ProductMainLists = ({currencyCode , products}) => {
+
+const ProductMainLists = ({ currencyCode, products }) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
@@ -34,7 +35,7 @@ const ProductMainLists = ({currencyCode , products}) => {
         <div className="products-lits">
           <div className="product-lists pt-6">
             {products.map((productList) => (
-              <Link href={`/product-detail/${productList.product_sku}`}  key={productList.product_sku}>
+              <Link href={`/product-detail/${productList.product_sku}`} key={productList.product_sku}>
                 <div
                   className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-2 md:p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
                 >
@@ -58,7 +59,9 @@ const ProductMainLists = ({currencyCode , products}) => {
                       />
 
                       <div className="prpduct-off-price absolute uppercase font-[300] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
-                        30% OFF
+                        {Math.round(
+                          ((productList.prices[0].price - productList.prices[0].sale_price) / productList.prices[0].price) * 100
+                        )}% OFF
                       </div>
                     </div>
                     <p className="text-[15px] font-[300] pt-1 line-clamp-2 h-[50px]">
