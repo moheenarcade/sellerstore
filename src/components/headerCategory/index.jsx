@@ -18,13 +18,6 @@ const HeaderCategory = () => {
     };
     const { setSelectedCategory } = useSelectedCategory();
     const router = useRouter();
-    const catitems = [
-        t("all_product"),
-        ,
-        t("perfume"),
-        t("Cosmatic"),
-        t("Electronics"),
-    ];
     const [categories, setCategories] = useState([]);
     // console.log(categories, "category");
     const [loading, setLoading] = useState(true);
@@ -86,7 +79,7 @@ const HeaderCategory = () => {
                             {categories.map((cat) => (
                                 <div key={cat.id} className="relative group/main-cat">
                                     <div className="flex items-center justify-between border-b px-3 border-gray-100 py-2 font-[400] text-gray-500 hover:text-black md:mx-2">
-                                        <Link href="#"
+                                        <Link href={`/products/${cat.name}`}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 setSelectedCategory(cat.name);
@@ -115,7 +108,7 @@ const HeaderCategory = () => {
                                     {cat.sub_categories && cat.sub_categories.length > 0 && (
                                         <div className={`invisible absolute left-full top-0 z-50 w-56 bg-white shadow-2xl rounded-lg py-1 text-gray-800 group-hover/main-cat:visible pl-1 ${language === 'ar' ? 'right-[96%]' : 'right-0'}`}>
                                             {cat.sub_categories.map((subCat) => (
-                                                <Link href="#"
+                                                <Link href={`/products/${cat.name}`}
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         setSelectedCategory(cat.name);

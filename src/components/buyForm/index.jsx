@@ -77,7 +77,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
         address: useRef(null),
     };
 
-    const mobileCode = getSetting?.mobile_code || "";
+    const mobileCode = getSetting?.mobile_code || currencyCode;
     const mobileLength = getSetting?.mobile_length || 9;
     console.log(mobileCode, "mobile code ")
     useEffect(() => {

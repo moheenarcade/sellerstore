@@ -59,6 +59,9 @@
     --v-border-opacity: 0.12;
   }
 }
+html {
+  scroll-behavior: smooth !important;
+}
 
 body {
   font-family: "Roboto", sans-serif;

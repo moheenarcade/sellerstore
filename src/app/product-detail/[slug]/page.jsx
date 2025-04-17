@@ -15,7 +15,7 @@ import { useLanguage } from "../.././../context/LanguageContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { PiHandsClappingFill } from "react-icons/pi";
 import ProductReviews from "../../../components/productReviews";
-import { trackBothEvents } from "../../../lib/pixelEvents"; 
+import { trackBothEvents } from "../../../lib/pixelEvents";
 
 export default function ProductDetailPage() {
   const { t } = useTranslation();
@@ -72,20 +72,6 @@ export default function ProductDetailPage() {
       });
     }
   }, [product, currencyCode]);
-
-  // useEffect(() => {
-  //   if (selectedSize && product) {
-  //     trackBothEvents("AddToCart", {
-  //       content_name: product.name,
-  //       content_ids: [product.product_id],
-  //       content_type: "product",
-  //       currency: currencyCode,
-  //       value: product.prices?.[0]?.sale_price,
-  //       quantity: 1,
-  //     });
-  //   }
-  // }, [selectedSize, product, currencyCode]);
-
 
   useEffect(() => {
     if (product?.options?.length > 0) {
@@ -167,6 +153,17 @@ export default function ProductDetailPage() {
   const totalAvailableQty = product.options.reduce((sum, opt) => sum + opt.available_quantity, 0);
   const isOutOfStock = totalAvailableQty === 0;
 
+
+  const isOfferActive = (offerStart, offerEnd) => {
+    if (!offerStart || !offerEnd) return false;
+
+    const currentDate = new Date();
+    const startDate = new Date(offerStart);
+    const endDate = new Date(offerEnd);
+
+    return currentDate >= startDate && currentDate <= endDate;
+  };
+
   return (
     <>
       <div className="container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
@@ -190,16 +187,6 @@ export default function ProductDetailPage() {
               {language === "ar" ? product.name_ar : product.name}
             </h1>
             <ul className="pt-2 md:pt-4">
-              {/* <li className="flex items-center mb-2">
-                <p className="text-[16px]">
-                  <b>{t('Brand')}:</b> {product.brand}
-                </p>
-              </li>
-              <li className="flex items-center mb-2">
-                <p className="text-[16px]">
-                  <b>{t('Gender')}:</b> {product.gender}
-                </p>
-              </li> */}
               <li className="flex flex-col mb-3">
                 <p className="text-[16px]">
                   <b>{t('Color')}:</b>
@@ -217,69 +204,12 @@ export default function ProductDetailPage() {
                       <p className="text-center">{product.color}</p>
                     </div>
                   )}
-
                 </div>
               </li>
             </ul>
 
             {product.options.some(opt => opt.option_name === "Size" && opt.available_quantity > 0) && (
               <>
-                {/* {product.options.some(opt => opt.option_name === "Size") && (
-                    <>
-                      <div className="size-options mb-3">
-                        <p className="text-[16px] pb-2">
-                          <b>{t('Size')}:</b>
-                        </p>
-                        <div className="flex gap-3 flex-wrap">
-                          <div className="flex gap-3 flex-wrap">
-                            {product.options
-                              .filter(opt => opt.option_name === "Size")
-                              .map((size) => {
-                                const isOutOfStock = size.available_quantity === 0;
-                                const isTooltipVisible = activeTooltip === size.option_label_id;
-
-                                const handleTouchOrClick = () => {
-                                  setActiveTooltip(size.option_label_id);
-                                  setTimeout(() => setActiveTooltip(null), 2000);
-                                  if (!isOutOfStock) {
-                                    setSelectedSize(size.option_label_id);
-                                  }
-                                };
-
-                                return (
-                                  <div
-                                    key={size.option_label_id}
-                                    onClick={handleTouchOrClick}
-                                    onTouchStart={handleTouchOrClick}
-                                    className={`relative group single-size font-[600] py-1 flex justify-center px-4 rounded-full w-[60px] transition-all duration-[0.3s] ease-in-out
-              ${selectedSize === size.option_label_id
-                                        ? "bg-black text-white border-black border-[2px]"
-                                        : "bg-white border-dotted border-[2px]"}
-              ${isOutOfStock ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-            `}
-                                    aria-disabled={isOutOfStock}
-                                  >
-                                    {size.option_label}
-
-                                    <div
-                                      className={`absolute w-[165px] z-[99999] text-center p-2 rounded-md -top-10 left-1/2 transform -translate-x-1/2 text-white text-sm pointer-events-none
-                ${isOutOfStock ? "bg-red-600" : "bg-black"}
-                ${isTooltipVisible ? "opacity-100" : "opacity-0"} 
-                group-hover:opacity-100 transition-opacity duration-300
-              `}
-                                    >
-                                      {isOutOfStock
-                                        ? t('Out_of_stock')
-                                        : `${t('Available_Quantity')}: ${size.available_quantity}`}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )} */}
 
                 {product.options.some(opt => opt.option_name === "Size") && (
                   <>
@@ -325,7 +255,7 @@ export default function ProductDetailPage() {
               </>
             )}
 
-            <div className="flex items-center gap-4 flex-wrap">
+            {/* <div className="flex items-center gap-4 flex-wrap">
               <p className="font-[600] text-2xl">
                 {product.prices?.[0]?.sale_price} {currencyCode}
               </p>
@@ -345,6 +275,64 @@ export default function ProductDetailPage() {
                     </span>
                   </p>
                 </div>
+              )}
+            </div> */}
+
+
+            <div className="flex items-center gap-4 flex-wrap">
+              {product.prices?.[0]?.offer_price &&
+                isOfferActive(product.prices[0].offer_start_date, product.prices[0].offer_end_date) ? (
+                <>
+                  <p className="font-[600] text-2xl">
+                    {product.prices[0].offer_price} {currencyCode}
+                  </p>
+                  <p className="font-[300] line-through text-xl">
+                    {product.prices[0].sale_price} {currencyCode}
+                  </p>
+                  <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
+                    <p className="flex items-center gap-2">
+                      <PiHandsClappingFill className="text-xl mt-[2px]" />
+                      {t('Save')}
+                      <span className="">
+                        {Math.round(
+                          ((product.prices[0].sale_price - product.prices[0].offer_price) /
+                            product.prices[0].sale_price) * 100
+                        )}
+                        %
+                      </span>
+                    </p>
+                  </div>
+                </>
+              ) : product.prices?.[0]?.sale_price ? (
+                <>
+                  <p className="font-[600] text-2xl">
+                    {product.prices[0].sale_price} {currencyCode}
+                  </p>
+                  {product.prices[0].price && (
+                    <p className="font-[300] line-through text-xl">
+                      {product.prices[0].price} {currencyCode}
+                    </p>
+                  )}
+                  {product.prices[0].price && product.prices[0].sale_price && (
+                    <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
+                      <p className="flex items-center gap-2">
+                        <PiHandsClappingFill className="text-xl mt-[2px]" />
+                        {t('Save')}
+                        <span className="">
+                          {Math.round(
+                            ((product.prices[0].price - product.prices[0].sale_price) /
+                              product.prices[0].price) * 100
+                          )}
+                          %
+                        </span>
+                      </p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="font-[600] text-2xl">
+                  {product.prices?.[0]?.price} {currencyCode}
+                </p>
               )}
             </div>
 
