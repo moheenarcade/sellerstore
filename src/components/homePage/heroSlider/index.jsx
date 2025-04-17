@@ -15,7 +15,7 @@ const HeroSlider = () => {
     const swiperRef = useRef(null);
     const { language } = useLanguage();
     return (
-        <div className="container hero-slider-main px-4 md:px-6 xl:px-28 mx-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="container hero-slider-main px-4 md:px-6 2xl:px-28 mx-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="relative"
                 onMouseEnter={() => swiperRef.current?.swiper.autoplay.stop()}
                 onMouseLeave={() => swiperRef.current?.swiper.autoplay.start()}

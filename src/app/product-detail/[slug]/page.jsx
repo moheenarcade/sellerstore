@@ -169,7 +169,7 @@ export default function ProductDetailPage() {
 
   return (
     <>
-      <div className="container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
+      <div className="container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
         <div className="flex flex-col md:flex-row justify-between gap-4">
           <div className="w-full md:w-[50%]">
             <ProductDetailImageSlider product={product} />

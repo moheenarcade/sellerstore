@@ -5,7 +5,7 @@ const SmallBannerAd = () => {
 
     return (
 
-        <div className='smallBanner-ad-main container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12'>
+        <div className='smallBanner-ad-main container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12'>
             <div className="rounded-xl">
                 <Image className="rounded-xl h-[80px] md:h-[110px] 2xl:h-[140px]" src={SmallBannerAdImage} alt='ad banner' />
             </div>

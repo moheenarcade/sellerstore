@@ -117,7 +117,7 @@ const ProductPage = () => {
 
   return (
     <div>
-      <div className="products-main container px-4 md:px-6 xl:px-28 mx-auto py-6">
+      <div className="products-main container px-4 md:px-6 2xl:px-28 mx-auto py-6">
         <div className="block lg:hidden">
           <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 pb-4">
             <button

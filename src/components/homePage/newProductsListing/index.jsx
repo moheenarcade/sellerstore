@@ -52,7 +52,7 @@ const NewProductsListing = () => {
   }, []);
 
   return (
-    <div className="new-product-main container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12">
+    <div className="new-product-main container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12">
       <div className="flex justify-between items-center">
         <h2 className="text-xl md:text-2xl font-[600] text-[#000000de]">
           {t("new_products")}

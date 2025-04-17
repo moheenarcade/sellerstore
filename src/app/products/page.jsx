@@ -126,7 +126,7 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="products-main container px-4 md:px-6 xl:px-28 mx-auto py-6">
+    <div className="products-main container px-4 md:px-6 2xl:px-28 mx-auto py-6">
       <div className="block lg:hidden">
         <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 pb-4">
           <button
@@ -139,7 +139,7 @@ const Products = () => {
         </div>
       </div>
       <div className="flex justify-between gap-[15px]">
-        <div className="filters-main hidden lg:block w-[25%] relative">
+        <div className="filters-main hidden lg:block min-w-[248px] w-[25%] relative">
           <div className="filter-container border-[1px] border-gray-300 rounded-lg">
             <div className="border-b-[1px] border-b-gray-300">
               <h1 className="text-lg font-[600] px-4 py-2">{t('Filters')}</h1>

@@ -71,7 +71,7 @@ const Header = () => {
       >
         <div className="hidden lg:block">
           <div
-            className={`header-navbar container px-4 md:px-6 xl:px-28 mx-auto `}
+            className={`header-navbar container px-4 md:px-6 2xl:px-28 mx-auto `}
           >
             <nav className="flex items-center py-4 border-b-[1px] border-b-gray-300">
               <div className="flex items-center gap-12 w-full">

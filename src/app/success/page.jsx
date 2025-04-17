@@ -36,7 +36,7 @@ const Success = () => {
     if (!orderData) return <p className="text-center py-10">No order data found.</p>;
 
     return (
-        <div className='success-main container px-4 md:px-6 xl:px-28 mx-auto pt-6 md:pt-12 pb-12'>
+        <div className='success-main container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12 pb-12'>
             <div className="flex flex-col justify-center text-center items-center">
                 <LuBadgeCheck className='text-center text-6xl mb-8' />
                 <h1 className='text-2xl md:text-3xl uppercase mb-3'>Thank you for your purchase</h1>
