@@ -1,19 +1,27 @@
-"use client"
-import React from 'react'
+"use client";
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { MdOutlineEmail } from "react-icons/md";
-import { MdLocalPhone } from "react-icons/md";
+import { MdOutlineEmail, MdLocalPhone, MdOutlineFacebook } from "react-icons/md";
 import { SiWhatsapp } from "react-icons/si";
-import { MdOutlineFacebook } from "react-icons/md";
 import { IoLogoInstagram } from "react-icons/io5";
 import { PiSnapchatLogo } from "react-icons/pi";
 import { AiFillTikTok } from "react-icons/ai";
-import { useTranslation } from '../../hooks/useTranslation';
 import { FaRegCopyright } from "react-icons/fa6";
-
+import { useTranslation } from '../../hooks/useTranslation';
 
 const Footer = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
+  const [storeSettings, setStoreSettings] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const settings = localStorage.getItem('storeSettings');
+      if (settings) {
+        setStoreSettings(JSON.parse(settings));
+      }
+    }
+  }, []);
+
   return (
 
     <footer className='footer-main bg-[#2d2d2d] pt-8'>
@@ -50,9 +58,9 @@ const Footer = () => {
           </div> <div className="">
             <p className='font-[400] text-lg md:text-[15px] 2xl:text-lg pb-3'>{t('get_in_touch')}</p>
             <ul className='font-[300] text-sm md:text-[12px] xl:text-sm flex flex-col gap-2 text-[#fff]'>
-              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#" className='flex items-center gap-2'><MdOutlineEmail className='text-xl' />freesouq@gmail.com</Link></li>
-              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#" className='flex items-center gap-2'><MdLocalPhone className='text-xl' />96892080045</Link></li>
-              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#" className='flex items-center gap-2'><SiWhatsapp className='text-xl' />96892080045</Link></li>
+              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href={`mailto:${storeSettings?.store_email}`} className='flex items-center gap-2'><MdOutlineEmail className='text-xl' />{storeSettings?.store_email || 'example@email.com'}</Link></li>
+              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href={`tel:${storeSettings ? storeSettings.mobile_code + storeSettings.store_mobile : ''}`}  className='flex items-center gap-2'><MdLocalPhone className='text-xl' />{storeSettings ? `${storeSettings.mobile_code}${storeSettings.store_mobile}` : '000000000'}</Link></li>
+              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href={`https://wa.me/${storeSettings?.store_whatsapp}`} className='flex items-center gap-2'><SiWhatsapp className='text-xl' /> {storeSettings?.store_whatsapp || '000000000'}</Link></li>
               <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#" className='flex items-center gap-2'><MdOutlineFacebook className='text-xl' />{t('Facebook')}</Link></li>
               <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#" className='flex items-center gap-2'><IoLogoInstagram className='text-xl' />{t('Instagram')}</Link></li>
               <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#" className='flex items-center gap-2'><PiSnapchatLogo className='text-xl' />{t('Snapchat')}</Link></li>
@@ -74,20 +82,20 @@ const Footer = () => {
       </div> */}
       <div className="footer-copy-right bg-[#393939] pt-4 font-[300] pb-20 lg:pb-4">
         <div className="container px-4 md:px-6 xl:px-28 mx-auto flex flex-col md:flex-row justify-between items-center text-[#fff]">
-          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright />2025 Dxbstore Powered by Reselluae</p>
+          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright />2025 {storeSettings?.store_name} Powered by Reselluae</p>
           <ul className='text-[12px] flex items-center gap-4'>
             <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-              <Link href="#">
+              <Link href="/privacy-policy">
                 {t('privacy_policy')}
               </Link>
             </li>
             <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-              <Link href="#">
+              <Link href="/terms-conditions">
                 {t('terms_and_conditions')}
               </Link>
             </li>
             <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-              <Link href="#">
+              <Link href="/about-us">
                 {t('about_us')}
               </Link>
             </li>
