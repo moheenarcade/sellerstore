@@ -12,6 +12,7 @@ import { useLanguage } from '../../context/LanguageContext';
 const FloatedLinks = () => {
     const [showScrollTop, setShowScrollTop] = useState(false);
     const { language, toggleLanguage } = useLanguage();
+    const whatsappNumber = '971565651133';
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 50) {
@@ -51,7 +52,9 @@ const FloatedLinks = () => {
                     </span> */}
                 </button>
                 <div className='whatsapp-btn py-2 flex justify-center px-1 text-[#05d960] '>
-                    <Link href="#"><FaWhatsapp className='text-2xl' /></Link>
+                    <Link href={`https://wa.me/${whatsappNumber}`}
+                        target="_blank"
+                        rel="noopener noreferrer"><FaWhatsapp className='text-2xl' /></Link>
                 </div>
                 {showScrollTop && (
                     <button onClick={scrollToTop} className='scroll-top-btn flex justify-center py-2 px-1 w-full cursor-pointer border-t-[1px] border-t-[#0000001f]'>
