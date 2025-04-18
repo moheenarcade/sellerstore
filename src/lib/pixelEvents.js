@@ -13,11 +13,6 @@ export const trackFacebookEvent = (eventName, eventData = {}) => {
       }
     }
   };
-  
-//   export const trackBothEvents = (eventName, eventData = {}) => {
-//     trackFacebookEvent(eventName, eventData);
-//     trackTikTokEvent(eventName, eventData);
-//   };
 
   export const trackBothEvents = (eventName, eventData) => {
     // Facebook Pixel

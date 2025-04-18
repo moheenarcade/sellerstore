@@ -104,7 +104,7 @@ const Header = () => {
                       height={100}
                     />
                     <p className="font-bold text-[#00000080] uppercase">
-                      Free Souq Oman
+                      {storeSettings?.store_name}
                     </p>
                   </div>
                 </Link>
