@@ -1,18 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "../../hooks/useTranslation";
-import {
-  getProducts,
-  getCategories,
-} from "../../lib/api";
-import { useLanguage } from "../../context/LanguageContext";
-import ProductMainLists from "../../components/productListing/productMainLists";
-import { useSelectedCategory } from "../../context/SelectedCategoryContext";
-import Loader from "../../components/loader";
+import React, { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "../../../hooks/useTranslation";
+import { getProducts, getCategories } from "../../../lib/api";
+import { useLanguage } from "../../../context/LanguageContext";
+import ProductMainLists from "../../../components/productListing/productMainLists";
+import { useSelectedCategory } from "../../../context/SelectedCategoryContext";
+import Loader from "../../../components/loader";
 import { IoClose } from "react-icons/io5";
-import { trackBothEvents } from "../../lib/pixelEvents";
-import { useRouter, useSearchParams } from 'next/navigation';
-import CategoryCheckboxList from "../../components/CategoryCheckboxList";
+import { trackBothEvents } from "../../../lib/pixelEvents";
+import { useRouter, useSearchParams } from "next/navigation";
+import CategoryCheckboxList from "../../../components/CategoryCheckboxList";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -38,13 +35,17 @@ const Products = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        // First, try to get categories from localStorage
         const storedCategories = localStorage.getItem("categories");
         if (storedCategories) {
           setCategories(JSON.parse(storedCategories));
         } else {
+          // If not in localStorage, fetch from API
           const data = await getCategories();
           const categoryList = data.data || [];
           setCategories(categoryList);
+
+          // Save to localStorage for future reference
           localStorage.setItem("categories", JSON.stringify(categoryList));
         }
       } catch (error) {
@@ -53,6 +54,8 @@ const Products = () => {
         setLoading(false);
       }
     };
+
+    // Only fetch categories when the component is mounted
     fetchCategories();
   }, []);
 
@@ -321,7 +324,10 @@ const Products = () => {
 
                             <button
                               className="text-red-600 cursor-pointer py-1 px-4 transition-all duration-[0.3s] ease-in-out"
-                              onClick={() => setSelectedCategories([])}
+                              onClick={() => {
+                                setSelectedCategories([]);
+                                router.push("/products");
+                              }}
                             >
                               {t("Clear")}
                             </button>

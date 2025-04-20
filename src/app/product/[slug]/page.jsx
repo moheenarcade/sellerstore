@@ -11,7 +11,7 @@ import RelatedProducts from "../../../components/relatedProducts";
 import ProductDescription from '../../../components/productDescription';
 import BuyForm from "../../../components/buyForm"
 import { useTranslation } from "../../../hooks/useTranslation";
-import { useLanguage } from "../.././../context/LanguageContext";
+import { useLanguage } from "../../../context/LanguageContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { PiHandsClappingFill } from "react-icons/pi";
 import ProductReviews from "../../../components/productReviews";

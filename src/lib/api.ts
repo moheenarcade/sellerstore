@@ -25,10 +25,10 @@ export const getProducts = async (slugs = "") => {
   }
 };
 
-export const getProductsByCategorySlug = async (slug: string) => {
-  const response = await axios.get(`${baseUrl}/categories/${slug}/products`);
-  return response.data;
-};
+// export const getProductsByCategorySlug = async (slug: string) => {
+//   const response = await axios.get(`${baseUrl}/categories/${slug}/products`);
+//   return response.data;
+// };
 
 export const getProductBySlug = async (slug: string) => {
   try {
@@ -40,44 +40,19 @@ export const getProductBySlug = async (slug: string) => {
   }
 };  
 
-// export const getSettings = async () => {
-//   try {
-//     const response = await axios.get(`${baseUrl}/store/setting`);
-//     const settings = response.data;
-
-//     // Save to localStorage (only runs on client-side)
-//     if (typeof window !== 'undefined') {
-//       localStorage.setItem('storeSettings', JSON.stringify(settings.data[0]));
-//     }
-
-//     return settings;
-//   } catch (error) {
-//     console.error('Error fetching setting:', error);
-//     throw error;
-//   } 
-// };
-
-
-
 export const getSettings = async () => {
   try {
     const response = await axios.get(`${baseUrl}/store/setting`);
     const settings = response.data;
-
-    // Save to localStorage (only runs on client-side)
     if (typeof window !== 'undefined') {
-      // Correctly accessing the settings object (no need to index into an array)
       localStorage.setItem('storeSettings', JSON.stringify(settings.data));
     }
-
     return settings;
   } catch (error) {
     console.error('Error fetching setting:', error);
     throw error;
   }
 };
-
-
 
 export const getCityState = async () => {
   const savedSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');

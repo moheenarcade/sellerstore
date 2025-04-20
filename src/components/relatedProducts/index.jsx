@@ -7,8 +7,8 @@ import { getProducts } from "../../lib/api";
 import { useLanguage } from "../../context/LanguageContext";
 import RandomReviews from "../../components/randomReviews";
 import { FaClipboardList } from "react-icons/fa";
-import Lottie from 'lottie-react';
-import noDataAnimation from '../../../public/images/Animation - 1744786688528.json';
+import Lottie from "lottie-react";
+import noDataAnimation from "../../../public/images/Animation - 1744786688528.json";
 
 const RelatedProducts = ({ currencyCode, product }) => {
   const { t } = useTranslation();
@@ -48,10 +48,11 @@ const RelatedProducts = ({ currencyCode, product }) => {
       {product && product.length > 0 ? (
         <div className="product-lists pt-6">
           {product.map((productList) => (
-            <Link href={`/product-detail/${productList.product_sku}`} key={productList.product_sku}>
-              <div
-                className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
-              >
+            <Link
+              href={`/product/${productList.product_sku}`}
+              key={productList.product_sku}
+            >
+              <div className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
                 <div className="">
                   <div className="product-banner-sec relative overflow-hidden">
                     <Image
@@ -117,12 +118,18 @@ const RelatedProducts = ({ currencyCode, product }) => {
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center pt-10">
-          <Lottie animationData={noDataAnimation} loop={true} className="w-[300px]" />
-          <p className="text-center py-4 text-gray-500 text-sm -mt-18">{t('No_related_product_available')}</p>
+          <Lottie
+            animationData={noDataAnimation}
+            loop={true}
+            className="w-[300px]"
+          />
+          <p className="text-center py-4 text-gray-500 text-sm -mt-18">
+            {t("No_related_product_available")}
+          </p>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default RelatedProducts;

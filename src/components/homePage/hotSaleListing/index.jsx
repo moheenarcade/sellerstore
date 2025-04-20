@@ -97,7 +97,7 @@ const HotSaleListing = () => {
                     >
                         {products.map((productList, index) => (
                             <SwiperSlide key={index}>
-                                <Link href={`/product-detail/${productList.product_sku}`}>
+                                <Link href={`/product/${productList.product_sku}`}>
                                     <div className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
                                         <div className="">
                                             <div className="product-banner-sec relative overflow-hidden">

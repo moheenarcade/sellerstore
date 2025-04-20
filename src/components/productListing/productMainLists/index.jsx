@@ -34,7 +34,7 @@ const ProductMainLists = ({ currencyCode, products }) => {
         </div>
           <div className="product-lists pt-6">
             {products.map((productList) => (
-              <Link href={`/product-detail/${productList.product_sku}`} key={productList.product_sku}>
+              <Link href={`/product/${productList.product_sku}`} key={productList.product_sku}>
                 <div
                   className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-2 md:p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out"
                 >
