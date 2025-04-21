@@ -21,7 +21,7 @@ const Header = () => {
   const [storeSettings, setStoreSettings] = useState(null);
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL_FOT_LOGO;
 
-  console.log(storeSettings?.store_logo, "logo data he re")
+  // console.log(storeSettings?.store_logo, "logo data he re")
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const settings = localStorage.getItem('storeSettings');

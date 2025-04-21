@@ -13,6 +13,9 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const formatCategoryName = (name) => {
+    return name.toLowerCase().replace(/\s+/g, "-");
+  };
   const router = useRouter();
   const [isAnimating, setIsAnimating] = useState(false);
   const { setSelectedCategory } = useSelectedCategory();
@@ -34,6 +37,8 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
 
   const handleLinkClick = () => {
     closeMobileMenu();
+    setSelectedCategory();
+    localStorage.removeItem("selectedCategories");
   };
 
   // Handle animation end
@@ -68,11 +73,11 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
           {allItems.map((item) => (
             <li key={item.id}>
               <Link
-                href="#"
+               href={`/products/${formatCategoryName(item.name)}`}
                 onClick={(e) => {
                   e.preventDefault();
                   setSelectedCategory(item.name);
-                  router.push("/products");
+                  router.push(`/products/${formatCategoryName(item.name)}`);
                   closeMobileMenu();
                 }}
                 className="block mb-2 border-b-[1px] border-b-gray-300 py-1 px-4 hover:bg-gray-100"
