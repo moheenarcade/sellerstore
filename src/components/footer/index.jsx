@@ -8,26 +8,43 @@ import { PiSnapchatLogo } from "react-icons/pi";
 import { AiFillTikTok } from "react-icons/ai";
 import { FaRegCopyright } from "react-icons/fa6";
 import { useTranslation } from '../../hooks/useTranslation';
-import { getCategories } from "../../lib/api";
+import { getCategories, getPages } from "../../lib/api";
 import { useRouter } from "next/navigation";
 import { useSelectedCategory } from "../../context/SelectedCategoryContext";
+import { useLanguage } from '../../context/LanguageContext';
 
 
 const Footer = () => {
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const [storeSettings, setStoreSettings] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [getAllPages, setGetAllPages] = useState([]);
   const { setSelectedCategory } = useSelectedCategory();
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
-  console.log(categories, "category");
+  console.log(getAllPages, "getAllPages");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getCategories();
         setCategories(data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getPages();
+        setGetAllPages(data.data || []);
       } catch (error) {
         console.error("Failed to fetch categories", error);
       } finally {
@@ -87,7 +104,7 @@ const Footer = () => {
               {categories.map((cat) => (
                 <li key={cat.id} className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
                   <Link href={`/products/${cat.name}`}
-                 
+
                     onClick={(e) => {
                       e.preventDefault();
                       setSelectedCategory(cat.name);
@@ -147,21 +164,13 @@ const Footer = () => {
         <div className="container px-4 md:px-6 2xl:px-28 mx-auto flex flex-col md:flex-row justify-between items-center text-[#fff]">
           <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright />2025 {storeSettings?.store_name?.replace(/\s+/g, '')}   Powered by Reselluae</p>
           <ul className='text-[12px] flex items-center gap-4'>
-            <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-              <Link href="/privacy-policy">
-                {t('privacy_policy')}
-              </Link>
-            </li>
-            <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-              <Link href="/terms-conditions">
-                {t('terms_and_conditions')}
-              </Link>
-            </li>
-            <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-              <Link href="/about-us">
-                {t('about_us')}
-              </Link>
-            </li>
+            {getAllPages.map((page) => (
+              <li key={page.slug} className='transition-all duration-[0.3s] ease-in-out hover:text-[#f69853]'>
+                <Link href={`/${page.slug}`}>
+                  {language === 'ar' ? page.title_ar : page.title}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

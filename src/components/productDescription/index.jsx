@@ -10,6 +10,7 @@ const ProductDescription = ({ description , description_ar}) => {
     const sanitizedDescription = DOMPurify.sanitize(rawDescription);
   return (
     <>
+
       <div 
         className="description-content mt-2"
         dangerouslySetInnerHTML={{ __html: sanitizedDescription }}

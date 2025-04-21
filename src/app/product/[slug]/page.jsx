@@ -4,6 +4,7 @@ import RandomReviews from "../../../components/randomReviews";
 import { getProductBySlug, getSettings } from "../../../lib/api";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from 'next/link';
 import OurGranteeShippingFaq from "../../../components/ourGranteeShippingFaq";
 import ProductDetailImageSlider from "../../../components/productDetailImageSlider";
 import Loader from "../../../components/loader";
@@ -40,7 +41,7 @@ export default function ProductDetailPage() {
       ? imageObj.image
       : `${imageBaseUrl}${imageObj.image}`;
   };
-  
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -181,7 +182,6 @@ export default function ProductDetailPage() {
                     {t('Hot_product_few_left_in_stock')}
                   </p>
                 )}
-
             </div>
             <RandomReviews />
             <h1 className="text-2xl md:text-3xl font-[600] pt-3">
@@ -192,19 +192,35 @@ export default function ProductDetailPage() {
                 <p className="text-[16px]">
                   <b>{t('Color')}:</b>
                 </p>
-                <div className="color-sec">
-                  {product.images?.[0] && (
-                    <div className="single-color flex flex-col overflow-hidden cursor-pointer border-black border-[2px] rounded-lg w-fit justify-center">
-                      <Image
-                        className="rounded-b-lg h-[80px] w-[80px] object-cover"
-                        src={getImageUrl(product.images[0])}
-                        alt={product.name}
-                        width={100}
-                        height={100}
-                      />
-                      <p className="text-center">{product.color}</p>
-                    </div>
-                  )}
+                <div className="color-sec flex gap-3">
+                  {product.product_colors?.map((colorOption) => {
+                    const colorImageObj = { image: colorOption.image };
+                    const isActive = product.product_sku === colorOption.sku;
+
+                    return (
+                      <Link
+                        href={`/product/${colorOption.sku}`}
+                        key={colorOption.sku}
+                      >
+                        <div
+                          key={colorOption.sku}
+                          className={`single-color flex flex-col overflow-hidden cursor-pointer border-[2px] rounded-lg w-fit justify-center ${isActive ? "border-black" : "border-gray-300"
+                            }`}
+                        >
+                          <Image
+                            className="rounded-b-lg h-[80px] w-[80px] object-cover"
+                            src={getImageUrl(colorImageObj)}
+                            alt={colorOption.sku}
+                            width={100}
+                            height={100}
+                          />
+                          <p className={`text-center ${isActive ? "font-bold" : ""}`}>
+                            {colorOption.color}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               </li>
             </ul>

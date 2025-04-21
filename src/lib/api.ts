@@ -66,5 +66,26 @@ export const getCityState = async () => {
 };
 
 
+export const getPages = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/store/pages`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching product by slug:', error);
+    throw error;
+  }
+};  
 
 
+export async function getPageBySlug(slug) {
+  try {
+    const response = await fetch(`${baseUrl}/store/page/detail/${slug}`);
+    if (!response.ok) {
+      throw new Error('Page not found');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching page:', error);
+    return null;
+  }
+}

@@ -40,16 +40,16 @@ const FloatedLinks = () => {
                     onClick={toggleLanguage}
                     className='lang-btn py-2 px-1 flex justify-center cursor-pointer border-b-[1px] border-b-[#0000001f]'
                 >
-                    <Image
+                    {/* <Image
                         src={language === 'en' ? ENflag : OMflag}
                         height="27"
                         width="27"
                         className="me-1 rounded-full h-[25px] w-[25px]"
                         alt={language === 'en' ? 'English' : 'العربية'}
-                    />
-                    {/* <span className="ms-1 text-xs">
-                        {language === 'en' ? 'ع' : 'EN'}
-                    </span> */}
+                    /> */}
+                    <span className="ms-1 text-xs font-[800]">
+                        {language === 'en' ? 'AR' : 'EN'}
+                    </span>
                 </button>
                 <div className='whatsapp-btn py-2 flex justify-center px-1 text-[#05d960] '>
                     <Link href={`https://wa.me/${whatsappNumber}`}
