@@ -20,11 +20,6 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const { setSelectedCategory } = useSelectedCategory();
   const pathname = usePathname();
-  const allItems = categories.flatMap((category) => [
-    { id: category.id, name: category.name },
-    ...(category.sub_categories || []),
-  ]);
-
   const toggleMenu = () => {
     if (isAnimating) return;
     setIsOpen(!isOpen);
@@ -47,7 +42,15 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
   };
 
 
+  const allItems = categories.flatMap((category) => [
+    { ...category, key: `cat-${category.id}` },
+    ...(category.sub_categories || []).map((sub) => ({
+      ...sub,
+      key: `sub-${sub.id}`,
+    })),
+  ]);
 
+  
   return (
     <div className="pt-8 h-[80vh] overflow-y-scroll">
       <li>
@@ -71,7 +74,7 @@ const MobileMenuLinks = ({ categories, closeMobileMenu }) => {
       >
         <ul className="space-y-2 bg-white pl-4">
           {allItems.map((item) => (
-            <li key={item.id}>
+            <li key={`${item.name}-${item.id}`}>
               <Link
                href={`/products/${formatCategoryName(item.name)}`}
                 onClick={(e) => {
