@@ -17,6 +17,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { PiHandsClappingFill } from "react-icons/pi";
 import ProductReviews from "../../../components/productReviews";
 import { trackBothEvents } from "../../../lib/pixelEvents";
+import BundleSave from "../../../components/bundleSave"
 
 export default function ProductDetailPage() {
   const { t } = useTranslation();
@@ -26,7 +27,8 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [getSetting, setGetSetting] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedOption, setSelectedOption] = useState("buyOne");
+  const [selectedBundle, setSelectedBundle] = useState(null);
+  console.log(selectedBundle, "selectedBundle in parent")
   const [selectedSize, setSelectedSize] = useState(null);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [currencyCode, setCurrencyCode] = useState('');
@@ -49,15 +51,26 @@ export default function ProductDetailPage() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const handleBuyButtonClick = () => {
     if (!isOutOfStock && product) {
+      const price = shouldShowDiscountPrices()
+        ? selectedBundle?.price
+        : product.prices?.[0]?.offer_price && isOfferActive(product.prices[0].offer_start_date, product.prices[0].offer_end_date)
+          ? product.prices[0].offer_price
+          : product.prices?.[0]?.sale_price || product.prices?.[0]?.price;
+
+      const quantity = shouldShowDiscountPrices()
+        ? selectedBundle?.quantity
+        : 1;
+
       trackBothEvents("InitiateCheckout", {
         content_name: product.name,
         content_ids: [product.product_id],
         content_type: "product",
         currency: currencyCode,
-        value: product.prices?.[0]?.sale_price,
-        quantity: 1,
+        value: price,
+        quantity: quantity,
       });
       openModal();
     }
@@ -166,6 +179,21 @@ export default function ProductDetailPage() {
     return currentDate >= startDate && currentDate <= endDate;
   };
 
+  const shouldShowDiscountPrices = () => {
+    return product?.discount_prices?.length > 0;
+  };
+
+  const now = new Date();
+const priceData = product.prices?.[0];
+
+const isOfferValid =
+  priceData?.offer_price &&
+  new Date(priceData.offer_start_date) <= now &&
+  new Date(priceData.offer_end_date) >= now;
+
+const displayPrice = selectedBundle?.price || (isOfferValid ? priceData.offer_price : priceData?.sale_price);
+
+
   return (
     <>
       <div className="container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12 pb-12">
@@ -272,125 +300,71 @@ export default function ProductDetailPage() {
               </>
             )}
 
-            {/* <div className="flex items-center gap-4 flex-wrap">
-              <p className="font-[600] text-2xl">
-                {product.prices?.[0]?.sale_price} {currencyCode}
-              </p>
-              <p className="font-[300] line-through text-xl">
-                {product.prices?.[0]?.price} {currencyCode}
-              </p>
-              {product.prices?.[0]?.price && product.prices?.[0]?.sale_price && (
-                <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
-                  <p className="flex items-center gap-2">
-                    <PiHandsClappingFill className="text-xl mt-[2px]" />
-                    {t('Save')}
-                    <span className="">
-                      {Math.round(
-                        ((product.prices[0].price - product.prices[0].sale_price) / product.prices[0].price) * 100
-                      )}
-                      %
-                    </span>
-                  </p>
-                </div>
-              )}
-            </div> */}
-
-
-            <div className="flex items-center gap-4 flex-wrap">
-              {product.prices?.[0]?.offer_price &&
-                isOfferActive(product.prices[0].offer_start_date, product.prices[0].offer_end_date) ? (
-                <>
-                  <p className="font-[600] text-2xl">
-                    {product.prices[0].offer_price} {currencyCode}
-                  </p>
-                  <p className="font-[300] line-through text-xl">
-                    {product.prices[0].sale_price} {currencyCode}
-                  </p>
-                  <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
-                    <p className="flex items-center gap-2">
-                      <PiHandsClappingFill className="text-xl mt-[2px]" />
-                      {t('Save')}
-                      <span className="">
-                        {Math.round(
-                          ((product.prices[0].sale_price - product.prices[0].offer_price) /
-                            product.prices[0].sale_price) * 100
-                        )}
-                        %
-                      </span>
+            {shouldShowDiscountPrices() ? (
+              <BundleSave
+                product={product}
+                currencyCode={currencyCode}
+                t={t}
+                onSelectionChange={(selected) => setSelectedBundle(selected)}
+              />
+            ) : (
+              <div className="flex items-center gap-4 flex-wrap">
+                {product.prices?.[0]?.offer_price &&
+                  isOfferActive(product.prices[0].offer_start_date, product.prices[0].offer_end_date) ? (
+                  <>
+                    <p className="font-[600] text-2xl">
+                      {product.prices[0].offer_price} {currencyCode}
                     </p>
-                  </div>
-                </>
-              ) : product.prices?.[0]?.sale_price ? (
-                <>
-                  <p className="font-[600] text-2xl">
-                    {product.prices[0].sale_price} {currencyCode}
-                  </p>
-                  {product.prices[0].price && (
                     <p className="font-[300] line-through text-xl">
-                      {product.prices[0].price} {currencyCode}
+                      {product.prices[0].sale_price} {currencyCode}
                     </p>
-                  )}
-                  {product.prices[0].price && product.prices[0].sale_price && (
                     <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
                       <p className="flex items-center gap-2">
                         <PiHandsClappingFill className="text-xl mt-[2px]" />
                         {t('Save')}
                         <span className="">
                           {Math.round(
-                            ((product.prices[0].price - product.prices[0].sale_price) /
-                              product.prices[0].price) * 100
+                            ((product.prices[0].sale_price - product.prices[0].offer_price) /
+                              product.prices[0].sale_price) * 100
                           )}
                           %
                         </span>
                       </p>
                     </div>
-                  )}
-                </>
-              ) : (
-                <p className="font-[600] text-2xl">
-                  {product.prices?.[0]?.price} {currencyCode}
-                </p>
-              )}
-            </div>
-
-            {/* <div className="">
-              <div className="bundlessave flex items-center justify-center my-4">
-                <div className="w-full h-[2px] bg-black"></div>
-                <p className="font-[600] w-full text-[14px] uppercase text-center px-2">
-                  {t('bundle_save')}
-                </p>
-                <div className="w-full h-[2px] bg-black"></div>
+                  </>
+                ) : product.prices?.[0]?.sale_price ? (
+                  <>
+                    <p className="font-[600] text-2xl">
+                      {product.prices[0].sale_price} {currencyCode}
+                    </p>
+                    {product.prices[0].price && (
+                      <p className="font-[300] line-through text-xl">
+                        {product.prices[0].price} {currencyCode}
+                      </p>
+                    )}
+                    {product.prices[0].price && product.prices[0].sale_price && (
+                      <div className="percent-off-tag py-1 px-3 text-black font-[600] bg-yellow-500 rounded-md">
+                        <p className="flex items-center gap-2">
+                          <PiHandsClappingFill className="text-xl mt-[2px]" />
+                          {t('Save')}
+                          <span className="">
+                            {Math.round(
+                              ((product.prices[0].price - product.prices[0].sale_price) /
+                                product.prices[0].price) * 100
+                            )}
+                            %
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="font-[600] text-2xl">
+                    {product.prices?.[0]?.price} {currencyCode}
+                  </p>
+                )}
               </div>
-
-              <div className="singlePrice mb-2 cursor-pointer flex items-center gap-2 py-1 md:py-3 px-2 rounded-xl border-[2px] transition-all duration-300 ease-in-out border-black bg-gray-100">
-                <div className="checkbox w-fit">
-                  <input
-                    className="hidden"
-                    type="radio"
-                    defaultChecked
-                    name="priceOption"
-                  />
-                  <div className="w-[15px] h-[15px] rounded-full bg-black"></div>
-                </div>
-                <div className={`flex flex-col w-full  md:border-l-0 pl-2 md:pl-0 ${language === "ar" ? "border-r-[1px] pr-2" : "border-l-[1px]"} `}>
-                  <div className="flex justify-between">
-                    <p className="font-[600]">{t('Price')}</p>
-                    <p className="font-[600]">
-                      {product.prices?.[0]?.sale_price} {currencyCode}
-                    </p>
-                  </div>
-                  <div className="flex justify-end md:justify-between">
-                    <p className="font-[300] text-[12px] md:text-[16px] hidden md:block">
-                      {t('Free_Shipping_on_orders_over_15_OMR')} 15 {currencyCode}
-                    </p>
-                    <p className="font-[300] line-through">
-                      {" "}
-                      {product.prices?.[0]?.price} {currencyCode}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+            )}
 
             <div
               className="relative group w-full mt-6"
@@ -412,7 +386,6 @@ export default function ProductDetailPage() {
                 {t('Buy_with_Cash_on_Delivery')}
               </button>
 
-              {/* Tooltip for both desktop and mobile */}
               {isOutOfStock && (
                 <div
                   className={`absolute w-[200px] z-[999] text-center p-2 rounded-md -top-8 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-sm 
@@ -471,7 +444,7 @@ export default function ProductDetailPage() {
                   height={100}
                 />
                 <p className="qty-tag absolute -top-2 right-[0px] bg-gray-500 text-white font-[500] rounded-full text-[14px] text-center flex items-center justify-center w-5 h-5">
-                  1
+                  {selectedBundle?.quantity || 1}
                 </p>
               </div>
               <p className={`font-semibold w-[70%] lg:w-[80%] ${language === "ar" ? "mr-4" : "ml-4"}`}>
@@ -481,23 +454,75 @@ export default function ProductDetailPage() {
             <div className="bg-gray-100 p-3 rounded-md mb-4">
               <div className="flex justify-between">
                 <p className="text-[15px]">{t('Price')}:</p>
-                <p className="font-[600] text-[15px]"> {product.prices?.[0]?.sale_price} {currencyCode}</p>
+                <p className="font-[600] text-[15px]">
+                  {displayPrice} {currencyCode}
+                </p>
               </div>
               <div className="flex justify-between">
                 <p className="text-[15px]">{t('Subtotal')}:</p>
-                <p className="font-[600] text-[15px]"> {product.prices?.[0]?.sale_price} {currencyCode}</p>
+                <p className="font-[600] text-[15px]">
+                  {displayPrice} {currencyCode}
+                </p>
               </div>
-              <div className="flex justify-between">
-                <p className="text-[15px]">{t('Free_Shipping')}:</p>
-                <p className="font-[600] text-[15px]">{t('Free')}</p>
-              </div>
+
+              {(() => {
+                const basePrice = selectedBundle?.price
+                  || (product.prices?.[0]?.offer_price &&
+                    isOfferActive(product.prices[0].offer_start_date, product.prices[0].offer_end_date)
+                    ? product.prices[0].offer_price
+                    : product.prices?.[0]?.sale_price || product.prices?.[0]?.price);
+                const isBelowThreshold = Number(basePrice) < 15;
+
+                return isBelowThreshold ? (
+                  <div className="">
+                    <div className="flex justify-between">
+                      <p className="text-[15px]">{t('Shipping Amount')}:</p>
+                      <p className="font-[600] text-[15px]">{getSetting?.shipping_amount} {currencyCode}</p>
+                    </div>
+                    <p className="text-[14px] bg-black py-1 px-2 text-white text-center mt-3 rounded-lg">
+                      Delivery charges will apply to orders priced below 15 {currencyCode}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex justify-between">
+                    <p className="text-[15px]">{t('Free_Shipping')}:</p>
+                    <p className="font-[600] text-[15px]">{t('Free')}</p>
+                  </div>
+                );
+              })()}
               <div className="flex justify-between border-t-[1px] border-t-gray-300 pt-2 mt-2">
-                <p className="font-[600] text-[15px]">{t('Grand_Total')}:</p>
-                <p className="font-[600] text-[15px]">{product.prices?.[0]?.sale_price} {currencyCode}</p>
+                {(() => {
+                  let basePrice =
+                    selectedBundle?.price ??
+                    (product.prices?.[0]?.offer_price &&
+                      isOfferActive(product.prices[0].offer_start_date, product.prices[0].offer_end_date)
+                      ? product.prices[0].offer_price
+                      : product.prices?.[0]?.sale_price ?? product.prices?.[0]?.price);
+
+                  const numericBasePrice = parseFloat(basePrice) || 0;
+                  const shippingAmount = parseFloat(getSetting?.shipping_amount) || 0;
+
+                  const isBelowThreshold = numericBasePrice < 15;
+                  const total = isBelowThreshold ? numericBasePrice + shippingAmount : numericBasePrice;
+
+                  return (
+                    <div className="flex justify-between w-full">
+                      <p className="font-[600] text-[15px]">{t('Grand_Total')}:</p>
+                      <p className="font-[600] text-[15px]">
+                        {total.toFixed(2)} {currencyCode}
+                      </p>
+                    </div>
+                  );
+                })()}
+
               </div>
             </div>
 
-            <BuyForm product={product} closeModal={closeModal} selectedSize={selectedSizeObj} />
+            <BuyForm product={product}
+              closeModal={closeModal}
+              selectedSize={selectedSizeObj}
+              selectedBundle={shouldShowDiscountPrices() ? selectedBundle : null}
+            />
           </div>
         </div>
       )}

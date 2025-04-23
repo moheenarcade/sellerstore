@@ -89,3 +89,14 @@ export async function getPageBySlug(slug) {
     return null;
   }
 }
+
+
+export const getSBanners = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/store/banners`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching product by slug:', error);
+    throw error;
+  }
+};  

@@ -20,34 +20,10 @@ const getCustomStyles = (formErrors, field) => ({
     }),
 });
 
-const customStyles = {
-    control: (provided, state) => ({
-        ...provided,
-        borderColor: state.isFocused
-            ? "#d1d5dc"
-            : state.selectProps.error
-                ? "red"
-                : "#d1d5dc",
-        boxShadow: "none",
-        borderRadius: "0.5rem",
-        padding: "2px",
-    }),
-    menu: (provided) => ({
-        ...provided,
-        borderRadius: "0.5rem",
-        marginTop: "4px",
-        zIndex: 20,
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        backgroundColor: state.isFocused ? "#E0E7FF" : "white",
-        color: "#111827",
-        padding: 10,
-    }),
-};
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const BuyForm = ({ product, closeModal, selectedSize }) => {
-    console.log("Selected Size in form:", selectedSize);
+
+const BuyForm = ({ product, closeModal, selectedSize, selectedBundle, totalGrandPrice }) => {
+    console.log("totalGrandPrice totalGrandPrice in form:", totalGrandPrice);
     const [currencyCode, setCurrencyCode] = useState('');
     const { t } = useTranslation();
     const { language } = useLanguage();
@@ -57,6 +33,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
     const [getSetting, setGetSetting] = useState({});
     const [getState, setGetState] = useState([]);
     const [loading, setLoading] = useState(true);
+    const shippingAmount = parseFloat(getSetting?.shipping_amount) || 0;
     const formRef = useRef(null);
     const router = useRouter();
     const [formValues, setFormValues] = useState({
@@ -178,6 +155,9 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
         }
 
         try {
+            const basePrice = Number(selectedBundle?.price) || (Number(product.prices?.[0]?.sale_price) * (product?.quantity || 1));
+            const totalPrice = basePrice < 15 ? basePrice + Number(shippingAmount) : basePrice;
+
             const payload = {
                 customer_name: formValues.fullName,
                 customer_email: formValues.email,
@@ -189,10 +169,11 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                 customer_address: formValues.address,
                 product_id: product?.product_id || 0,
                 product_name: product?.name || "",
-                product_quantity: product?.quantity || 1,
+                product_quantity: selectedBundle?.quantity || product?.quantity || 1,
                 product_sku: product?.product_sku || "",
-                product_price: product.prices?.[0]?.sale_price || 0,
-                total_price: (product.prices?.[0]?.sale_price) * (product?.quantity || 1),
+                product_price: selectedBundle?.price || product.prices?.[0]?.sale_price || 0,
+                // total_price: selectedBundle?.price || (product.prices?.[0]?.sale_price) * (product?.quantity || 1),
+                total_price: totalPrice,
                 product_option_color: product.color || '',
                 product_option_id: selectedSize?.product_option_id ?? product.options?.[0]?.product_option_id ?? null,
                 product_option_label: selectedSize?.option_label ?? product.options?.[0]?.option_label ?? null,
@@ -213,30 +194,20 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
 
             if (result.success) {
                 const orderId = result.order_id;
-              
+
                 // Track Purchase Event (with TikTok-required fields)
                 trackBothEvents("Purchase", {
-                    content_ids: [product.product_id], 
+                    content_ids: [product.product_id],
                     content_id: product.product_id,
                     content_name: product.name,
                     content_type: "product",
                     currency: currencyCode,
-                    value: product.prices?.[0]?.sale_price,
-                    quantity: product?.quantity || 1,
+                    value: selectedBundle?.price || (product.prices?.[0]?.sale_price) * (product?.quantity || 1),
+                    quantity: selectedBundle?.quantity || product?.quantity || 1,
                     order_id: orderId,
                     email: formValues.email,
                     phone: `${mobileCode}${formValues.phone}`,
                 });
-
-                // TikTok-specific: CompletePayment
-                // trackBothEvents("CompletePayment", {
-                //     value: product.prices?.[0]?.sale_price,
-                //     currency: currencyCode,
-                //     order_id: orderId,
-                //     email: formValues.email,
-                //     phone: `${mobileCode}${formValues.phone}`,
-                //     description: "Order completed",
-                // });
 
                 toast.success('Order placed successfully!');
                 setFormValues({
@@ -268,7 +239,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
             <form className="space-y-3" ref={formRef} onSubmit={handleSubmit}>
                 <div className="space-y-3 overflow-y-auto px-2 pt-2">
                     <div ref={formRefs.fullName}>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Full_Name')}</label> */}
+
                         <input
                             type="text"
                             name="fullName"
@@ -282,7 +253,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                     </div>
 
                     <div ref={formRefs.email}>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Email')}</label> */}
+
                         <input
                             type="email"
                             name="email"
@@ -296,7 +267,6 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                     </div>
 
                     <div ref={formRefs.phone}>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Phone_Number')}</label> */}
 
                         <div className="flex rounded-md shadow-sm flex-row-reverse rtl:flex-row">
                             {language === "ar" ? (
@@ -316,7 +286,6 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                                 </>
                             ) : (
                                 <>
-
                                     <input
                                         type="tel"
                                         name="phone"
@@ -337,7 +306,7 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                     </div>
 
                     <div ref={formRefs.state}>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('State')}</label> */}
+
                         <Select
                             inputId="selectState"
                             options={getState.map((state) => ({
@@ -359,7 +328,6 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                     </div>
 
                     <div ref={formRefs.city}>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('city')}</label> */}
                         <Select
                             inputId="selectCity"
                             options={cityOptions}
@@ -379,7 +347,6 @@ const BuyForm = ({ product, closeModal, selectedSize }) => {
                     </div>
 
                     <div ref={formRefs.address}>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">{t('Delivery_Address')}</label> */}
                         <textarea
                             name="address"
                             value={formValues.address}

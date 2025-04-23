@@ -47,14 +47,14 @@ const FloatedLinks = () => {
                         className="me-1 rounded-full h-[25px] w-[25px]"
                         alt={language === 'en' ? 'English' : 'العربية'}
                     /> */}
-                    <span className="ms-1 text-xs font-[800]">
+                    <span className="ms-1 text-lg font-[800]">
                         {language === 'en' ? 'AR' : 'EN'}
                     </span>
                 </button>
                 <div className='whatsapp-btn py-2 flex justify-center px-1 text-[#05d960] '>
                     <Link href={`https://wa.me/${whatsappNumber}`}
                         target="_blank"
-                        rel="noopener noreferrer"><FaWhatsapp className='text-2xl' /></Link>
+                        rel="noopener noreferrer"><FaWhatsapp className='text-3xl' /></Link>
                 </div>
                 {showScrollTop && (
                     <button onClick={scrollToTop} className='scroll-top-btn flex justify-center py-2 px-1 w-full cursor-pointer border-t-[1px] border-t-[#0000001f]'>
