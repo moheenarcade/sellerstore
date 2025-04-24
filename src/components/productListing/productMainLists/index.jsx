@@ -25,10 +25,10 @@ const ProductMainLists = ({ currencyCode, products }) => {
         <div className="hidden lg:block">
           <div className="flex justify-between">
             <div className="flex items-center">
-              <p className={`text-xl font-[600]  ${language === "ar" ? " pl-4 border-l-[1px] border-l-gray-300" : "pr-4 border-r-[1px] border-r-gray-300"} `}>
+              <p className={`text-xl font-[600]  ${language === "ar" ? " pl-4 border-l-[0px] border-l-gray-300" : "pr-4 border-r-[0px] border-r-gray-300"} `}>
                 {t('Products')}
               </p>
-              <p className={` font-[300] ${language === "ar" ? "pr-3" : "pl-3"} `}>{products.length}</p>
+              {/* <p className={` font-[300] ${language === "ar" ? "pr-3" : "pl-3"} `}>{products.length}</p> */}
             </div>
           </div>
         </div>

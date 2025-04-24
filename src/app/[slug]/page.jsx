@@ -31,14 +31,15 @@ const DynamicPage = () => {
 
   return (
     <div className="container px-4 md:px-6 2xl:px-28 mx-auto py-12 lg:py-18">
-            <h1 className='text-3xl md:text-4xl text-center pb-6 md:pb-12'>{pageData.title}</h1>
-      <div 
+      <h1 className='text-3xl md:text-4xl text-center pb-6 md:pb-12'>{language === "ar" ? pageData.title_ar : pageData.title}</h1>
+      
+      <div
         className={`prose max-w-none ${language === 'ar' ? 'text-right' : ''}`}
-        dangerouslySetInnerHTML={{ 
-          __html: language === 'ar' && pageData.details_ar 
-            ? pageData.details_ar 
-            : pageData.details 
-        }} 
+        dangerouslySetInnerHTML={{
+          __html: language === 'ar' && pageData.details_ar
+            ? pageData.details_ar
+            : pageData.details
+        }}
       />
     </div>
   );

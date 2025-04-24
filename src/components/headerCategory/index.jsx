@@ -90,7 +90,7 @@ const HeaderCategory = () => {
                         router.push(`/products/${formatCategoryName(cat.name)}`);
                       }}
                     >
-                      {cat.name}
+                   {language === 'ar' ? cat.name_ar : cat.name}
                     </Link>
                     {cat.sub_categories && cat.sub_categories.length > 0 && (
                       <svg
@@ -135,7 +135,8 @@ const HeaderCategory = () => {
                           key={subCat.id}
                           className="block border-b px-3 border-gray-100 py-2 font-[400] text-gray-500 hover:text-black"
                         >
-                          {subCat.name}
+                          {language === 'ar' ? subCat.name_ar : subCat.name}
+                       
                         </Link>
                       ))}
                     </div>

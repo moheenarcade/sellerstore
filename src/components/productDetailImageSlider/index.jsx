@@ -37,7 +37,7 @@ const ProductDetailImageSlider = ({ product }) => {
         }}
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper2"
-        rtl={language === "ar"} // Set the rtl prop based on language
+        dir={language === "ar" ? "rtl" : "ltr"}
       >
         {product.images?.map((imageObj, index) => (
           <SwiperSlide key={index}>
@@ -60,7 +60,7 @@ const ProductDetailImageSlider = ({ product }) => {
         watchSlidesProgress={true}
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper mt-4"
-        rtl={language === "ar"} 
+        dir={language === "ar" ? "rtl" : "ltr"} 
       >
         {product.images?.map((imageObj, index) => (
           <SwiperSlide key={index}>

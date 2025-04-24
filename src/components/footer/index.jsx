@@ -114,7 +114,7 @@ const Footer = () => {
                      router.push(`/products/${formatCategoryName(cat.name)}`);
                    }}
                   >
-                    {cat.name}
+                   {language === 'ar' ? cat.name_ar : cat.name}
                   </Link></li>
               ))}
             </ul>

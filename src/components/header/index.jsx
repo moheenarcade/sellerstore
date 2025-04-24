@@ -144,7 +144,7 @@ const Header = () => {
             <nav className="flex items-center py-4 border-b-[1px] border-b-gray-300">
               <div className="flex items-center gap-12 w-full">
                 <Link href="/">
-                  <div className="flex items-center">
+                  <div className="flex gap-2 items-center">
                     <Image
                       className="w-[50px]"
                       src={getImageUrl(storeSettings?.store_logo)}

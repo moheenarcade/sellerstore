@@ -10,7 +10,7 @@ import MobileBottomMenu from "../components/mobileBottomMenu";
 import Loader from "../components/loader";
 import { getCategories, getSettings } from "../lib/api";
 import { SelectedCategoryProvider } from "../context/SelectedCategoryContext";
-import PixelTracker from "../components/PixelTracker"; // Add this import
+import PixelTracker from "../components/PixelTracker";
 
 export default function RootLayout({ children }) {
   const [categories, setCategories] = useState([]);

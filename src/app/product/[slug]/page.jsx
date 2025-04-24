@@ -131,7 +131,6 @@ export default function ProductDetailPage() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -184,14 +183,14 @@ export default function ProductDetailPage() {
   };
 
   const now = new Date();
-const priceData = product.prices?.[0];
+  const priceData = product.prices?.[0];
 
-const isOfferValid =
-  priceData?.offer_price &&
-  new Date(priceData.offer_start_date) <= now &&
-  new Date(priceData.offer_end_date) >= now;
+  const isOfferValid =
+    priceData?.offer_price &&
+    new Date(priceData.offer_start_date) <= now &&
+    new Date(priceData.offer_end_date) >= now;
 
-const displayPrice = selectedBundle?.price || (isOfferValid ? priceData.offer_price : priceData?.sale_price);
+  const displayPrice = selectedBundle?.price || (isOfferValid ? priceData.offer_price : priceData?.sale_price);
 
 
   return (
