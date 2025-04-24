@@ -10,12 +10,14 @@ import "../../assets/style/togglemenu.css";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useLanguage } from "../../context/LanguageContext";
 import HeaderCategory from "../headerCategory";
-import { getCategories } from "../../lib/api";
+import { getCategories, searchProducts } from "../../lib/api";
 import MobileMenuLinks from "../../components/mobileMenuLinks";
 import { FaWhatsapp } from "react-icons/fa6";
 import "./switchbtn.css"
 
+
 const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL_FOT_LOGO;
+const SearchImageUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL
 
 const Header = () => {
   const { t } = useTranslation();
@@ -27,9 +29,37 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showBox, setShowBox] = useState(false);
 
+  const [results, setResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const run = async () => {
+      const term = searchTerm.trim();
+      if (term.length < 1) {
+        setResults([]);
+        return;
+      }
+      try {
+        setSearchLoading(true);
+        const data = await searchProducts(term);
+        setResults(data?.data || []);
+      } catch (err) {
+        console.error("Search failed:", err);
+        setResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+
+    const timer = setTimeout(run, 300);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [searchTerm]);
 
 
-  // console.log(storeSettings?.store_logo, "logo data he re")
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const settings = localStorage.getItem('storeSettings');
@@ -87,6 +117,15 @@ const Header = () => {
     return `${imageBaseUrl}${encodedPath}`;
   };
 
+  const getSearchImageUrl = (imagePath) => {
+    if (!imagePath) return Logo;
+    if (imagePath.startsWith("http")) {
+      return imagePath;
+    }
+    const encodedPath = encodeURI(imagePath);
+    return `${SearchImageUrl}${encodedPath}`;
+  };
+
   const whatsappNumber = '971565651133';
 
   return (
@@ -131,36 +170,48 @@ const Header = () => {
                     placeholder={t("search_products")}
                     className="head-search-bar border-[1px] border-gray-300 bg-[#f4f4f4] rounded-sm w-full py-2 px-4"
                   />
+
                   {showBox && (
                     <div
                       className="absolute left-0 right-0 mt-1 bg-white border border-gray-200
                rounded shadow-lg z-[999999] overflow-y-auto"
                       dir={language === "ar" ? "rtl" : "ltr"}
-                      style={{
-                        maxHeight: "400px",
-                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
-                      }}
+                      style={{ maxHeight: "400px" }}
                     >
-                      <ul className="search-result w-full">
-                        <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                          <div className="product-img">
-                            <Image
-                              className="w-[50px] h-[50px] rounded-md"
-                              src={getImageUrl(storeSettings?.store_logo)}
-                              alt="logo"
-                              width={100}
-                              height={100}
-                            />
-                          </div>
-                          <div className="pl-2">
-                            <p className="text-md font-[400]">Premium Product</p>
-                            <p className="text-sm font-[300]">99 AED</p>
-                          </div>
-                        </li>
-
-                      </ul>
+                      {searchLoading ? (
+                           <div className="flex justify-center items-center py-4">
+                           <div className="lds-ellipsis" bis_skin_checked="1"><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div>
+                         </div>
+                      ) : results.length ? (
+                        <ul>
+                          {results.map((p) => (
+                            <Link href={`/product/${p.sku}`} key={p.sku}>
+                              <li
+                                className="flex items-start gap-3 p-3 cursor-pointer hover:bg-gray-100"
+                              >
+                                <Image
+                                  src={getSearchImageUrl(p.thumbnail || p.image)}
+                                  alt={p.name}
+                                  width={60}
+                                  height={60}
+                                  className="rounded h-[50px] w-[50px] object-cover"
+                                />
+                                <div>
+                                  <p className="text-md font-[400]">{p.name}</p>
+                                  <p className="text-xs text-gray-500">
+                                    {p.price} {storeSettings.currency_code || ""}
+                                  </p>
+                                </div>
+                              </li>
+                            </Link>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="p-4 text-center text-sm">{t("No data found")}</p>
+                      )}
                     </div>
                   )}
+
 
                 </div>
               </div>
@@ -230,222 +281,37 @@ const Header = () => {
                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
                   }}
                 >
-                  <ul className="search-result w-full">
-                    <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
-                      <div className="product-img h-[40px] w-[40px]">
-                        <Image
-                          className="w-full h-full rounded-md"
-                          src={getImageUrl(storeSettings?.store_logo)}
-                          alt="logo"
-                          width={40}
-                          height={40}
-                        />
-                      </div>
-                      <div className="pl-2">
-                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
-                        <p className="text-sm font-[300]">99 AED</p>
-                      </div>
-                    </li>
-
-                  </ul>
+                  {searchLoading ? (
+                    <div className="flex justify-center items-center py-4">
+                      <div className="lds-ellipsis" bis_skin_checked="1"><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div>
+                    </div>
+                  ) : results.length ? (
+                    <ul>
+                      {results.map((p) => (
+                        <Link href={`/product/${p.sku}`} key={p.sku}>
+                          <li
+                            className="flex items-start gap-3 p-3 cursor-pointer hover:bg-gray-100"
+                          >
+                            <Image
+                              src={getSearchImageUrl(p.thumbnail || p.image)}
+                              alt={p.name}
+                              width={60}
+                              height={60}
+                              className="rounded h-[50px] w-[50px] object-cover"
+                            />
+                            <div>
+                              <p className="text-sm font-[400]">{p.name}</p>
+                              <p className="text-xs text-gray-500">
+                                {p.price} {storeSettings.currency_code || ""}
+                              </p>
+                            </div>
+                          </li>
+                        </Link>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="p-4 text-center text-sm">{t("No data found")}</p>
+                  )}
                 </div>
               )}
             </div>
