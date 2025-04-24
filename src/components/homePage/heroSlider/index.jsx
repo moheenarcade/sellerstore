@@ -24,6 +24,7 @@ const HeroSlider = () => {
     const { language } = useLanguage();
     const [topBanners, setTopBanners] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,11 +35,11 @@ const HeroSlider = () => {
                 setTopBanners(filtered);
             } catch (error) {
                 console.error("Failed to fetch banners", error);
+                setError(true);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchData();
     }, []);
 
@@ -49,12 +50,30 @@ const HeroSlider = () => {
     };
 
     if (loading) {
-        return <Loader />;
-      }
+        return (
+            <div className="flex flex-col items-center justify-center py-8">
+                <Loader />
+                {error && (
+                    <p className="mt-4 text-sm text-red-500">
+                        {language === 'ar' ? 'خطأ في الشبكة. حاول مرة أخرى.' : 'Network error. Please try again.'}
+                    </p>
+                )}
+            </div>
+        );
+    }
 
-      if (!topBanners) {
-        return <Loader />;
-      }
+    if (error && topBanners.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center py-8">
+                <Loader />
+                <p className="mt-4 text-sm text-red-500">
+                    {language === 'ar' ? 'خطأ في الشبكة. حاول مرة أخرى.' : 'Network error. Please try again.'}
+                </p>
+            </div>
+        );
+    }
+
+    if (topBanners.length === 0) return null;
 
     return (
         <div className="container hero-slider-main px-4 md:px-6 2xl:px-28 mx-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>

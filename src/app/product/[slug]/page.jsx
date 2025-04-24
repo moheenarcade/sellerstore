@@ -303,6 +303,7 @@ const displayPrice = selectedBundle?.price || (isOfferValid ? priceData.offer_pr
             {shouldShowDiscountPrices() ? (
               <BundleSave
                 product={product}
+                getSetting={getSetting}
                 currencyCode={currencyCode}
                 t={t}
                 onSelectionChange={(selected) => setSelectedBundle(selected)}
@@ -476,11 +477,11 @@ const displayPrice = selectedBundle?.price || (isOfferValid ? priceData.offer_pr
                 return isBelowThreshold ? (
                   <div className="">
                     <div className="flex justify-between">
-                      <p className="text-[15px]">{t('Shipping Amount')}:</p>
+                      <p className="text-[15px]">{t('Shipping_Amount')}:</p>
                       <p className="font-[600] text-[15px]">{getSetting?.shipping_amount} {currencyCode}</p>
                     </div>
                     <p className="text-[14px] bg-black py-1 px-2 text-white text-center mt-3 rounded-lg">
-                      Delivery charges will apply to orders priced below 15 {currencyCode}
+                      {t('Delivery_charges_priced_below')} 15 {currencyCode}
                     </p>
                   </div>
                 ) : (

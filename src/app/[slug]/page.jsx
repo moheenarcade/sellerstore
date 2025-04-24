@@ -27,7 +27,7 @@ const DynamicPage = () => {
   }, [slug]);
 
   if (loading) return <Loader />;
-  if (!pageData) return <div>Page not found</div>;
+  if (!pageData) return <div className='text-center py-12'>Network Error</div>;
 
   return (
     <div className="container px-4 md:px-6 2xl:px-28 mx-auto py-12 lg:py-18">

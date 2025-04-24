@@ -1,4 +1,4 @@
-// File: D:\sellerstore\src\app\page.js
+// File: /Users/macbookpro2019/Desktop/moheen-work/sellerstore/src/app/page.js
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

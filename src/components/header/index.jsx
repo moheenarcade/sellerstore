@@ -12,14 +12,22 @@ import { useLanguage } from "../../context/LanguageContext";
 import HeaderCategory from "../headerCategory";
 import { getCategories } from "../../lib/api";
 import MobileMenuLinks from "../../components/mobileMenuLinks";
+import { FaWhatsapp } from "react-icons/fa6";
+import "./switchbtn.css"
+
+const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL_FOT_LOGO;
+
 const Header = () => {
   const { t } = useTranslation();
-  const { language } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
   const [isSticky, setIsSticky] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [storeSettings, setStoreSettings] = useState(null);
-  const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL_FOT_LOGO;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showBox, setShowBox] = useState(false);
+
+
 
   // console.log(storeSettings?.store_logo, "logo data he re")
   useEffect(() => {
@@ -79,13 +87,15 @@ const Header = () => {
     return `${imageBaseUrl}${encodedPath}`;
   };
 
+  const whatsappNumber = '971565651133';
+
   return (
     <header>
       <HeaderSlide />
       <div
         className={`header-main border-b-[1px] border-b-gray-300 z-[99999] ${isSticky
-            ? "fixed top-0 left-0 right-0 z-[9999999] bg-white"
-            : "relative"
+          ? "fixed top-0 left-0 right-0 z-[9999999] bg-white"
+          : "relative"
           }`}
       >
         <div className="hidden lg:block">
@@ -108,50 +118,336 @@ const Header = () => {
                     </p>
                   </div>
                 </Link>
-                <div className="w-[70%]">
+                <div className="w-[70%] relative">
                   <input
+                    onChange={e => {
+                      setSearchTerm(e.target.value);
+                      setShowBox(!!e.target.value.trim());
+                    }}
+                    onFocus={() => setShowBox(!!searchTerm.trim())}
+                    onBlur={() => setTimeout(() => setShowBox(false), 120)}
+                    value={searchTerm}
                     type="search"
                     placeholder={t("search_products")}
                     className="head-search-bar border-[1px] border-gray-300 bg-[#f4f4f4] rounded-sm w-full py-2 px-4"
                   />
+                  {showBox && (
+                    <div
+                      className="absolute left-0 right-0 mt-1 bg-white border border-gray-200
+               rounded shadow-lg z-[999999] overflow-y-auto"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                      style={{
+                        maxHeight: "400px",
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                      }}
+                    >
+                      <ul className="search-result w-full">
+                        <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                          <div className="product-img">
+                            <Image
+                              className="w-[50px] h-[50px] rounded-md"
+                              src={getImageUrl(storeSettings?.store_logo)}
+                              alt="logo"
+                              width={100}
+                              height={100}
+                            />
+                          </div>
+                          <div className="pl-2">
+                            <p className="text-md font-[400]">Premium Product</p>
+                            <p className="text-sm font-[300]">99 AED</p>
+                          </div>
+                        </li>
+
+                      </ul>
+                    </div>
+                  )}
+
                 </div>
               </div>
               <div className="flex gap-6 items-center">
-                <button className="cursor-pointer text-2xl text-gray-500 transition-all duration-[0.3s] ease-in-out hover:text-[#f69853]">
-                  <LuHeart />
-                </button>
-                <button className="cursor-pointer text-2xl text-gray-500 transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]">
-                  <FiShoppingCart />
-                </button>
+                <div className='whatsapp-btn py-2 flex justify-center px-1 text-[#05d960] '>
+                  <Link href={`https://wa.me/${whatsappNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"><FaWhatsapp className='text-3xl' /></Link>
+                </div>
+                <div className="switch">
+
+                  <input
+                    id="language-toggle"
+                    className="check-toggle check-toggle-round-flat"
+                    type="checkbox"
+                    onChange={toggleLanguage}
+                    checked={language === "en"}
+                  />
+                  <label htmlFor="language-toggle"></label>
+                  <span className="on">AR</span>
+                  <span className="off">EN</span>
+                </div>
               </div>
             </nav>
             <HeaderCategory />
           </div>
         </div>
-        <div className="block lg:hidden mobile-header ">
+        <div className="block lg:hidden mobile-header relative">
           <div
             className={`flex items-center justify-between gap-12 w-full px-2 py-2 ${isSticky
-                ? "fixed top-0 left-0 right-0 z-[9999999] bg-white shadow-md"
-                : ""
+              ? "fixed top-0 left-0 right-0 z-[9999999] bg-white shadow-md"
+              : ""
               }`}
           >
             <Link href="/">
               <div className="flex items-center">
                 <Image
                   className="w-[35px]"
-                  src={Logo}
+                  src={getImageUrl(storeSettings?.store_logo)}
                   alt="logo"
                   width={100}
                   height={100}
                 />
               </div>
             </Link>
-            <div className="w-[60%]">
+            <div className="w-[70%] ">
               <input
+                onChange={e => {
+                  setSearchTerm(e.target.value);
+                  setShowBox(!!e.target.value.trim());
+                }}
+                onFocus={() => setShowBox(!!searchTerm.trim())}
+                onBlur={() => setTimeout(() => setShowBox(false), 120)}
+                value={searchTerm}
                 type="search"
                 placeholder={t("search_products")}
                 className="text-[14px] head-search-bar border-[1px] border-gray-300 bg-[#f4f4f4] rounded-sm w-full py-1 px-2"
               />
+
+              {showBox && (
+                <div
+                  className="absolute left-0 py-2 right-0 mt-1 bg-white border border-gray-200
+               rounded shadow-lg z-[999999] overflow-y-auto"
+                  dir={language === "ar" ? "rtl" : "ltr"}
+                  style={{
+                    maxHeight: "300px",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                  }}
+                >
+                  <ul className="search-result w-full">
+                    <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>   <li className="flex items-start py-2 gap-3 px-6 w-full cursor-pointer bg-white hover:bg-gray-100 transition-all duration-[0.3s] ease-in-out">
+                      <div className="product-img h-[40px] w-[40px]">
+                        <Image
+                          className="w-full h-full rounded-md"
+                          src={getImageUrl(storeSettings?.store_logo)}
+                          alt="logo"
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <div className="pl-2">
+                        <p className="text-[14px] md:text-md font-[400]">Premium Product</p>
+                        <p className="text-sm font-[300]">99 AED</p>
+                      </div>
+                    </li>
+
+                  </ul>
+                </div>
+              )}
             </div>
             <div className="hamburger-menu w-[10%] md:w-[4%] flex justify-end">
               <input id="menu__toggle" type="checkbox" ref={menuToggleRef} />

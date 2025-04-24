@@ -23,8 +23,11 @@ const Footer = () => {
   const { setSelectedCategory } = useSelectedCategory();
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
-  console.log(getAllPages, "getAllPages");
+    const formatCategoryName = (name) => {
+      return name.toLowerCase().replace(/\s+/g, "-");
+    };
+    const router = useRouter();
+    console.log(getAllPages, "getAllPages");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,24 +106,28 @@ const Footer = () => {
             <ul className='font-[300] text-sm md:text-[12px] xl:text-sm flex flex-col gap-2 text-[#fff]'>
               {categories.map((cat) => (
                 <li key={cat.id} className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'>
-                  <Link href={`/products/${cat.name}`}
-
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedCategory(cat.name);
-                      router.push("/products");
-                    }}
+                  <Link 
+                   href={`/products/${formatCategoryName(cat.name)}`}
+                   onClick={(e) => {
+                     e.preventDefault();
+                     setSelectedCategory(cat.name);
+                     router.push(`/products/${formatCategoryName(cat.name)}`);
+                   }}
                   >
                     {cat.name}
                   </Link></li>
               ))}
             </ul>
           </div> <div className="">
-            <p className='font-[400] text-lg md:text-[15px] 2xl:text-lg  pb-3'>{t('offers_for_you')}</p>
+            <p className='font-[400] text-lg md:text-[15px] 2xl:text-lg  pb-3'>{t('Helpful_links')}</p>
             <ul className='font-[300] text-sm md:text-[12px] xl:text-sm flex flex-col gap-2 text-[#fff]'>
-              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#">{t('amazing_products')}</Link></li>
-              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#">{t('todays_Deal')}</Link></li>
-              <li className='transition-all duration-[0.3s] ease-in-out  hover:text-[#f69853]'><Link href="#">{t('related_products')}</Link></li>
+            {getAllPages.map((page) => (
+              <li key={page.slug} className='transition-all duration-[0.3s] ease-in-out hover:text-[#f69853]'>
+                <Link href={`/${page.slug}`}>
+                  {language === 'ar' ? page.title_ar : page.title}
+                </Link>
+              </li>
+            ))}
             </ul>
           </div> <div className="">
             <p className='font-[400] text-lg md:text-[15px] 2xl:text-lg pb-3'>{t('get_in_touch')}</p>
@@ -161,17 +168,9 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-copy-right bg-[#393939] pt-4 font-[300] pb-20 lg:pb-4">
-        <div className="container px-4 md:px-6 2xl:px-28 mx-auto flex flex-col md:flex-row justify-between items-center text-[#fff]">
+        <div className="container px-4 md:px-6 2xl:px-28 mx-auto flex justify-center items-center text-[#fff]">
           <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright />2025 {storeSettings?.store_name?.replace(/\s+/g, '')}   Powered by Reselluae</p>
-          <ul className='text-[12px] flex items-center gap-4'>
-            {getAllPages.map((page) => (
-              <li key={page.slug} className='transition-all duration-[0.3s] ease-in-out hover:text-[#f69853]'>
-                <Link href={`/${page.slug}`}>
-                  {language === 'ar' ? page.title_ar : page.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        
         </div>
       </div>
     </footer>
