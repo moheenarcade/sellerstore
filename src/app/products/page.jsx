@@ -95,7 +95,6 @@ const Products = () => {
         setLoading(false);
       }
     };
-
     fetchInitialProducts();
   }, []);
 
@@ -156,32 +155,7 @@ const Products = () => {
               <h1 className="text-lg font-[600] px-4 py-2">{t("Filters")}</h1>
             </div>
             <div className="px-4 h-[94%] overflow-y-auto pb-12">
-              {/* <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
-                <h2 className="text-lg font-[600] py-2">{t("For_you")}</h2>
-                <div className="flex gap-2 flex-wrap text-[14px]">
-                  <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    All
-                  </button>
-                  <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    Amazing Products
-                  </button>
-                  <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    Today's Deal
-                  </button>
-                  <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    Hot Sale
-                  </button>
-                  <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    Related Products
-                  </button>
-                  <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    Special Offer
-                  </button>{" "}
-                  <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                    New Products
-                  </button>
-                </div>
-              </div> */}
+             
 
               {selectedCategories.length > 0 && (
                 <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
@@ -283,35 +257,6 @@ const Products = () => {
                       </button>
                     </div>
                     <div className="px-3 h-screen overflow-y-auto pt-12">
-                      <div className="filter-for-you border-y-[1px] border-y-gray-300 pb-6">
-                        <h2 className="text-lg font-[600] py-2">
-                          {t("For_you")}
-                        </h2>
-                        <div className="flex gap-2 flex-wrap text-[14px]">
-                          <button className="border-[1px] border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            All
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Amazing Products
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Today's Deal
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Hot Sale
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Related Products
-                          </button>
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            Special Offer
-                          </button>{" "}
-                          <button className="border-[1px] border-[#00000080] rounded-lg text-[#222222] cursor-pointer py-1 px-4 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out">
-                            New Products
-                          </button>
-                        </div>
-                      </div>
-
                       {selectedCategories.length > 0 && (
                         <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
                           <div className="flex justify-between items-center">
