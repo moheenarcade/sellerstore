@@ -29,6 +29,7 @@ const HeaderCategory = () => {
       try {
         const data = await getCategories();
         setCategories(data.data || []);
+        localStorage.setItem("categories", JSON.stringify(data.data));
       } catch (error) {
         console.error("Failed to fetch categories", error);
       } finally {
