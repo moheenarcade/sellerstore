@@ -58,7 +58,7 @@ export default function RootLayout({ children }) {
                 href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
                 rel="stylesheet"
               />
-              {settings?.tiktok_pixel && (
+              {/* {settings?.tiktok_pixel && (
                 <script
                   dangerouslySetInnerHTML={{
                     __html: `
@@ -70,9 +70,9 @@ export default function RootLayout({ children }) {
         `,
                   }}
                 />
-              )}
+              )} */}
 
-              {settings?.facebook_pixel && (
+              {/* {settings?.facebook_pixel && (
                 <script
                   dangerouslySetInnerHTML={{
                     __html: `
@@ -90,7 +90,7 @@ export default function RootLayout({ children }) {
       `,
                   }}
                 />
-              )}
+              )} */}
             </Head>
             <Header />
             <FloatedLinks />

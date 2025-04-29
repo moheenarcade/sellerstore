@@ -28,9 +28,16 @@ const Products = () => {
   const searchParams = useSearchParams();
   const slugFromURL = searchParams.get("slug");
 
+  // useEffect(() => {
+  //   trackBothEvents("ViewContent", {
+  //     content_name: "Products",
+  //   });
+  // }, []);
+
   useEffect(() => {
     trackBothEvents("ViewContent", {
       content_name: "Products",
+      content_category: "product_listing",
     });
   }, []);
 
@@ -150,7 +157,7 @@ const Products = () => {
         </div>
       </div>
       <div className="flex justify-between gap-[15px]">
-        <div className="filters-main hidden lg:block min-w-[305px] max-w-[305px] relative">
+        <div className="filters-main hidden lg:block min-w-[280px] xl:min-w-[305px] max-w-[280px] xl:max-w-[305px] relative">
           <div className="filter-container border-[1px] border-gray-300 rounded-lg">
             <div className="border-b-[1px] border-b-gray-300">
               <h1 className="text-lg font-[600] px-4 py-2">{t("Filters")}</h1>

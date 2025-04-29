@@ -77,12 +77,12 @@ const HotSaleListing = () => {
                         loop
                         breakpoints={{
                             0: {
-                                slidesPerView: 1,
+                                slidesPerView: 1.2,
                                 spaceBetween: 10,
                             },
                             425: {
                                 slidesPerView: 2,
-                                spaceBetween: 5,
+                                spaceBetween: 10,
                             },
                             768: {
                                 slidesPerView: 3,
@@ -138,8 +138,8 @@ const HotSaleListing = () => {
                                                     )}
                                                     <p className='uppercase font-[300]'>{currencyCode}</p>
                                                 </div>
-                                                <div className="product-offer-badge">
-                                                    <span className="offer-effect px-2 py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">+2&nbsp;Free</span>
+                                                <div className="product-offer-badge hidden md:block">
+                                                    <span className="offer-effect px-2 text-[12px]  py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">+2&nbsp;Free</span>
                                                 </div>
                                             </div>
                                             {productList.prices?.[0]?.price ? (
