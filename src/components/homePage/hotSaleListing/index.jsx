@@ -59,7 +59,7 @@ const HotSaleListing = () => {
         <div className='container hero-slider-main px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12' dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="flex justify-between items-center">
                 <h1 className='text-xl md:text-2xl font-[600] text-[#000000de]'>{t('hot_sale')}</h1>
-                <Link href="#" className='text-[#f69853] border-[1px] border-[#f69853] py-1 md:py-2 px-4 rounded-md text-md font-[300] hover:scale-[1.05] tarnsition-all duration-[0.6s] ease-in-out' >
+                <Link href="/products" className='text-[#f69853] border-[1px] border-[#f69853] py-1 md:py-2 px-4 rounded-md text-md font-[300] hover:scale-[1.05] tarnsition-all duration-[0.6s] ease-in-out' >
                     {t('see_more')}
                 </Link>
             </div>

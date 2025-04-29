@@ -58,7 +58,7 @@ const NewProductsListing = () => {
           {t("new_products")}
         </h2>
         <Link
-          href="#"
+          href="/products"
           className="text-[#f69853] border-[1px] border-[#f69853] py-1 md:py-2 px-4 rounded-md text-md font-[300] hover:scale-[1.05] tarnsition-all duration-[0.6s] ease-in-out"
         >
           {t("see_more")}

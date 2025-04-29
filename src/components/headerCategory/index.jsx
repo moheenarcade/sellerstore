@@ -23,7 +23,7 @@ const HeaderCategory = () => {
   const [loading, setLoading] = useState(true);
   const { setSelectedCategories } = useSelectedCategory();
 
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {

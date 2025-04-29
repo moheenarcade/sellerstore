@@ -3,8 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Logo from "../../../public/images/main-logo.webp";
 import Link from "next/link";
-import { FiShoppingCart } from "react-icons/fi";
-import { LuHeart } from "react-icons/lu";
 import HeaderSlide from "../headerSlide";
 import "../../assets/style/togglemenu.css";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -197,7 +195,7 @@ const Header = () => {
                                   className="rounded h-[50px] w-[50px] object-cover"
                                 />
                                 <div>
-                                  <p className="text-md font-[400]">{p.name}</p>
+                                <p className="text-md font-[400]">{language == "ar" ? p.name_ar : p.name}</p>
                                   <p className="text-xs text-gray-500">
                                     {p.price} {storeSettings.currency_code || ""}
                                   </p>
@@ -300,7 +298,7 @@ const Header = () => {
                               className="rounded h-[50px] w-[50px] object-cover"
                             />
                             <div>
-                              <p className="text-sm font-[400]">{p.name}</p>
+                            <p className="text-sm font-[400]">{language == "ar" ? p.name_ar : p.name}</p>
                               <p className="text-xs text-gray-500">
                                 {p.price} {storeSettings.currency_code || ""}
                               </p>
