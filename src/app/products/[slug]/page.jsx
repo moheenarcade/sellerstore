@@ -54,10 +54,10 @@ const Products = () => {
         setLoading(false);
       }
     };
-  
+
     fetchCategories();
   }, []);
-  
+
 
   useEffect(() => {
     const storedSelected = localStorage.getItem("selectedCategories");
@@ -148,7 +148,8 @@ const Products = () => {
             {t("Filters")}
           </button>
           <p className="pl-3 font-[300]">
-            {t("Products")}: {products.length}
+            {t("Products")}
+            {/* : {products.length} */}
           </p>
         </div>
       </div>
@@ -176,16 +177,28 @@ const Products = () => {
                     </button>
                   </div>
                   <div className="flex gap-2 flex-wrap text-[14px]">
-                    {selectedCategories.map((category) => (
-                      <button
-                        key={category}
-                        className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
-                        onClick={() => handleCheckboxChange(category)}
-                      >
-                        {category}
-                        <IoClose className="text-xl" />
-                      </button>
-                    ))}
+
+                    {selectedCategories.map((categoryName) => {
+                      const matchedCategory = categories.find(
+                        (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+                      );
+                      const displayName =
+                        language === "ar"
+                          ? matchedCategory?.name_ar || categoryName
+                          : matchedCategory?.name || categoryName;
+
+                      return (
+                        <button
+                          key={categoryName}
+                          className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
+                          onClick={() => handleCheckboxChange(categoryName)}
+                        >
+                          {displayName}
+                          <IoClose className="text-xl" />
+                        </button>
+                      );
+                    })}
+
                   </div>
                 </div>
               )}
@@ -278,17 +291,27 @@ const Products = () => {
                             </button>
                           </div>
                           <div className="flex gap-2 flex-wrap text-[14px]">
-                            {selectedCategories.map((category) => (
-                              <button
-                                key={category}
-                                className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
-                                onClick={() => handleCheckboxChange(category)}
-                              >
-                                {category}
+                            {selectedCategories.map((categoryName) => {
+                              const matchedCategory = categories.find(
+                                (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+                              );
+                              const displayName =
+                                language === "ar"
+                                  ? matchedCategory?.name_ar || categoryName
+                                  : matchedCategory?.name || categoryName;
 
-                                <IoClose className="text-xl" />
-                              </button>
-                            ))}
+                              return (
+                                <button
+                                  key={categoryName}
+                                  className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
+                                  onClick={() => handleCheckboxChange(categoryName)}
+                                >
+                                  {displayName}
+                                  <IoClose className="text-xl" />
+                                </button>
+                              );
+                            })}
+
                           </div>
                         </div>
                       )}
@@ -301,7 +324,7 @@ const Products = () => {
                             categories={categories}
                             selectedCategories={selectedCategories}
                             onChange={handleCheckboxChange}
-                    isArabic={language === "ar"}
+                            isArabic={language === "ar"}
 
                           />
                         </div>
