@@ -11,11 +11,16 @@ import Loader from "../components/loader";
 import { getCategories, getSettings } from "../lib/api";
 import { SelectedCategoryProvider } from "../context/SelectedCategoryContext";
 import PixelTracker from "../components/PixelTracker";
+import { usePathname } from "next/navigation";
+import { useRef } from "react";
+import { trackTikTokEvent } from "../lib/pixelEvents"; 
 
 export default function RootLayout({ children }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState(null);
+  const pathname = usePathname();
+  const previousPath = useRef("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +53,14 @@ export default function RootLayout({ children }) {
     fetchData();
   }, []);
 
+
+  useEffect(() => {
+    if (previousPath.current !== pathname) {
+      previousPath.current = pathname;
+      trackTikTokEvent("PageView");
+    }
+  }, [pathname]);
+
   return (
     <html lang="en">
       <body>
@@ -55,7 +68,7 @@ export default function RootLayout({ children }) {
           <SelectedCategoryProvider>
             <Head>
               <link
-                href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+                href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;800;900&display=swap"
                 rel="stylesheet"
               />
               {/* {settings?.tiktok_pixel && (

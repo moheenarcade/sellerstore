@@ -124,7 +124,7 @@ const Header = () => {
     return `${SearchImageUrl}${encodedPath}`;
   };
 
-  const whatsappNumber = '971565651133';
+  // const whatsappNumber = '971565651133';
 
   return (
     <header>
@@ -177,9 +177,9 @@ const Header = () => {
                       style={{ maxHeight: "400px" }}
                     >
                       {searchLoading ? (
-                           <div className="flex justify-center items-center py-4">
-                           <div className="lds-ellipsis" bis_skin_checked="1"><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div>
-                         </div>
+                        <div className="flex justify-center items-center py-4">
+                          <div className="lds-ellipsis" bis_skin_checked="1"><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div>
+                        </div>
                       ) : results.length ? (
                         <ul>
                           {results.map((p) => (
@@ -195,7 +195,7 @@ const Header = () => {
                                   className="rounded h-[50px] w-[50px] object-cover"
                                 />
                                 <div>
-                                <p className="text-md font-[400]">{language == "ar" ? p.name_ar : p.name}</p>
+                                  <p className="text-md font-[400]">{language == "ar" ? p.name_ar : p.name}</p>
                                   <p className="text-xs text-gray-500">
                                     {p.price} {storeSettings.currency_code || ""}
                                   </p>
@@ -215,9 +215,11 @@ const Header = () => {
               </div>
               <div className="flex gap-6 items-center">
                 <div className='whatsapp-btn py-2 flex justify-center px-1 text-[#05d960] '>
-                  <Link href={`https://wa.me/${whatsappNumber}`}
+                  <Link
+                    href={`https://wa.me/${storeSettings?.mobile_code}${storeSettings?.store_whatsapp}`}
                     target="_blank"
-                    rel="noopener noreferrer"><FaWhatsapp className='text-3xl' /></Link>
+                    rel="noopener noreferrer"
+                  ><FaWhatsapp className='text-3xl' /></Link>
                 </div>
                 <div className="switch">
 
@@ -298,7 +300,7 @@ const Header = () => {
                               className="rounded h-[50px] w-[50px] object-cover"
                             />
                             <div>
-                            <p className="text-sm font-[400]">{language == "ar" ? p.name_ar : p.name}</p>
+                              <p className="text-sm font-[400]">{language == "ar" ? p.name_ar : p.name}</p>
                               <p className="text-xs text-gray-500">
                                 {p.price} {storeSettings.currency_code || ""}
                               </p>
