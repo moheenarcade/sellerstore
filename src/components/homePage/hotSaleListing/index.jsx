@@ -89,7 +89,7 @@ const HotSaleListing = () => {
                                 spaceBetween: 20,
                             },
                             1280: {
-                                slidesPerView: 5.3,
+                                slidesPerView: 4.3,
                                 spaceBetween: 24,
                             },
                         }}
