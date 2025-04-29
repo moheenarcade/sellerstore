@@ -144,7 +144,8 @@ const Products = () => {
             {t("Filters")}
           </button>
           <p className="pl-3 font-[300]">
-            {t("Products")}: {products.length}
+            {t("Products")}
+            {/* : {products.length} */}
           </p>
         </div>
       </div>
@@ -155,6 +156,7 @@ const Products = () => {
               <h1 className="text-lg font-[600] px-4 py-2">{t("Filters")}</h1>
             </div>
             <div className="px-4 h-[94%] overflow-y-auto pb-12">
+
               {selectedCategories.length > 0 && (
                 <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
                   <div className="flex justify-between items-center">
@@ -172,7 +174,7 @@ const Products = () => {
                     </button>
                   </div>
                   <div className="flex gap-2 flex-wrap text-[14px]">
-                    {selectedCategories.map((category) => (
+                    {/* {selectedCategories.map((category) => (
                       <button
                         key={category}
                         className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
@@ -181,7 +183,21 @@ const Products = () => {
                         {category}
                         <IoClose className="text-xl" />
                       </button>
-                    ))}
+                    ))} */}
+                    {selectedCategories.map((categoryNameEn) => {
+  const category = categories.find((cat) => cat.name_en === categoryNameEn);
+  const displayName = language === "ar" ? category?.name_ar : categoryNameEn;
+  return (
+    <button
+      key={categoryNameEn}
+      onClick={() => handleCheckboxChange(categoryNameEn)}
+      className="border-[1px] flex items-center gap-3 border-[#f69853] rounded-lg text-[#f69853] cursor-pointer py-1 px-2 hover:border-[#f69853] hover:text-[#f69853] transition-all duration-[0.3s] ease-in-out"
+    >
+      {displayName}
+      <IoClose className="text-xl" />
+    </button>
+  );
+})}
                   </div>
                 </div>
               )}
@@ -193,9 +209,11 @@ const Products = () => {
                     categories={categories}
                     selectedCategories={selectedCategories}
                     onChange={handleCheckboxChange}
+                    isArabic={language === "ar"}
                   />
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
@@ -293,6 +311,8 @@ const Products = () => {
                             categories={categories}
                             selectedCategories={selectedCategories}
                             onChange={handleCheckboxChange}
+                    isArabic={language === "ar"}
+
                           />
                         </div>
                       </div>

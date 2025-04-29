@@ -4,6 +4,7 @@ const CategoryCheckboxList = React.memo(function CategoryCheckboxList({
   categories,
   selectedCategories,
   onChange,
+  isArabic
 }) {
   return (
     <ul className="pl-2 text-[14px]">
@@ -15,7 +16,7 @@ const CategoryCheckboxList = React.memo(function CategoryCheckboxList({
             checked={selectedCategories.includes(cat.name)}
             onChange={() => onChange(cat.name)}
           />
-          <label htmlFor={`cat-${cat.id}`}>{cat.name}</label>
+          <label htmlFor={`cat-${cat.id}`}>{isArabic ? cat.name_ar : cat.name}</label>
         </li>
       ))}
     </ul>

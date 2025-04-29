@@ -159,8 +159,6 @@ const Products = () => {
               <h1 className="text-lg font-[600] px-4 py-2">{t("Filters")}</h1>
             </div>
             <div className="px-4 h-[94%] overflow-y-auto pb-12">
-             
-
               {selectedCategories.length > 0 && (
                 <div className="filter-for-you border-b-[1px] border-b-gray-300 pb-6">
                   <div className="flex justify-between items-center">
@@ -199,6 +197,7 @@ const Products = () => {
                     categories={categories}
                     selectedCategories={selectedCategories}
                     onChange={handleCheckboxChange}
+                    isArabic={language === "ar"}
                   />
                 </div>
               </div>
@@ -302,6 +301,8 @@ const Products = () => {
                             categories={categories}
                             selectedCategories={selectedCategories}
                             onChange={handleCheckboxChange}
+                    isArabic={language === "ar"}
+
                           />
                         </div>
                       </div>
