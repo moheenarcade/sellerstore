@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Logo from "../../../public/images/main-logo.webp";
+import Logo from "../../../public/images/gray-circle-icon-png-crisp-quality.png";
 import Link from "next/link";
 import HeaderSlide from "../headerSlide";
 import "../../assets/style/togglemenu.css";
@@ -12,7 +12,6 @@ import { getCategories, searchProducts } from "../../lib/api";
 import MobileMenuLinks from "../../components/mobileMenuLinks";
 import { FaWhatsapp } from "react-icons/fa6";
 import "./switchbtn.css"
-
 
 const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL_FOT_LOGO;
 const SearchImageUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL
@@ -28,6 +27,8 @@ const Header = () => {
   const [showBox, setShowBox] = useState(false);
   const [results, setResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
 
   useEffect(() => {
     const controller = new AbortController();
@@ -54,7 +55,6 @@ const Header = () => {
       clearTimeout(timer);
       controller.abort();
     };
-    
   }, [searchTerm]);
 
 

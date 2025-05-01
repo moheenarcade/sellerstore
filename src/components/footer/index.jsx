@@ -168,7 +168,7 @@ const Footer = () => {
       </div>
       <div className="footer-copy-right bg-[#393939] pt-4 font-[300] pb-20 lg:pb-4">
         <div className="container px-4 md:px-6 2xl:px-28 mx-auto flex justify-center items-center text-[#fff]">
-          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright /> {new Date().getFullYear()} {storeSettings?.store_name?.replace(/\s+/g, '')} Powered by Reselluae</p>
+          <p className='text-[12px] text-center md:text-start pb-0 md:pb-0 flex items-center'><FaRegCopyright /> {new Date().getFullYear()} {storeSettings?.store_name?.replace(/\s+/g, '')} Powered by Reselluae</p>
         </div>
       </div>
     </footer>

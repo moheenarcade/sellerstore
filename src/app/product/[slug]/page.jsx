@@ -205,7 +205,7 @@ export default function ProductDetailPage() {
               {product.options
                 .filter(opt => opt.option_name === "Size")
                 .reduce((total, opt) => total + opt.available_quantity, 0) < 5 && (
-                  <p className="text-[13px] md:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
+                  <p className="text-[13px] xl:text-lg uppercase font-[600] border-black border-2 py-1 px-3 w-fit">
                     {t('Hot_product_few_left_in_stock')}
                   </p>
                 )}
