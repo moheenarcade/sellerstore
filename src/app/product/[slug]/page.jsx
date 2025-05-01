@@ -28,7 +28,7 @@ export default function ProductDetailPage() {
   const [getSetting, setGetSetting] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedBundle, setSelectedBundle] = useState(null);
-  console.log(selectedBundle, "selectedBundle in parent")
+  // console.log(selectedBundle, "selectedBundle in parent")
   const [selectedSize, setSelectedSize] = useState(null);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [currencyCode, setCurrencyCode] = useState('');

@@ -27,7 +27,7 @@ const Footer = () => {
       return name.toLowerCase().replace(/\s+/g, "-");
     };
     const router = useRouter();
-    console.log(getAllPages, "getAllPages");
+    // console.log(getAllPages, "getAllPages");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,13 +81,12 @@ const Footer = () => {
       hour12: true,
     });
   };
-
-
+  {new Date().getFullYear()}
   return (
 
     <footer className='footer-main bg-[#2d2d2d] pt-8'>
       <div className="container px-4 md:px-6 2xl:px-28 mx-auto pb-8">
-        <div className="footer-nav flex flex-col md:flex-row gap-12 md:gap-6 justify-between text-white">
+        <div className="footer-nav flex flex-col md:flex-row gap-8 md:gap-6 justify-between text-white">
           <div className="">
             <p className='font-[400] text-lg md:text-[15px] 2xl:text-lg pb-3'>{storeSettings?.store_name}</p>
             <ul className='font-[300] text-sm md:text-[12px] xl:text-sm flex flex-col gap-2 text-[#fff]'>
@@ -169,8 +168,7 @@ const Footer = () => {
       </div>
       <div className="footer-copy-right bg-[#393939] pt-4 font-[300] pb-20 lg:pb-4">
         <div className="container px-4 md:px-6 2xl:px-28 mx-auto flex justify-center items-center text-[#fff]">
-          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright />2025 {storeSettings?.store_name?.replace(/\s+/g, '')}   Powered by Reselluae</p>
-        
+          <p className='text-[12px] text-center md:text-start pb-4 md:pb-0 flex items-center'><FaRegCopyright /> {new Date().getFullYear()} {storeSettings?.store_name?.replace(/\s+/g, '')} Powered by Reselluae</p>
         </div>
       </div>
     </footer>

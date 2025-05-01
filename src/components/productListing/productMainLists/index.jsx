@@ -199,7 +199,6 @@ const ProductMainLists = ({ currencyCode, products }) => {
           ) : (
             <div className="text-start text-gray-500 py-10">No Data Found</div>
           )}
-
         </div>
       </div>
     </>

@@ -221,9 +221,9 @@ const BuyForm = ({ product, closeModal, selectedSize, selectedBundle, totalGrand
 
                 setTimeout(() => {
                     router.push(`/success?orderId=${orderId}`);
-                }, 3000);
+                }, 2000);
             } else {
-                toast.error(result.message || "Failed to place order");
+                toast.error(result.error || result.message || "Failed to place order");
             }
         } catch (error) {
             console.error("Order error:", error);

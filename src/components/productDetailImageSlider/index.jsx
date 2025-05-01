@@ -44,7 +44,7 @@ const ProductDetailImageSlider = ({ product }) => {
             <Image
               className="w-full aspect-[5/5] object-cover block rounded-xl"
               src={getImageUrl(imageObj)}
-              alt={product.name}
+              alt="product image"
               width={600}
               height={600}
             />

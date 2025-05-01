@@ -22,9 +22,8 @@ const BundleSave = ({ product, currencyCode, t, onSelectionChange ,getSetting })
             onSelectionChange(option);
         }
     };
-    
 
-    console.log(selectedOption, "selected option in bundle component");
+    // console.log(selectedOption, "selected option in bundle component");
     return (
 
         <div className="">

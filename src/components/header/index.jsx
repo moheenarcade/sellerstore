@@ -124,8 +124,6 @@ const Header = () => {
     return `${SearchImageUrl}${encodedPath}`;
   };
 
-  // const whatsappNumber = '971565651133';
-
   return (
     <header>
       <HeaderSlide />

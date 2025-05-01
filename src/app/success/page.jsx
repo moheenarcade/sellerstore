@@ -41,43 +41,43 @@ const Success = () => {
                 <LuBadgeCheck className='text-center text-6xl mb-8' />
                 <h1 className='text-2xl md:text-3xl uppercase mb-3'>Thank you for your purchase</h1>
                 <p className='text-xl'>Your order number is: <b>#{orderId}</b></p>
-                <p className='text-xl'>We will email you an order confirmation with details and tracking info</p>
-                <div className="order-summary w-full md:w-[70%] xl:w-[40%] border-1 border-gray-200 bg-white rounded-xl shadow-xl p-6 mt-10">
-                    <h2 className='text-xl text-start pb-2'>Order Summary</h2>
+                <p className='text-md lg:text-xl'>We will email you an order confirmation with details and tracking info</p>
+                <div className="order-summary text-[12px] md:text-[14px] lg:text-[16px] w-full md:w-[70%] xl:w-[40%] border-1 border-gray-200 bg-white rounded-xl shadow-xl p-2 md:p-6 mt-10">
+                    <h2 className='text-lg lg:text-xl text-start pb-2'>Order Summary</h2>
                     <hr className="bg-gray-300 text-gray-300" />
                     <div className="flex justify-between pt-2 text-gray-700" >
-                        <p className="mb-0 "> Order Name:</p>
-                        <p className="font-bold mb-0 "> {orderData.customer_name} </p>
+                        <p className="mb-0 text-start"> Order Name:</p>
+                        <p className="font-bold mb-0 text-end"> {orderData.customer_name} </p>
                     </div>
                     <div className="flex justify-between pt-2 text-gray-700" >
-                        <p className="mb-0 "> Product Name:</p>
-                        <p className="font-bold mb-0 "> {orderData.order_products[0].product_name} </p>
+                        <p className="mb-0 text-start whitespace-nowrap"> Product Name:</p>
+                        <p className="font-bold mb-0 py-0 text-end line-clamp-1"> {orderData.order_products[0].product_name} </p>
                     </div>
                     <div className="flex justify-between text-gray-700" >
-                        <p className="mb-0 "> Contact Number: </p>
-                        <p className="font-bold mb-0 "> {orderData.customer_mobile} </p>
+                        <p className="mb-0 text-start"> Contact Number: </p>
+                        <p className="font-bold mb-0 text-end"> {orderData.customer_mobile} </p>
                     </div>
                     <div className="flex justify-between text-gray-700" >
-                        <p className="mb-0 "> City:</p>
-                        <p className="font-bold mb-0 "> {orderData.customer_country} </p>
+                        <p className="mb-0 text-start"> City:</p>
+                        <p className="font-bold mb-0 text-end"> {orderData.customer_country} </p>
                     </div>
                     <div className="flex justify-between text-gray-700" >
-                        <p className="mb-0 "> State:</p>
-                        <p className="font-bold mb-0 "> {orderData.customer_city} </p>
+                        <p className="mb-0 text-start"> State:</p>
+                        <p className="font-bold mb-0 text-end"> {orderData.customer_city} </p>
                     </div>
                     <div className="flex justify-between text-gray-700" >
-                        <p className="mb-0 "> House Number:</p>
-                        <p className="font-bold mb-0 "> {orderData.customer_area} </p>
+                        <p className="mb-0 text-start"> House Number:</p>
+                        <p className="font-bold mb-0 text-end"> {orderData.customer_area} </p>
                     </div>
                     <div className="flex justify-between pb-2 text-gray-700 " >
-                        <p className="mb-0 "> Total Quantity:</p>
-                        <p className="font-bold mb-0 "> {orderData.order_products[0].order_product_quantity} </p>
+                        <p className="mb-0 text-start"> Total Quantity:</p>
+                        <p className="font-bold mb-0 text-end"> {orderData.order_products[0].order_product_quantity} </p>
                     </div>
                     <hr className="bg-gray-300 text-gray-300" />
 
                     <div className="flex justify-between pt-2" >
-                        <p className="font-bold mb-0 "> Total Price:</p>
-                        <p className="font-bold text-success mb-0 "> {orderData.order_total_amount} </p></div>
+                        <p className="font-bold mb-0 text-start"> Total Price:</p>
+                        <p className="font-bold text-success mb-0 text-end"> {orderData.order_total_amount} </p></div>
                 </div>
                 <Link href="/products" className='w-fit mx-auto cursor-pointer hover:scale-[1.05] transition-all duration-[0.3s] ease-in-out py-3 text-md md:text-lg px-6 rounded-lg bg-black text-white font-[500] mt-6'>Continue Shopping </Link>
             </div>
