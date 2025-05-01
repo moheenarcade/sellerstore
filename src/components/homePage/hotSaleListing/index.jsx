@@ -48,7 +48,7 @@ const HotSaleListing = () => {
         if (settings) {
             try {
                 const parsedSettings = JSON.parse(settings);
-                setCurrencyCode(parsedSettings.currency_code || 'OMR'); // fallback to OMR
+                setCurrencyCode(parsedSettings.currency_code || 'OMR');
             } catch (error) {
                 console.error("Failed to parse storeSettings:", error);
             }
@@ -95,7 +95,7 @@ const HotSaleListing = () => {
                         }}
                         className="w-full"
                     >
-                        {products.map((productList, index) => (
+                        {/* {products.map((productList, index) => (
                             <SwiperSlide key={index}>
                                 <Link href={`/product/${productList.product_sku}`}>
                                     <div className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
@@ -117,7 +117,7 @@ const HotSaleListing = () => {
                                                     height={300}
                                                 />
 
-                                                <div className="prpduct-off-price absolute uppercase font-[300] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
+                                                <div className="prpduct-off-price absolute uppercase font-[400] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
                                                     {Math.round(
                                                         ((productList.prices[0].price - productList.prices[0].sale_price) / productList.prices[0].price) * 100
                                                     )}% OFF
@@ -151,10 +151,74 @@ const HotSaleListing = () => {
                                     </div>
                                 </Link>
                             </SwiperSlide>
-                        ))}
+                        ))} */}
+                        {products.map((productList, index) => {
+                            const hasPrices = productList.prices && productList.prices.length > 0;
+                            const price = hasPrices ? productList.prices[0].price : null;
+                            const salePrice = hasPrices ? productList.prices[0].sale_price : null;
+
+                            return (
+                                <SwiperSlide key={index}>
+                                    <Link href={`/product/${productList.product_sku}`}>
+                                        <div className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
+                                            <div className="">
+                                                <div className="product-banner-sec relative overflow-hidden">
+                                                    <Image
+                                                        className='w-full block'
+                                                        src={getImageUrl(productList.images?.[0])}
+                                                        alt={productList.name || "product banner"}
+                                                        width={300}
+                                                        height={300}
+                                                    />
+                                                    <Image
+                                                        className="w-full h-full absolute top-0 left-0 right-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"
+                                                        src={getImageUrl(productList.images?.[1] || productList.images?.[0])}
+                                                        alt={productList.name || "product banner"}
+                                                        width={300}
+                                                        height={300}
+                                                    />
+
+                                                    {hasPrices && salePrice && price && salePrice < price && (
+                                                        <div className="prpduct-off-price absolute uppercase font-[400] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
+                                                            {Math.round(((price - salePrice) / price) * 100)}% OFF
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <p className='text-[15px] font-[300] pt-1 line-clamp-2 h-[50px]'>
+                                                    {language === 'ar' ? productList.name_ar : productList.name}
+                                                </p>
+                                            </div>
+                                            <div className="">
+                                                <RandomReviews />
+                                                <div className="product-price flex items-center gap-2 pt-2">
+                                                    {hasPrices && salePrice ? (
+                                                        <div className="flex items-center gap-1">
+                                                            <b className='text-[17px]'>{salePrice}</b>
+                                                            <p className='uppercase font-[300]'>{currencyCode}</p>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-[13px] text-red-500">No Price Added</div>
+                                                    )}
+                                                    {hasPrices && price && salePrice && (
+                                                        <div className="product-offer-badge hidden md:block">
+                                                            <span className="offer-effect px-2 text-[12px] py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">+2&nbsp;Free</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {hasPrices && price ? (
+                                                    <b className='text-[17px] line-through font-[300]'>{price} {currencyCode}</b>
+                                                ) : (
+                                                    <b className='text-[13px] text-red-500'>No Price Added</b>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </SwiperSlide>
+                            );
+                        })}
                     </Swiper>
                 </div>
-
             </div>
         </div>
     )

@@ -55,7 +55,7 @@ const ProductMainListsByCat = ({ products , currencyCode}) => {
                                             height={300}
                                         />
 
-                                        <div className="prpduct-off-price absolute uppercase font-[300] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
+                                        <div className="prpduct-off-price absolute uppercase font-[400] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
                                             30% OFF
                                         </div>
                                     </div>

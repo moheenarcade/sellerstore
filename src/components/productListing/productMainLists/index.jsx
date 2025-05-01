@@ -26,8 +26,8 @@ const ProductMainLists = ({ currencyCode, products }) => {
             <div className="flex items-center">
               <p
                 className={`text-xl font-[600]  ${language === "ar"
-                    ? " pl-4 border-l-[0px] border-l-gray-300"
-                    : "pr-4 border-r-[0px] border-r-gray-300"
+                  ? " pl-4 border-l-[0px] border-l-gray-300"
+                  : "pr-4 border-r-[0px] border-r-gray-300"
                   } `}
               >
                 {t("Products")}
@@ -38,7 +38,7 @@ const ProductMainLists = ({ currencyCode, products }) => {
         </div>
 
         <div className="product-lists pt-6">
-          {products && products.length > 0 ? (
+          {/* {products && products.length > 0 ? (
             products.map((productList) => (
               <Link
                 href={`/product/${productList.product_sku}`}
@@ -64,7 +64,7 @@ const ProductMainLists = ({ currencyCode, products }) => {
                         height={300}
                       />
 
-                      <div className="prpduct-off-price absolute uppercase font-[300] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
+                      <div className="prpduct-off-price absolute uppercase font-[400] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
                         {Math.round(
                           ((productList.prices[0].price -
                             productList.prices[0].sale_price) /
@@ -115,7 +115,91 @@ const ProductMainLists = ({ currencyCode, products }) => {
             ))
           ) : (
             <div className="text-start text-gray-500 py-10">No Data Found</div>
+          )} */}
+
+          {products && products.length > 0 ? (
+            products.map((productList) => {
+              const hasPrices = productList.prices && productList.prices.length > 0;
+              const price = hasPrices ? productList.prices[0].price : null;
+              const salePrice = hasPrices ? productList.prices[0].sale_price : null;
+              const discount =
+                price && salePrice && price > salePrice
+                  ? Math.round(((price - salePrice) / price) * 100)
+                  : null;
+
+              return (
+                <Link
+                  href={`/product/${productList.product_sku}`}
+                  key={productList.product_sku}
+                >
+                  <div className="product-card-main group border-[1px] border-[#0000001f] rounded-md cursor-pointer p-2 md:p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-in-out">
+                    <div>
+                      <div className="product-banner-sec relative overflow-hidden">
+                        <Image
+                          className="w-full block"
+                          src={getImageUrl(productList.images?.[0])}
+                          alt={productList.name || "product banner image"}
+                          width={300}
+                          height={300}
+                        />
+                        <Image
+                          className="w-full h-full absolute top-0 left-0 right-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"
+                          src={getImageUrl(productList.images?.[1] || productList.images?.[0])}
+                          alt={productList.name || "product banner image"}
+                          width={300}
+                          height={300}
+                        />
+
+                        {discount !== null && (
+                          <div className="prpduct-off-price absolute uppercase font-[400] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">
+                            {discount}% OFF
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-[15px] font-[300] pt-1 line-clamp-2 h-[50px]">
+                        {language === "ar" ? productList.name_ar : productList.name}
+                      </p>
+                    </div>
+
+                    <div>
+                      <RandomReviews />
+                      <div className="product-price flex items-center gap-2 pt-2">
+                        {salePrice ? (
+                          <div className="flex items-center gap-1">
+                            <b className="text-[17px]">{salePrice}</b>
+                            <p className="uppercase font-[300]">{currencyCode}</p>
+                          </div>
+                        ) : (
+                          <div className="text-[13px] text-red-500">No Price Added</div>
+                        )}
+
+                        {discount !== null && (
+                          <div className="product-offer-badge">
+                            <span className="offer-effect px-2 py-1 text-[#f44336] ms-2 border-[1px] border-[#ff00004d]">
+                              +2&nbsp;Free
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div>
+                        {price ? (
+                          <b className="text-[17px] line-through font-[300]">
+                            {price} {currencyCode}
+                          </b>
+                        ) : (
+                          <b className="text-[13px] text-red-500">No Price Added</b>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })
+          ) : (
+            <div className="text-start text-gray-500 py-10">No Data Found</div>
           )}
+
         </div>
       </div>
     </>
