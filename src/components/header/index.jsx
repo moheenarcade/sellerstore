@@ -26,7 +26,6 @@ const Header = () => {
   const [storeSettings, setStoreSettings] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showBox, setShowBox] = useState(false);
-
   const [results, setResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
 
@@ -55,6 +54,7 @@ const Header = () => {
       clearTimeout(timer);
       controller.abort();
     };
+    
   }, [searchTerm]);
 
 
@@ -184,6 +184,10 @@ const Header = () => {
                             <Link href={`/product/${p.sku}`} key={p.sku}>
                               <li
                                 className="flex items-start gap-3 p-3 cursor-pointer hover:bg-gray-100"
+                                onClick={() => {
+                                  setSearchTerm("");
+                                  setShowBox(false);
+                                }}
                               >
                                 <Image
                                   src={getSearchImageUrl(p.thumbnail || p.image)}
@@ -220,7 +224,6 @@ const Header = () => {
                   ><FaWhatsapp className='text-3xl' /></Link>
                 </div>
                 <div className="switch">
-
                   <input
                     id="language-toggle"
                     className="check-toggle check-toggle-round-flat"
@@ -289,6 +292,10 @@ const Header = () => {
                         <Link href={`/product/${p.sku}`} key={p.sku}>
                           <li
                             className="flex items-start gap-3 p-3 cursor-pointer hover:bg-gray-100"
+                            onClick={() => {
+                              setSearchTerm("");
+                              setShowBox(false);
+                            }}
                           >
                             <Image
                               src={getSearchImageUrl(p.thumbnail || p.image)}
