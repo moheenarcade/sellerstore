@@ -90,6 +90,7 @@ const HeroSlider = () => {
                                 layout="fill"
                                 objectFit="cover"
                                 className="rounded-xl"
+                                unoptimized
                             />
                         </div>
                     </Link>
@@ -113,6 +114,7 @@ const HeroSlider = () => {
                                             layout="fill"
                                             objectFit="cover"
                                             className="rounded-xl"
+                                            unoptimized
                                         />
                                     </div>
                                 </Link>

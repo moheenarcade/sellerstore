@@ -47,6 +47,8 @@ const ProductDetailImageSlider = ({ product }) => {
               alt="product image"
               width={600}
               height={600}
+              unoptimized
+
             />
           </SwiperSlide>
         ))}
@@ -69,6 +71,7 @@ const ProductDetailImageSlider = ({ product }) => {
               alt={`Thumbnail ${index}`}
               width={100}
               height={100}
+              unoptimized
               className="w-full aspect-[4/4] object-cover border cursor-pointer rounded-xl"
             />
           </SwiperSlide>

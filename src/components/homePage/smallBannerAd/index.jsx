@@ -46,7 +46,7 @@ const SmallBannerAd = () => {
         <div className='smallBanner-ad-main container px-4 md:px-6 2xl:px-28 mx-auto pt-6 md:pt-12'>
             <Link href={getBannerLink(centerBanners[0])} target="_blank" rel="noopener noreferrer">
             <div className="rounded-xl">
-                <Image className="rounded-xl w-full h-[80px] object-cover md:h-[110px] 2xl:h-[140px]" width={1200} height={300} src={getImageUrl(centerBanners[0], language)} alt='ad banner' />
+                <Image unoptimized className="rounded-xl w-full h-[80px] object-cover md:h-[110px] 2xl:h-[140px]" width={1200} height={300} src={getImageUrl(centerBanners[0], language)} alt='ad banner' />
             </div>
             </Link>
         </div>

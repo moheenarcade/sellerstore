@@ -147,6 +147,7 @@ const Header = () => {
                       alt="logo"
                       width={100}
                       height={100}
+                      unoptimized
                     />
                     <p className="font-bold text-[#00000080] uppercase">
                       {storeSettings?.store_name}
@@ -194,6 +195,7 @@ const Header = () => {
                                   alt={p.name}
                                   width={60}
                                   height={60}
+                                  unoptimized
                                   className="rounded h-[50px] w-[50px] object-cover"
                                 />
                                 <div>
@@ -255,6 +257,7 @@ const Header = () => {
                   alt="logo"
                   width={100}
                   height={100}
+                  unoptimized
                 />
               </div>
             </Link>
@@ -302,6 +305,7 @@ const Header = () => {
                               alt={p.name}
                               width={60}
                               height={60}
+                              unoptimized
                               className="rounded h-[50px] w-[50px] object-cover"
                             />
                             <div>

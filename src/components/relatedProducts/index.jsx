@@ -61,6 +61,7 @@ const RelatedProducts = ({ currencyCode, product }) => {
                       alt="product banner"
                       width={300}
                       height={300}
+                      unoptimized
                     />
                     <Image
                       className="w-full h-full absolute top-0 left-0 right-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"
@@ -70,6 +71,7 @@ const RelatedProducts = ({ currencyCode, product }) => {
                       alt="product banner"
                       width={300}
                       height={300}
+                      unoptimized
                     />
 
                     <div className="prpduct-off-price absolute uppercase font-[400] text-white bg-[#ff0000] px-2 py-1 text-sm bottom-0">

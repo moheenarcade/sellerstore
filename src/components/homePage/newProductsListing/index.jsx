@@ -154,6 +154,7 @@ const NewProductsListing = () => {
                       alt={productList.name || "Product image"}
                       width={300}
                       height={300}
+                      unoptimized
                     />
                     <Image
                       className="w-full h-full absolute top-0 left-0 right-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"
@@ -161,6 +162,7 @@ const NewProductsListing = () => {
                       alt={productList.name || "Product image"}
                       width={300}
                       height={300}
+                      unoptimized
                     />
 
                     {discount !== null && (

@@ -241,6 +241,7 @@ export default function ProductDetailPage() {
                               alt={colorOption.sku}
                               width={100}
                               height={100}
+                              unoptimized
                             />
                             <p className={`text-center ${isActive ? "font-bold" : ""}`}>
                               {colorOption.color}
@@ -443,6 +444,7 @@ export default function ProductDetailPage() {
                   alt={product.name}
                   width={100}
                   height={100}
+                  unoptimized
                 />
                 <p className="qty-tag absolute -top-2 right-[0px] bg-gray-500 text-white font-[500] rounded-full text-[14px] text-center flex items-center justify-center w-5 h-5">
                   {selectedBundle?.quantity || 1}
