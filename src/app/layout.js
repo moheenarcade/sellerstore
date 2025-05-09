@@ -14,6 +14,7 @@ import PixelTracker from "../components/PixelTracker";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 import { trackTikTokEvent } from "../lib/pixelEvents"; 
+import FaviconLoader from "../components/FaviconLoader"
 
 export default function RootLayout({ children }) {
   const [categories, setCategories] = useState([]);
@@ -64,6 +65,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+      <FaviconLoader />
         <LanguageProvider>
           <SelectedCategoryProvider>
             <Head>

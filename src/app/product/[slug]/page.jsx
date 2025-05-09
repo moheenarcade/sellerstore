@@ -214,44 +214,45 @@ export default function ProductDetailPage() {
             <h1 className="text-2xl md:text-3xl font-[600] pt-3">
               {language === "ar" ? product.name_ar : product.name}
             </h1>
-            <ul className="pt-2 md:pt-4">
-              <li className="flex flex-col mb-3">
-                <p className="text-[16px]">
-                  <b>{t('Color')}:</b>
-                </p>
-                <div className="color-sec flex gap-3">
-                  {product.product_colors?.map((colorOption) => {
-                    const colorImageObj = { image: colorOption.image };
-                    const isActive = product.product_sku === colorOption.sku;
+            {product.product_colors?.length > 1 && (
+              <ul className="pt-2 md:pt-4">
+                <li className="flex flex-col mb-3">
+                  <p className="text-[16px]">
+                    <b>{t('Color')}:</b>
+                  </p>
+                  <div className="color-sec flex gap-3">
+                    {product.product_colors?.map((colorOption) => {
+                      const colorImageObj = { image: colorOption.image };
+                      const isActive = product.product_sku === colorOption.sku;
 
-                    return (
-                      <Link
-                        href={`/product/${colorOption.sku}`}
-                        key={colorOption.sku}
-                      >
-                        <div
+                      return (
+                        <Link
+                          href={`/product/${colorOption.sku}`}
                           key={colorOption.sku}
-                          className={`single-color flex flex-col overflow-hidden cursor-pointer border-[2px] rounded-lg w-fit justify-center ${isActive ? "border-black" : "border-gray-300"
-                            }`}
                         >
-                          <Image
-                            className="rounded-b-lg h-[80px] w-[80px] object-cover"
-                            src={getImageUrl(colorImageObj)}
-                            alt={colorOption.sku}
-                            width={100}
-                            height={100}
-                          />
-                          <p className={`text-center ${isActive ? "font-bold" : ""}`}>
-                            {colorOption.color}
-                          </p>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </li>
-            </ul>
-
+                          <div
+                            key={colorOption.sku}
+                            className={`single-color flex flex-col overflow-hidden cursor-pointer border-[2px] rounded-lg w-fit justify-center ${isActive ? "border-black" : "border-gray-300"
+                              }`}
+                          >
+                            <Image
+                              className="rounded-b-lg h-[80px] w-[80px] object-cover"
+                              src={getImageUrl(colorImageObj)}
+                              alt={colorOption.sku}
+                              width={100}
+                              height={100}
+                            />
+                            <p className={`text-center ${isActive ? "font-bold" : ""}`}>
+                              {colorOption.color}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </li>
+              </ul>
+            )}
             {product.options.some(opt => opt.option_name === "Size" && opt.available_quantity > 0) && (
               <>
 
